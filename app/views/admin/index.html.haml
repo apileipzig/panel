@@ -1,0 +1,11 @@
+%h1 Admin Konsole
+%p
+  Liste freizuschaltender User
+%p
+  - if @inactive_users.blank?
+    Niemand will aktiviert werden.
+  - else
+    %ul
+    - @inactive_users.each do |user|
+      %li
+        = user.login 
