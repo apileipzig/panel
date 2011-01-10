@@ -5,7 +5,10 @@
   - if @inactive_users.blank?
     Niemand will aktiviert werden.
   - else
-    %ul
+    = form_tag user_activation_path
     - @inactive_users.each do |user|
-      %li
-        = user.login 
+      = user.login 
+      = check_box "activation[#{user.login}]", 'active', { :class => 'user_activation' }
+      %br/
+    %br/
+    = submit_tag 'Absenden'
