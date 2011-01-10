@@ -6,8 +6,8 @@ class AdminController < ApplicationController
   end
   
   def user_activation
-    params[:activation].each do |login,form_values|
-      user = User.find_by_login(login)
+    params[:activation].each do |id,form_values|
+      user = User.find(id)
       user.update_attributes(form_values)
     end
   end

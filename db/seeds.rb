@@ -5,4 +5,4 @@
 #   
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Major.create(:name => 'Daley', :city => cities.first)
-User.create(:login => "admin", :password => "123456", :password_confirmation => "123456", :email => "windisch@tml-consulting.net", :admin => true, :active => true)
+User.create(:password => "123456", :password_confirmation => "123456", :email => "windisch@tml-consulting.net", :name => "Sven Windisch", :telefon => "0341/2231489", :admin => true, :active => true)
