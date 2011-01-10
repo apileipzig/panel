@@ -1,5 +1,28 @@
 %h1 Register
-- form_for @user, :url => account_path do |f|
-  = f.error_messages
-  = render :partial => "form", :object => f
-  = f.submit "Register"
+- form_for @user, :url => account_path do |form|
+  = form.error_messages
+  = form.label :name
+  %br/
+  = form.text_field :name
+  %br/
+  %br/
+  = form.label :telefon
+  %br/
+  = form.text_field :telefon
+  %br/
+  %br/
+  = form.label :email
+  %br/
+  = form.text_field :email
+  %br/
+  %br/
+  = form.label :password, form.object.new_record? ? nil : "Change password"
+  %br/
+  = form.password_field :password
+  %br/
+  %br/
+  = form.label :password_confirmation
+  %br/
+  = form.password_field :password_confirmation
+  %br/
+  = form.submit "Register"
