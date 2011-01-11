@@ -1,0 +1,31 @@
+%h1 Admin Konsole
+%p
+  %b Rechtevergabe
+%p
+  - if @users.blank?
+    Keine Nutzer vorhanden
+  - else
+    = form_tag set_permissions_path
+    = collection_select('user', 'id', @users, :id, :name)
+    %br/
+    - @permissions.each do |tablename, table_permissions|
+      %b= "Leserechte für Tabelle \"#{tablename}\""
+      %br/
+      Spalte Nein Ja
+      %br/
+      - table_permissions['read'].each do |permission|
+        = permission.column.titleize
+        = radio_button('permission', permission.id, 0) 
+        = radio_button('permission', permission.id, 1)
+        %br/ 
+      %b= "Schreibrechte für Tabelle \"#{tablename}\""
+      %br/
+      Spalte Nein Ja
+      %br/
+      - table_permissions['write'].each do |permission|
+        = permission.column.titleize
+        = radio_button('permission', permission.id, 0) 
+        = radio_button('permission', permission.id, 1)
+        %br/ 
+    %br/
+    = submit_tag 'Absenden'
