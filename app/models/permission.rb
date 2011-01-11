@@ -12,5 +12,9 @@ class Permission < ActiveRecord::Base
   
   def column
     name.split('_').fourth
-  end  
+  end
+  
+  def self.all_tables
+    Permission.all.map{|p| p.table}.uniq
+  end
 end
