@@ -1,4 +1,4 @@
-%h1 Register
+%h1 Registrierung
 - form_for @user, :url => account_path do |form|
   = form.error_messages
   = form.label :name
@@ -11,18 +11,18 @@
   = form.text_field :telefon
   %br/
   %br/
-  = form.label :email
+  = form.label :email, 'E-Mail-Adresse'
   %br/
   = form.text_field :email
   %br/
   %br/
-  = form.label :password, form.object.new_record? ? nil : "Change password"
+  = form.label :password, form.object.new_record? ? 'Passwort' : 'Passwort &auml;ndern'
   %br/
   = form.password_field :password
   %br/
   %br/
-  = form.label :password_confirmation
+  = form.label :password_confirmation, 'Passwortbestätigung'
   %br/
   = form.password_field :password_confirmation
   %br/
-  = form.submit "Register"
+  = form.submit "Registrieren"

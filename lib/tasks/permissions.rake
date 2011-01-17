@@ -6,7 +6,10 @@ namespace :permissions do
       puts "Creating permissions for table #{table_name}"
       ActiveRecord::Base.connection.columns(table).each do |column|
         %w[read write].each do |access|
-          Permission.create(:name => "can_#{access}_#{table_name}_#{column.name}")
+          name = "can_#{access}_#{table_name}_#{column.name}"
+          if Permission.find_by_name(name).blank?
+	        Permission.create(:name => name)
+	      end    
         end
       end
     end
