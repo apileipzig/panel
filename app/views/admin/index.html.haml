@@ -1,6 +1,9 @@
 %h1 Admin Konsole
 %p
-  %b Liste freizuschaltender User
+  %a{:href => account_path}
+    Zur&uuml;ck zur Profilseite
+%h2
+  Liste freizuschaltender Benutzer
 %p
   - if @inactive_users.blank?
     Niemand will aktiviert werden.
@@ -12,3 +15,14 @@
       %br/
     %br/
     = submit_tag 'Absenden'
+%h2
+  Benutzereinstellungen bearbeiten
+%p
+  - if @active_users.blank?
+    Keine Benutzer angelegt.
+  - else
+    = form_tag user_details_path
+    Benutzer ausw&auml;hlen:
+    = collection_select('user', 'id', @active_users, :id, :name)
+    = submit_tag 'Bearbeiten'
+   

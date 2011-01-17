@@ -10,6 +10,9 @@
     = stylesheet_link_tag 'compiled/print.css', :media => 'print'
     = stylesheet_link_tag 'compiled/ie.css', :media => 'screen, projection'
 
+    - if controller.controller_name == 'admin'
+      = javascript_include_tag :jquery_ui
+      = stylesheet_link_tag 'compiled/jquery/ui/ui-lightness.css', :media => 'screen, projection'
 
   %body
     #mainContent= yield
