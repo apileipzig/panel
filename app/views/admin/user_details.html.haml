@@ -1,0 +1,61 @@
+:javascript
+  $(function() {
+    $( "#accordion" ).accordion({ collapsible: true, active: false });
+  });
+
+  function select_all(ids, select) {
+    while(ids.length > 0) {
+      $( "#permission_" + ids.shift() + "_" + select ).attr('checked', true);
+    }
+  }
+  
+%h1 Admin Konsole
+%p
+  %a{:href => account_path}
+    Zur&uuml;ck zur Profilseite
+%h2
+  = "Rechtevergabe f&uuml;r #{@user.name}"
+%p
+  - if @user.blank?
+    Dieser Nutzer existiert nicht.
+  - else
+    = form_tag set_permissions_path
+    = hidden_field(:user, :id)
+    %div#accordion
+      - @permissions.each do |tablename, table_permissions|
+        - %w[read write].each do |access|
+          %h3
+            %a{:href => '#'}
+              = "Leserechte für Tabelle \"#{tablename.titleize}\"" if access == 'read'
+              = "Schreibrechte für Tabelle \"#{tablename.titleize}\"" if access == 'write'
+          %div
+            %span
+              - js_call = "select_all(new Array('" + table_permissions[access].map{|p| p.id}.join("','") + "'), 0);"
+              %a{:href => 'javascript:void(0)', :onclick => js_call}
+                Alle abw&auml;hlen
+            %span
+              - js_call = "select_all(new Array('" + table_permissions[access].map{|p| p.id}.join("','") + "'), 1);"
+              %a{:href => 'javascript:void(0)', :onclick => js_call}
+                Alle ausw&auml;hlen
+            %table
+              %tr
+                - %w[Spalte Nein Ja].each do |headline|
+                  %th= headline
+              - table_permissions[access].each do |permission|
+                %tr
+                  %td
+                    = permission.column.titleize
+                    %td
+                      = radio_button('permission', permission.id, 0, :checked => !@user_permissions.include?(permission))
+                    %td
+                      = radio_button('permission', permission.id, 1, :checked => @user_permissions.include?(permission))
+    = submit_tag 'Absenden'
+    
+%h2
+  = "Benutzerstatistik f&uuml;r #{@user.name}"
+%p
+  Diese Funktion fehlt noch!
+%h2
+  = "Account von #{@user.name} deaktivieren"
+%p
+  Diese Funktion fehlt noch!

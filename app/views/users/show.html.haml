@@ -1,30 +1,23 @@
 %p
   %b Name:
   = h @user.name
-%p
-  %b Login count:
-  = h @user.login_count
-%p
-  %b Last request at:
-  = h @user.last_request_at
-%p
-  %b Last login at:
-  = h @user.last_login_at
-%p
-  %b Current login at:
-  = h @user.current_login_at
-%p
-  %b Last login ip:
-  = h @user.last_login_ip
-%p
-  %b Current login ip:
-  = h @user.current_login_ip
-= link_to 'Edit', edit_account_path
-= link_to 'Logout', logout_path
+  = link_to 'Profil bearbeiten', edit_account_path
+  = link_to 'Logout', logout_path
 %p
   - if @user.active?
-    = "Du wurdest freigeschaltet. Hier ist dein API-Key: #{@user.single_access_token}"
-    
+    = "Sie wurden freigeschaltet. Hier ist Ihr API-Key: #{@user.single_access_token}"
+%P
+  Sie verfügen momentan über folgende Rechte:
+  - @permissions.each do |tablename, permissions|
+    %table
+      %tr
+        %th= "Datentabelle \"#{tablename.titleize}\""
+      - unless permissions['read'].blank?
+        %tr
+          %td= "Lesezugriff auf die Spalten: #{permissions['read'].map{|p| p.column.titleize}.join(', ')}"
+      - unless permissions['write'].blank?
+        %tr
+          %td= "Schreibzugriff auf die Spalten: #{permissions['write'].map{|p| p.column.titleize}.join(', ')}"
 %p
   - if @user.admin?
-    "Du bist ein Admin! Gehe zur #{link_to 'Admin Konsole', admin_url}"
+    = "Hier geht es zur #{link_to 'Admin Konsole', admin_url}."
