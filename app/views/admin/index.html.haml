@@ -8,21 +8,21 @@
   - if @inactive_users.blank?
     Niemand will aktiviert werden.
   - else
-    = form_tag user_activation_path
-    - @inactive_users.each do |user|
-      = user.name 
-      = check_box "activation[#{user.id}]", 'active', { :class => 'user_activation' }
+    - form_tag user_activation_path do
+      - @inactive_users.each do |user|
+        = user.name 
+        = check_box "activation[#{user.id}]", 'active', { :class => 'user_activation' }
+        %br/
       %br/
-    %br/
-    = submit_tag 'Absenden'
+      = submit_tag 'Absenden'
 %h2
   Benutzereinstellungen bearbeiten
 %p
   - if @active_users.blank?
     Keine Benutzer angelegt.
   - else
-    = form_tag user_details_path
-    Benutzer ausw&auml;hlen:
-    = collection_select('user', 'id', @active_users, :id, :name)
-    = submit_tag 'Bearbeiten'
+    - form_tag user_details_path do
+      Benutzer ausw&auml;hlen:
+      = collection_select('user', 'id', @active_users, :id, :name)
+      = submit_tag 'Bearbeiten'
    
