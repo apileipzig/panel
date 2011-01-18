@@ -9,12 +9,42 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110111102453) do
+ActiveRecord::Schema.define(:version => 20110118132615) do
+
+  create_table "data_firmen", :force => true do |t|
+    t.string  "Firma",                         :null => false
+    t.string  "Ansprechpartner",               :null => false
+    t.string  "Strasse",                       :null => false
+    t.integer "Hausnummer",       :limit => 2, :null => false
+    t.string  "HausnummerZusatz",              :null => false
+    t.integer "PLZ",              :limit => 3, :null => false
+    t.string  "Ort",                           :null => false
+    t.string  "Telefon",                       :null => false
+    t.string  "Fax",                           :null => false
+    t.string  "e-Mail",                        :null => false
+    t.string  "WWW",                           :null => false
+  end
+
+  create_table "data_unternehmen", :force => true do |t|
+    t.string  "Firma",                         :null => false
+    t.string  "Ansprechpartner",               :null => false
+    t.string  "Strasse",                       :null => false
+    t.integer "Hausnummer",       :limit => 2, :null => false
+    t.string  "HausnummerZusatz",              :null => false
+    t.integer "PLZ",              :limit => 3, :null => false
+    t.string  "Ort",                           :null => false
+    t.string  "Telefon",                       :null => false
+    t.string  "Fax",                           :null => false
+    t.string  "e-Mail",                        :null => false
+    t.string  "WWW",                           :null => false
+  end
 
   create_table "permissions", :force => true do |t|
-    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "access"
+    t.string   "tabelle"
+    t.string   "spalte"
   end
 
   create_table "permissions_users", :id => false, :force => true do |t|

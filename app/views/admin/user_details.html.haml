@@ -44,7 +44,7 @@
                 - table_permissions[access].each do |permission|
                   %tr
                     %td
-                      = permission.column.titleize
+                      = permission.spalte.titleize
                       %td
                         = radio_button('permission', permission.id, 0, :checked => !@user_permissions.include?(permission))
                       %td
@@ -58,8 +58,20 @@
   %h2
     = "Account von #{@user.name} deaktivieren"
   %p
-    - form_tag user_activation_path, :name => 'deactivation' do
-      = "Setzen Sie den Haken um den Benutzer #{@user.name} zu deaktivieren:"
-      = check_box "deactivation[#{@user.id}]", 'active', { :class => 'user_deactivation' }
+    - confirm_function = "return confirm('Wollen Sie den API-Key des Nutzers wirklich erneuern?')" 
+    - form_tag reset_apikey_path, :name => 'reset_apikey', :onsubmit => confirm_function do
+      Mit einem Klick auf Absenden wird der API-Key des Nutzers erneuert. Der Nutzer muss dar&uuml;ber in Kenntnis gesetzt werden,
+      da sein alter API-Key dann nicht mehr funktioniert.
+      = hidden_field :user, :id
+      %br/
+      = submit_tag 'Absenden'
+  %h2
+    = "Account von #{@user.name} deaktivieren"
+  %p
+    - confirm_function = "return confirm('Wollen Sie den Nutzer wirklich deaktivieren?')" 
+    - form_tag user_deactivation_path, :name => 'deactivation', :onsubmit => confirm_function do
+      Mit einem Klick auf Absenden wird der Nutzer deaktiviert. Der Nutzer hat dann keinen Zugang mehr zur Leipzig-API.
+      Seine Rechte bleiben bis zur einer erneuten Aktivierung erhalten.
+      = hidden_field :user, :id
       %br/
       = submit_tag 'Absenden'
