@@ -19,43 +19,47 @@
   - if @user.blank?
     Dieser Nutzer existiert nicht.
   - else
-    = form_tag set_permissions_path
-    = hidden_field(:user, :id)
-    %div#accordion
-      - @permissions.each do |tablename, table_permissions|
-        - %w[read write].each do |access|
-          %h3
-            %a{:href => '#'}
-              = "Leserechte für Tabelle \"#{tablename.titleize}\"" if access == 'read'
-              = "Schreibrechte für Tabelle \"#{tablename.titleize}\"" if access == 'write'
-          %div
-            %span
-              - js_call = "select_all(new Array('" + table_permissions[access].map{|p| p.id}.join("','") + "'), 0);"
-              %a{:href => 'javascript:void(0)', :onclick => js_call}
-                Alle abw&auml;hlen
-            %span
-              - js_call = "select_all(new Array('" + table_permissions[access].map{|p| p.id}.join("','") + "'), 1);"
-              %a{:href => 'javascript:void(0)', :onclick => js_call}
-                Alle ausw&auml;hlen
-            %table
-              %tr
-                - %w[Spalte Nein Ja].each do |headline|
-                  %th= headline
-              - table_permissions[access].each do |permission|
+    - form_tag set_permissions_path, :name => 'set_permissions' do
+      = hidden_field(:user, :id)
+      %div#accordion
+        - @permissions.each do |tablename, table_permissions|
+          - %w[read write].each do |access|
+            %h3
+              %a{:href => '#'}
+                = "Leserechte für Tabelle \"#{tablename.titleize}\"" if access == 'read'
+                = "Schreibrechte für Tabelle \"#{tablename.titleize}\"" if access == 'write'
+            %div
+              %span
+                - js_call = "select_all(new Array('" + table_permissions[access].map{|p| p.id}.join("','") + "'), 0);"
+                %a{:href => 'javascript:void(0)', :onclick => js_call}
+                  Alle abw&auml;hlen
+              %span
+                - js_call = "select_all(new Array('" + table_permissions[access].map{|p| p.id}.join("','") + "'), 1);"
+                %a{:href => 'javascript:void(0)', :onclick => js_call}
+                  Alle ausw&auml;hlen
+              %table
                 %tr
-                  %td
-                    = permission.column.titleize
+                  - %w[Spalte Nein Ja].each do |headline|
+                    %th= headline
+                - table_permissions[access].each do |permission|
+                  %tr
                     %td
-                      = radio_button('permission', permission.id, 0, :checked => !@user_permissions.include?(permission))
-                    %td
-                      = radio_button('permission', permission.id, 1, :checked => @user_permissions.include?(permission))
-    = submit_tag 'Absenden'
+                      = permission.column.titleize
+                      %td
+                        = radio_button('permission', permission.id, 0, :checked => !@user_permissions.include?(permission))
+                      %td
+                        = radio_button('permission', permission.id, 1, :checked => @user_permissions.include?(permission))
+      = submit_tag 'Absenden'
     
-%h2
-  = "Benutzerstatistik f&uuml;r #{@user.name}"
-%p
-  Diese Funktion fehlt noch!
-%h2
-  = "Account von #{@user.name} deaktivieren"
-%p
-  Diese Funktion fehlt noch!
+  %h2
+    = "Benutzerstatistik f&uuml;r #{@user.name}"
+  %p
+    Diese Funktion fehlt noch!
+  %h2
+    = "Account von #{@user.name} deaktivieren"
+  %p
+    - form_tag user_activation_path, :name => 'deactivation' do
+      = "Setzen Sie den Haken um den Benutzer #{@user.name} zu deaktivieren:"
+      = check_box "deactivation[#{@user.id}]", 'active', { :class => 'user_deactivation' }
+      %br/
+      = submit_tag 'Absenden'
