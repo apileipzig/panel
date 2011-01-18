@@ -23,8 +23,8 @@ class UsersController < ApplicationController
     @permissions = Hash.new
     Permission.all_tables.each do |tablename|
       @permissions[tablename] = {'read', 'write'}
-      @permissions[tablename]['read'] = @user.permissions.select{|p| p.access == 'read' && p.table == tablename}
-      @permissions[tablename]['write'] = @user.permissions.select{|p| p.access == 'write' && p.table == tablename}
+      @permissions[tablename]['read'] = @user.permissions.select{|p| p.access == 'read' && p.tabelle == tablename}
+      @permissions[tablename]['write'] = @user.permissions.select{|p| p.access == 'write' && p.tabelle == tablename}
       
       # Prevent the display of a table if the user has no single permission on it
       @permissions.delete(tablename) if @permissions[tablename]['read'].blank? && @permissions[tablename]['write'].blank?

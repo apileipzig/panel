@@ -14,10 +14,10 @@
         %th= "Datentabelle \"#{tablename.titleize}\""
       - unless permissions['read'].blank?
         %tr
-          %td= "Lesezugriff auf die Spalten: #{permissions['read'].map{|p| p.column.titleize}.join(', ')}"
+          %td= "Lesezugriff auf die Spalten: #{permissions['read'].map{|p| p.spalte.titleize}.join(', ')}"
       - unless permissions['write'].blank?
         %tr
-          %td= "Schreibzugriff auf die Spalten: #{permissions['write'].map{|p| p.column.titleize}.join(', ')}"
+          %td= "Schreibzugriff auf die Spalten: #{permissions['write'].map{|p| p.spalte.titleize}.join(', ')}"
 %p
   - if @user.admin?
     = "Hier geht es zur #{link_to 'Admin Konsole', admin_url}."
