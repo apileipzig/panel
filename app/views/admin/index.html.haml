@@ -11,7 +11,7 @@
     - form_tag user_activation_path do
       - @inactive_users.each do |user|
         = user.name 
-        = check_box "activation[#{user.id}]", 'active', { :class => 'user_activation' }
+        = check_box "activation[#{user.id}]", 'active'
         %br/
       %br/
       = submit_tag 'Absenden'
