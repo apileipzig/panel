@@ -1,0 +1,254 @@
+<!DOCTYPE html>   
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="de" class="no-js"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<!--[if IE]><link rel="stylesheet" href="css/ie.css"><![endif]-->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>API.LEIPZIG - Datenquelle bearbeiten</title>
+	<meta name="description" content="API.LEIPZIG - ist ein Portal, wo Daten aus Leipzig zusammengefasst und kreativ visualisiert werden">
+	<meta name="keywords" content="" />
+	<meta name="author" content="Thomas Apfelbacher">
+	<meta name="viewport" content="width=device-width; initial-scale=1.0">
+	<!-- !CSS -->
+	<link rel="stylesheet" href="css/api-style.css?v=1">
+	<!-- !Google Font Library -->
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold' rel='stylesheet' type='text/css'>
+	<!-- Uncomment if you are specifically targeting less enabled mobile browsers
+	<link rel="stylesheet" media="handheld" href="css/handheld.css?v=1">  -->
+	
+	<!-- !Modernizr - All other JS at bottom -->
+	<script src="js/modernizr-1.6.min.js"></script>
+</head>
+<!-- !Body -->
+<body>
+	<section id="Backend">
+		<header id="PageHeader">
+			<nav class="container">
+			<h1 id="Logo"><a href="index.html" title="API.LEIPZIG">API.LEIPZIG</a></h1>
+			<section id="user" class="span-4">
+					Hallo, <a href="#profiledit" title="Nutzer-Profil editieren">Lars Christian</a>
+			</section>
+			<ul id="GlobalNav" class="span-5 append-2">
+				<li><a href="index.html" title="Startseite">Start</a></li>
+				<li><a href="#datenschutz" title="Datenschutz">Datenschutz</a></li>
+				<li><a href="#beteiligte" title="Hintergründe">Hintergründe</a></li>
+				<li><a href="#hilfe" title="Hilfe">Hilfe</a></li>
+			</ul><!-- /#GlobalNav  -->
+			<a class="LogoutLink span-1 last" href="backend.html" title="Logout">Logout</a>
+			<ul id="GlobalTabs" class="prepend-4 span-5 last">
+				<li><a href="#datenquellen" title="Datenquellen">Datenquellen</a></li>
+				<li><a href="#anwendungen" title="Anwendungen">Anwendungen</a></li>
+				<li><a href="wiki.html" title="WIKI">WIKI</a></li>
+			</ul><!-- /#GlobalTabs  -->
+				<section id="LinkktoBE">
+					 <a class="current" href="backend.html" title="Einstellungen vornehmen">Backend</a>
+				</section>			
+			</nav><!-- /.container  -->
+		</header><!-- /header -->
+		
+		<section id="Page" class="container pane-backend" role="main">
+		 	<article class="span-8">
+		 		<section id="CatEdit">
+		 			<ul id="CatEditTabs" class="span-8">
+		 				<li><a class="current" href="datasets.html" title="Eine Datenquelle anlegen oder bearbeiten">Datenquellen bearbeiten</a></li>
+		 				<li><a href="#application" title="Eine Anwendung anlegen oder bearbeiten">Anwendung bearbeiten</a></li>
+		 				<li><a href="calendar.html" title="Kalenderevent bearbeiten">Kalendereintrag</a></li>
+		 				<li><a class="admin" href="admin.html" title="Adminbereich">Admin</a></li>
+		 			</ul>
+		 			<section class="prepend-6 span-2 last">
+		 				<ul id="AddorEdit" >
+		 					<li><a class="add" rel="edit" href="#addItem" title="neu anlegen">neu anlegen</a></li>
+		 					<li><a class="edit" rel="edit" href="#editItem" title="bearbeiten 2">bearbeiten</a></li>
+		 				</ul>
+		 			</section>
+		 		</section>
+		 		<div class="clear">&nbsp;</div>
+		 		<header>
+		 			<h1>Datenquelle anlegen (Pagetitle)</h1>
+				</header>
+				<p>Kurze textliche Einleitung, was für Daten bearbeitet bzw. erwartet werden. <b>Anmerkung! </b>Es gibt zwei Arten um die einzelnen Fieldsets des Formular mit Informationen zu versehen. Einmal als versteckter Tooltip (siehe Angaben zum Datenset), welcher beim hover über das besagte Fielset erscheint und einmal ganz normal als Text im Fieldset direkt(s.u. Links) - Apfel</p>
+				
+				
+				<div class="hr"><hr /></div>
+				<form id="new-dataset" class="api-form" action="dataset/add.php" method="post">
+				<fieldset id="step1">
+					<legend>Allgemeine Daten</legend>
+					<div class="fieldset-desc">
+					<p>Beschreibung zum Formularfeld. Beispiel:
+Bitte tragen Sie hier den Namen des Datensets. Dieser sollte selbstbeschreibend sein und die Art bzw. Kategorie der Daten widerspiegeln</p>
+					</div>	
+					<label for=data-name>Name des Datensets</label>
+					<input id=data-name name=datat-name type=text placeholder="Aussagekräftiger Name des Datensets" required title="Der Name des Datensets ist zwingend erforderlich" data-h5-errorid="invalid-DatasetName">
+					<p class="ui-state-error notice" id="invalid-DatasetName" ></p>
+					
+					<label for=data-cat>Kategorie(n)</label>
+					<input id=data-cat name=data-category type=text placeholder="Umwelt, Transport" title="Geben Sie eine Kategorie(n) an, in welche das Datenset sortiert werden soll. Bildung, Transport" required data-h5-errorid="invalid-DatasetCat">
+					<p class="ui-state-error notice" id="invalid-DatasetCat" ></p>
+					
+										
+					<label for=data-desc>Beschreibung des Datensets</label>
+					<textarea id=data-desc name=datasat-description rows=5 placeholder="Bitte unbedingt ausfüllen" title="Eine Beschreibung ist für die Nutzer des Datensets nützlich" required data-h5-errorid="invalid-DatasetDesc" ></textarea>
+					<p class="ui-state-error notice" id="invalid-DatasetDesc" ></p>
+					</fieldset>
+					
+					<fieldset id="step2">
+					<legend>Angaben des Erstellers</legend>
+
+					<label for=name>Name des Erstellers/Firma/Organisation</label>
+					<input id=name name=name type=text placeholder="Name" title="Name des Erstellers/Organisation bitte angeben" required data-h5-errorid="invalid-DatasetOrg">
+					<p class="ui-state-error notice" id="invalid-DatasetOrg" ></p>
+					
+					<label for=email>E-Mail-Adresse</label>
+					<input id=email name=email type=email placeholder="mustermann@meine-domain.de" title="Bitte eine gültige E-Mail-Adresse angeben" required data-h5-errorid="invalid-DatasetMail">
+					<p class="ui-state-error notice" id="invalid-DatasetMail" ></p>
+
+					<label for=phone>Telefone</label>
+					<input id=phone name=phone type=tel placeholder="Format: 0341-12345678" title="Bitte eine Telefonnummer angeben: 0341-12345678" required data-h5-errorid="invalid-DatasetTel">
+					<p class="ui-state-error notice" id="invalid-DatasetTel"></p>
+					
+					<label for=website>Webseite</label>
+					<input id=website name=webseite type=url placeholder="www.organisation.de">
+											
+				</fieldset>
+				<div class="hr"><hr /></div>	
+				<fieldset id="step3">
+					<legend>Quellen des DatenSets</legend>
+					<p>Hier finden Sie unterschiedliche Eingabefelder um Ihre Datenquelle frei zu geben. Bitte hinterlegen Sie die Daten in einem der angegebenen Datenformate auf ihrem <b>Server</b>. Bitte füllen Sie mindestens ein zu Ihren Datenformat korrespondierenden Feld aus. <b>Beispiel: XLS &#x2192; Excel-Datei </b></p>
+					<label for=url-pdf>URL zum PDF</label>
+					<input id=url-pdf name=url-pdf type=text placeholder="www.organisation.de/data.pdf">
+					
+					<label for=url-json>URL zum JSON-Datenset</label>
+					<input id=url-json name=url-json type=text placeholder="www.organisation.de/data.pdf">					
+					
+					<label for=url-xml>URL zum PDF</label>
+					<input id=url-xml name=url-xml type=text placeholder="www.organisation.de/data.xml">					
+					
+					<label for=url-xls>URL zum XLS</label>
+					<input id=url-xls name=url-xls type=text placeholder="www.organisation.de/data.xml">
+					<label for=url-csv>URL zum CSV</label>
+					<input id=url-csv name=url-csv type=text placeholder="www.organisation.de/data.csv">						
+					</fieldset>
+					
+				
+				
+				<fieldset>
+					<button type=submit>speichern</button>
+				</fieldset>
+			</form>
+			</article >
+			<aside class="span-4 last">
+		 		<section id="Profil" class="span-5">
+		 			<ul id="EditProfil">
+		 				<li><a href="#editprofile" title="Profil bearbeiten">Profil bearbeiten</a></li>
+		 				<li><a href="#changepassword" title="Passwort ändern">Passwort ändern</a></li>
+		 				<li><a class="smallfield" href="#permissions" title="Berechtigungen">Permissions</a></li>
+		 				<!-- placeholder: only if needed, otherwise delete them -->
+		 				<li><a href="#placeholder" title="Placeholder">Placeholder</a></li>
+		 				<li><a href="#placeholder" title="Placeholder">Placeholder</a></li>
+		 				<li><a class="smallfield" href="#placeholder" title="Placeholder">Placeholder</a></li>
+		 			</ul>
+		 		</section>				
+					<h1 class="hide">Sidebar</h1>
+
+					<section class="Banner">
+						<hgroup>
+						<h1>Normaler Banner</h1>
+						<h2>Werbung? Mitglieder?</h2>
+						</hgroup>
+
+					</section>
+					<section class="Banner notice">
+						<h1>Information für die Entwickler</h1>
+						<p>Wir müssen uns noch einmal über die Validierung des HTML5-Formulars unterhalten!    
+						</p>
+					</section>	
+					<section class="Banner down">
+						<h1>Unten platzierterter Banner</h1>
+						<ul> 
+							<li><a href="#placeholder" title="Placeholder">Hilfe</a></li>
+		 					<li><a href="#placeholder" title="Placeholder">Tutorials</a></li>
+		 					<li><a href="#placeholder" title="Placeholder">FAQ</a></li>
+						</ul>
+					</section>			
+			</aside>
+		
+			<div class="clear">&nbsp;</div>				
+		</section><!-- /#Content -->
+		
+		<div class="clear">&nbsp;</div>	
+		<section id="Legacy" class="container pane-darker">
+			<h1 id="SmallLogo">API.LEIPZIG</h1>
+			<p>ist ein Projekt gefördert durch die <a href="http://www.leipzig.de" title="Stadt Leipzig" rel="external">Stadt Leipzig</a>, das in Zusammenarbeit mit <a href="#beteiligte" title="Personen und Organisationen, welche LEIPZIG.API erstellt haben" rel="external">Selbstständigen der Kultur- &amp; Kreativwirtschaft</a> enstanden ist.</p>
+		</section><!-- /#Legacy  -->
+		
+		<div class="page-hr"><hr /></div>
+		
+		<footer class="container">
+		 <nav id="FooterWikiNav" >
+		 <div class="span-8">
+		 <h1>Browse the WIKI</h1>
+		 	<div class="span-2">
+		 	<ul class="FooterWikiList">
+				<li><a href="#nowhere" title="Datenquellen">Datenquellen</a></li>
+				<li><a href="#nowhere" title="Kategorien">Kategorien (A-Z)</a></li>
+				<li><a href="#nowhere" title="Formate der Daten">Formate der Daten</a></li>
+				<li><a href="#nowhere" title="Wie können Sie sich beteiligen">Wie beteiligen?</a></li>
+			</ul>
+			</div><!-- /.FooterWikiList 1  -->
+			<div class="span-2">
+			<ul class="FooterWikiList">
+				<li><a href="#nowhere" title="Ausgewählte Anwendung">Kalender</a></li>
+				<li><a href="#nowhere" title="Apps (Übersicht)">Anwendungen</a></li>
+				<li><a href="#nowhere" title="Wie erstelle ich Anwendungen">Wie erstelle ich Apps?</a></li>
+				<li><a href="#nowhere" title="Tutorials">Tutorials</a></li>
+			</ul>
+			</div><!-- /.FooterWikiList 2  -->
+	 		<div class="span-2">
+	 		<ul class="FooterWikiList">
+				<li><a href="#nowhere" title="Was ist api.leipzig?">Was ist api.leipzig?</a></li>
+				<li><a href="#nowhere" title="Nutzen von api.leipzig">Nutzen API.LEIPZIG</a></li>
+				<li><a href="#nowhere" title="Für wen?">Für wen?</a></li>
+				<li><a href="#nowhere" title="Hintergründe">Hintergründe</a></li>
+			</ul>
+			</div><!-- /.FooterWikiList 3  -->
+			<div class="span-2 last">
+			<ul class="FooterWikiList">
+				<li><a href="#nowhere" title="Startseite">Datenschutz</a></li>
+				<li><a href="#nowhere" title="FAQs">FAQs</a></li>
+				<li><a href="#nowhere" title="Hilfe">Hilfe</a></li>
+				<li><a href="#nowhere" title="Beteiligte">Beteiligte</a></li>
+			</ul>
+			</div><!-- /.FooterWikiList 4  -->
+		</div>
+
+		 <div class="prepend-1 span-3 last" id="addFooterLinks">
+		 <a href="#impressum" title="Link zum Impressum">Impressum</a> &middot;<a href="#kontakt" title="Link zur Kontaktseite"> Kontakt</a>
+			<ul id="FooterSocialList span-2">
+				<li><a class="rss" href="#nowhere" title="RSS-Feed">RSS-Feed</a></li>
+				<li><a class="facebook" href="#nowhere" title="Facebook">Facebook</a></li>
+				<li><a class="twitter" href="#nowhere" title="Twitter">Twitter</a></li>
+			</ul><!-- /# FooterSocialList  -->
+		</div>
+	  </nav>
+	 </footer><!-- /footer -->
+	</section><!--!/Backend -->
+	<!-- !Javascript - at the bottom for fast page loading -->
+	<!-- Grab Google CDN's jQuery. fall back to local if necessary -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+	<script>!window.jQuery && document.write('<script src="js/jquery-1.4.4.min.js"><\/script>')</script>
+	
+	<!-- nice Slider on Homepage / maybe on the Gallery side
+	<script src="js/jQueryTools.js?v=1"></script> -->
+	
+	<!-- PlugIn to get html5 forms work on all Browser (e.g. require, type=url) : needed on all sites containing forms at api.leipzig -->
+	<script src="js/jquery.html5form-1.2-min.js"></script>
+	<!-- PlugIn to validate the forms on html5-doms and show errors: needed on all sites containing forms at api.leipzig -->
+	<script src="js/jquery.h5validate.js"></script>
+	<!-- Guess what? all the nice js-driven things on api.leipzig -->
+	<script src="js/api-leipzig-global.js?v=1"></script>
+</body>
+</html>

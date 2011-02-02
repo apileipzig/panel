@@ -1,11 +1,10 @@
-%p
-  %b Name:
-  = h @user.name
-  = link_to 'Profil bearbeiten', edit_account_path
-  = link_to 'Logout', logout_path
+%header
+  %h1
+    = "Profil von #{@current_user.name}"
 %p
   - if @user.active?
-    = "Sie wurden freigeschaltet. Hier ist Ihr API-Key: #{@user.single_access_token}"
+    Sie können mit folgendem API-Key auf API.LEIPZIG zugreifen: 
+    = @user.single_access_token
 %P
   Sie verfügen momentan über folgende Rechte:
   - @permissions.each do |tablename, permissions|
@@ -18,6 +17,3 @@
       - unless permissions['write'].blank?
         %tr
           %td= "Schreibzugriff auf die Spalten: #{permissions['write'].map{|p| p.spalte.titleize}.join(', ')}"
-%p
-  - if @user.admin?
-    = "Hier geht es zur #{link_to 'Admin Konsole', admin_url}."
