@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110118132615) do
+ActiveRecord::Schema.define(:version => 20110202105400) do
 
   create_table "data_firmen", :force => true do |t|
     t.string  "Firma",                         :null => false
@@ -43,8 +43,8 @@ ActiveRecord::Schema.define(:version => 20110118132615) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "access"
-    t.string   "tabelle"
-    t.string   "spalte"
+    t.string   "table"
+    t.string   "column"
   end
 
   create_table "permissions_users", :id => false, :force => true do |t|
