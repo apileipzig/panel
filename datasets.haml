@@ -1,0 +1,262 @@
+!!!
+/[if lt IE 7 ] <html lang="en" class="no-js ie6">
+/[if IE 7 ] <html lang="en" class="no-js ie7">
+/[if IE 8 ] <html lang="en" class="no-js ie8">
+/[if IE 9 ] <html lang="en" class="no-js ie9">
+/ [if (gt IE 9)|!(IE)]><!
+%html.no-js{:lang => "de"}
+  / <![endif]
+  %head
+    %meta{:charset => "utf-8"}/
+    /[if IE] <link rel="stylesheet" href="css/ie.css">
+    %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
+    %title API.LEIPZIG - Datenquelle bearbeiten
+    %meta{:content => "API.LEIPZIG - ist ein Portal, wo Daten aus Leipzig zusammengefasst und kreativ visualisiert werden", :name => "description"}/
+    %meta{:content => "", :name => "keywords"}/
+    %meta{:content => "Thomas Apfelbacher", :name => "author"}/
+    %meta{:content => "width=device-width; initial-scale=1.0", :name => "viewport"}/
+    / !CSS
+    %link{:href => "css/api-style.css?v=1", :rel => "stylesheet"}/
+    / !Google Font Library
+    %link{:href => "http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold", :rel => "stylesheet", :type => "text/css"}/
+    /
+      Uncomment if you are specifically targeting less enabled mobile browsers
+      <link rel="stylesheet" media="handheld" href="css/handheld.css?v=1">
+    / !Modernizr - All other JS at bottom
+    %script{:src => "js/modernizr-1.6.min.js"}
+  / !Body
+  %body
+    %section#Backend
+      %header#PageHeader
+        %nav.container
+    %h1#Logo
+      %a{:href => "index.html", :title => "API.LEIPZIG"} API.LEIPZIG
+    %section#user.span-4
+      Hallo,
+    %a{:href => "#profiledit", :title => "Nutzer-Profil editieren"} Lars Christian
+    %ul#GlobalNav.span-5.append-2
+      %li
+        %a{:href => "index.html", :title => "Startseite"} Start
+      %li
+        %a{:href => "#datenschutz", :title => "Datenschutz"} Datenschutz
+      %li
+        %a{:href => "#beteiligte", :title => "Hintergr\303\274nde"} Hintergründe
+      %li
+        %a{:href => "#hilfe", :title => "Hilfe"} Hilfe
+    / /#GlobalNav
+    %a.LogoutLink.span-1.last{:href => "backend.html", :title => "Logout"} Logout
+    %ul#GlobalTabs.prepend-4.span-5.last
+      %li
+        %a{:href => "#datenquellen", :title => "Datenquellen"} Datenquellen
+      %li
+        %a{:href => "#anwendungen", :title => "Anwendungen"} Anwendungen
+      %li
+        %a{:href => "wiki.html", :title => "WIKI"} WIKI
+    / /#GlobalTabs
+    %section#LinkktoBE
+    %a.current{:href => "backend.html", :title => "Einstellungen vornehmen"} Backend
+    / /.container
+    / /header
+    %section#Page.container.pane-backend{:role => "main"}
+      %article.span-8
+        %section#CatEdit
+    %ul#CatEditTabs.span-8
+      %li
+        %a.current{:href => "datasets.html", :title => "Eine Datenquelle anlegen oder bearbeiten"} Datenquellen bearbeiten
+      %li
+        %a{:href => "#application", :title => "Eine Anwendung anlegen oder bearbeiten"} Anwendung bearbeiten
+      %li
+        %a{:href => "calendar.html", :title => "Kalenderevent bearbeiten"} Kalendereintrag
+      %li
+        %a.admin{:href => "admin.html", :title => "Adminbereich"} Admin
+    %section.prepend-6.span-2.last
+    %ul#AddorEdit
+      %li
+        %a.add{:href => "#addItem", :rel => "edit", :title => "neu anlegen"} neu anlegen
+      %li
+        %a.edit{:href => "#editItem", :rel => "edit", :title => "bearbeiten 2"} bearbeiten
+    .clear &nbsp;
+    %header
+    %h1 Datenquelle anlegen (Pagetitle)
+    %p
+      Kurze textliche Einleitung, was für Daten bearbeitet bzw. erwartet werden.
+      = succeed "Es" do
+        %b Anmerkung!
+      gibt zwei Arten um die einzelnen Fieldsets des Formular mit Informationen zu versehen. Einmal als versteckter Tooltip (siehe Angaben zum Datenset), welcher beim hover über das besagte Fielset erscheint und einmal ganz normal als Text im Fieldset direkt(s.u. Links) - Apfel
+    .hr
+      %hr/
+    %form#new-dataset.api-form{:action => "dataset/add.php", :method => "post"}
+      %fieldset#step1
+        %legend Allgemeine Daten
+        .fieldset-desc
+          %p
+            Beschreibung zum Formularfeld. Beispiel:
+            Bitte tragen Sie hier den Namen des Datensets. Dieser sollte selbstbeschreibend sein und die Art bzw. Kategorie der Daten widerspiegeln
+        %label{:for => "data-name"} Name des Datensets
+        %input#data-name{"data-h5-errorid" => "invalid-DatasetName", :name => "datat-name", :placeholder => "Aussagekr\303\244ftiger Name des Datensets", :required => "", :title => "Der Name des Datensets ist zwingend erforderlich", :type => "text"}/
+        %p#invalid-DatasetName.ui-state-error.notice
+        %label{:for => "data-cat"} Kategorie(n)
+        %input#data-cat{"data-h5-errorid" => "invalid-DatasetCat", :name => "data-category", :placeholder => "Umwelt, Transport", :required => "", :title => "Geben Sie eine Kategorie(n) an, in welche das Datenset sortiert werden soll. Bildung, Transport", :type => "text"}/
+        %p#invalid-DatasetCat.ui-state-error.notice
+        %label{:for => "data-desc"} Beschreibung des Datensets
+        %textarea#data-desc{"data-h5-errorid" => "invalid-DatasetDesc", :name => "datasat-description", :placeholder => "Bitte unbedingt ausf\303\274llen", :required => "", :rows => "5", :title => "Eine Beschreibung ist f\303\274r die Nutzer des Datensets n\303\274tzlich"}
+        %p#invalid-DatasetDesc.ui-state-error.notice
+      %fieldset#step2
+        %legend Angaben des Erstellers
+        %label{:for => "name"} Name des Erstellers/Firma/Organisation
+        %input#name{"data-h5-errorid" => "invalid-DatasetOrg", :name => "name", :placeholder => "Name", :required => "", :title => "Name des Erstellers/Organisation bitte angeben", :type => "text"}/
+        %p#invalid-DatasetOrg.ui-state-error.notice
+        %label{:for => "email"} E-Mail-Adresse
+        %input#email{"data-h5-errorid" => "invalid-DatasetMail", :name => "email", :placeholder => "mustermann@meine-domain.de", :required => "", :title => "Bitte eine g\303\274ltige E-Mail-Adresse angeben", :type => "email"}/
+        %p#invalid-DatasetMail.ui-state-error.notice
+        %label{:for => "phone"} Telefone
+        %input#phone{"data-h5-errorid" => "invalid-DatasetTel", :name => "phone", :placeholder => "Format: 0341-12345678", :required => "", :title => "Bitte eine Telefonnummer angeben: 0341-12345678", :type => "tel"}/
+        %p#invalid-DatasetTel.ui-state-error.notice
+        %label{:for => "website"} Webseite
+        %input#website{:name => "webseite", :placeholder => "www.organisation.de", :type => "url"}/
+      .hr
+        %hr/
+      %fieldset#step3
+        %legend Quellen des DatenSets
+        %p
+          Hier finden Sie unterschiedliche Eingabefelder um Ihre Datenquelle frei zu geben. Bitte hinterlegen Sie die Daten in einem der angegebenen Datenformate auf ihrem
+          = succeed "." do
+            %b Server
+          Bitte füllen Sie mindestens ein zu Ihren Datenformat korrespondierenden Feld aus.
+          %b Beispiel: XLS &#x2192; Excel-Datei
+        %label{:for => "url-pdf"} URL zum PDF
+        %input#url-pdf{:name => "url-pdf", :placeholder => "www.organisation.de/data.pdf", :type => "text"}/
+        %label{:for => "url-json"} URL zum JSON-Datenset
+        %input#url-json{:name => "url-json", :placeholder => "www.organisation.de/data.pdf", :type => "text"}/
+        %label{:for => "url-xml"} URL zum PDF
+        %input#url-xml{:name => "url-xml", :placeholder => "www.organisation.de/data.xml", :type => "text"}/
+        %label{:for => "url-xls"} URL zum XLS
+        %input#url-xls{:name => "url-xls", :placeholder => "www.organisation.de/data.xml", :type => "text"}/
+        %label{:for => "url-csv"} URL zum CSV
+        %input#url-csv{:name => "url-csv", :placeholder => "www.organisation.de/data.csv", :type => "text"}/
+      %fieldset
+        %button{:type => "submit"} speichern
+    %aside.span-4.last
+      %section#Profil.span-5
+    %ul#EditProfil
+      %li
+        %a{:href => "#editprofile", :title => "Profil bearbeiten"} Profil bearbeiten
+      %li
+        %a{:href => "#changepassword", :title => "Passwort \303\244ndern"} Passwort ändern
+      %li
+        %a.smallfield{:href => "#permissions", :title => "Berechtigungen"} Permissions
+      / placeholder: only if needed, otherwise delete them
+      %li
+        %a{:href => "#placeholder", :title => "Placeholder"} Placeholder
+      %li
+        %a{:href => "#placeholder", :title => "Placeholder"} Placeholder
+      %li
+        %a.smallfield{:href => "#placeholder", :title => "Placeholder"} Placeholder
+    %h1.hide Sidebar
+    %section.Banner
+      %hgroup
+    %h1 Normaler Banner
+    %h2 Werbung? Mitglieder?
+    %section.Banner.notice
+    %h1 Information für die Entwickler
+    %p
+      Wir müssen uns noch einmal über die Validierung des HTML5-Formulars unterhalten!
+    %section.Banner.down
+    %h1 Unten platzierterter Banner
+    %ul
+      %li
+        %a{:href => "#placeholder", :title => "Placeholder"} Hilfe
+      %li
+        %a{:href => "#placeholder", :title => "Placeholder"} Tutorials
+      %li
+        %a{:href => "#placeholder", :title => "Placeholder"} FAQ
+    .clear &nbsp;
+    / /#Content
+    .clear &nbsp;
+    %section#Legacy.container.pane-darker
+    %h1#SmallLogo API.LEIPZIG
+    %p
+      ist ein Projekt gefördert durch die
+      = succeed "," do
+        %a{:href => "http://www.leipzig.de", :rel => "external", :title => "Stadt Leipzig"} Stadt Leipzig
+      das in Zusammenarbeit mit
+      %a{:href => "#beteiligte", :rel => "external", :title => "Personen und Organisationen, welche LEIPZIG.API erstellt haben"} Selbstständigen der Kultur- &amp; Kreativwirtschaft
+      enstanden ist.
+    / /#Legacy
+    .page-hr
+      %hr/
+    %footer.container
+      %nav#FooterWikiNav
+    .span-8
+      %h1 Browse the WIKI
+      .span-2
+        %ul.FooterWikiList
+          %li
+            %a{:href => "#nowhere", :title => "Datenquellen"} Datenquellen
+          %li
+            %a{:href => "#nowhere", :title => "Kategorien"} Kategorien (A-Z)
+          %li
+            %a{:href => "#nowhere", :title => "Formate der Daten"} Formate der Daten
+          %li
+            %a{:href => "#nowhere", :title => "Wie k\303\266nnen Sie sich beteiligen"} Wie beteiligen?
+      / /.FooterWikiList 1
+      .span-2
+        %ul.FooterWikiList
+          %li
+            %a{:href => "#nowhere", :title => "Ausgew\303\244hlte Anwendung"} Kalender
+          %li
+            %a{:href => "#nowhere", :title => "Apps (\303\234bersicht)"} Anwendungen
+          %li
+            %a{:href => "#nowhere", :title => "Wie erstelle ich Anwendungen"} Wie erstelle ich Apps?
+          %li
+            %a{:href => "#nowhere", :title => "Tutorials"} Tutorials
+      / /.FooterWikiList 2
+      .span-2
+        %ul.FooterWikiList
+          %li
+            %a{:href => "#nowhere", :title => "Was ist api.leipzig?"} Was ist api.leipzig?
+          %li
+            %a{:href => "#nowhere", :title => "Nutzen von api.leipzig"} Nutzen API.LEIPZIG
+          %li
+            %a{:href => "#nowhere", :title => "F\303\274r wen?"} Für wen?
+          %li
+            %a{:href => "#nowhere", :title => "Hintergr\303\274nde"} Hintergründe
+      / /.FooterWikiList 3
+      .span-2.last
+        %ul.FooterWikiList
+          %li
+            %a{:href => "#nowhere", :title => "Startseite"} Datenschutz
+          %li
+            %a{:href => "#nowhere", :title => "FAQs"} FAQs
+          %li
+            %a{:href => "#nowhere", :title => "Hilfe"} Hilfe
+          %li
+            %a{:href => "#nowhere", :title => "Beteiligte"} Beteiligte
+      / /.FooterWikiList 4
+    #addFooterLinks.prepend-1.span-3.last
+      %a{:href => "#impressum", :title => "Link zum Impressum"} Impressum
+      \&middot;
+      %a{:href => "#kontakt", :title => "Link zur Kontaktseite"} Kontakt
+      %ul{:id => "FooterSocialList span-2"}
+        %li
+          %a.rss{:href => "#nowhere", :title => "RSS-Feed"} RSS-Feed
+        %li
+          %a.facebook{:href => "#nowhere", :title => "Facebook"} Facebook
+        %li
+          %a.twitter{:href => "#nowhere", :title => "Twitter"} Twitter
+      / /# FooterSocialList
+    / /footer
+    / !/Backend
+    / !Javascript - at the bottom for fast page loading
+    / Grab Google CDN's jQuery. fall back to local if necessary
+    %script{:src => "http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"}
+    :javascript
+      !window.jQuery && document.write('<script src="js/jquery-1.4.4.min.js"><\/script>')    /
+      nice Slider on Homepage / maybe on the Gallery side
+      <script src="js/jQueryTools.js?v=1"></script>
+    / PlugIn to get html5 forms work on all Browser (e.g. require, type=url) : needed on all sites containing forms at api.leipzig
+    %script{:src => "js/jquery.html5form-1.2-min.js"}
+    / PlugIn to validate the forms on html5-doms and show errors: needed on all sites containing forms at api.leipzig
+    %script{:src => "js/jquery.h5validate.js"}
+    / Guess what? all the nice js-driven things on api.leipzig
+    %script{:src => "js/api-leipzig-global.js?v=1"}

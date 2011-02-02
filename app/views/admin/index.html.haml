@@ -1,28 +1,34 @@
-%h1 Admin Konsole
-%p
-  %a{:href => account_path}
-    Zur&uuml;ck zur Profilseite
-%h2
-  Liste freizuschaltender Benutzer
-%p
-  - if @inactive_users.blank?
-    Niemand will aktiviert werden.
-  - else
-    - form_tag user_activation_path do
-      - @inactive_users.each do |user|
-        = user.name 
-        = check_box "activation[#{user.id}]", 'active'
-        %br/
-      %br/
-      = submit_tag 'Absenden'
-%h2
-  Benutzereinstellungen bearbeiten
-%p
-  - if @active_users.blank?
-    Keine Benutzer angelegt.
-  - else
-    - form_tag user_details_path do
-      Benutzer ausw&auml;hlen:
+%header
+  %h1
+    Admin Konsole
+- if @inactive_users.blank?
+  %p
+    Derzeit gibt es keine Nutzer, die freigeschaltet werden müssen.
+- else
+  %p
+    Folgende Benutzer sind noch nicht freigeschaltet:
+  - form_tag user_activation_path do
+    %fieldset
+      %legend Freizuschaltende Benutzer
+      .fieldset-desc
+        %p
+          Bitte wählen Sie die Nutzer aus, die Sie freischalten wollen.
+      %table
+        - @inactive_users.each do |user|
+          %tr
+            %td= user.name 
+            %td= check_box "activation[#{user.id}]", 'active'
+      %button{:name => 'commit', :type => 'submit'} Absenden
+
+- if @active_users.blank?
+  %p
+    Es gibt keine aktiven Benutzer.
+- else
+  - form_tag user_details_path do
+    %fieldset
+      %legend Benutzerdaten bearbeiten
+      .fieldset-desc
+        %p
+          Bitte wählen Sie den Nutzer aus, dessen Daten Sie bearbeiten wollen.
       = collection_select('user', 'id', @active_users, :id, :name)
-      = submit_tag 'Bearbeiten'
-   
+      %button{:name => 'commit', :type => 'submit'} Bearbeiten   
