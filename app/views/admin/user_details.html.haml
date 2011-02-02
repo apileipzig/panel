@@ -22,11 +22,13 @@
       = hidden_field(:user, :id)
       %div#accordion
         - @permissions.each do |tablename, table_permissions|
-          - %w[read write].each do |access|
+          - %w[create read update delete].each do |access|
             %h3
               %a{:href => '#'}
+                = "Schreibrechte für Tabelle \"#{tablename.titleize}\"" if access == 'create'
                 = "Leserechte für Tabelle \"#{tablename.titleize}\"" if access == 'read'
-                = "Schreibrechte für Tabelle \"#{tablename.titleize}\"" if access == 'write'
+                = "Aktualisierungsrechte für Tabelle \"#{tablename.titleize}\"" if access == 'update'
+                = "Löschrechte für Tabelle \"#{tablename.titleize}\"" if access == 'delete'
             %div
               %span
                 - js_call = "select_all(new Array('" + table_permissions[access].map{|p| p.id}.join("','") + "'), 0);"
@@ -43,7 +45,7 @@
                 - table_permissions[access].each do |permission|
                   %tr
                     %td
-                      = permission.spalte.titleize
+                      = permission.column.titleize
                       %td
                         = radio_button('permission', permission.id, 0, :checked => !@user_permissions.include?(permission))
                       %td

@@ -41,9 +41,14 @@ class AdminController < ApplicationController
     @user_permissions = @user.permissions
     @permissions = Hash.new
     Permission.all_tables.each do |tablename|
-      @permissions[tablename] = {'read', 'write'}
-      @permissions[tablename]['read'] = Permission.all.select{|p| p.access == 'read' && p.tabelle == tablename}
-      @permissions[tablename]['write'] = Permission.all.select{|p| p.access == 'write' && p.tabelle == tablename}
+      @permissions[tablename] = Hash.new
+      %w[create read update delete].each do |access|
+        permissions = Permission.all.select{|p| p.access == access && p.table == tablename}
+        unless permissions.blank?
+          @permissions[tablename][access] = Hash.new 
+          @permissions[tablename][access] = permissions
+        end
+      end
     end
   end
 
