@@ -11,9 +11,16 @@
     %table
       %tr
         %th= "Datentabelle \"#{tablename.titleize}\""
+      - unless permissions['create'].blank?
+        %tr
+          %td= "Schreibzugriff auf die Spalten: #{permissions['create'].map{|p| p.column.titleize}.join(', ')}"
       - unless permissions['read'].blank?
         %tr
-          %td= "Lesezugriff auf die Spalten: #{permissions['read'].map{|p| p.spalte.titleize}.join(', ')}"
-      - unless permissions['write'].blank?
+          %td= "Lesezugriff auf die Spalten: #{permissions['read'].map{|p| p.column.titleize}.join(', ')}"
+      - unless permissions['update'].blank?
         %tr
-          %td= "Schreibzugriff auf die Spalten: #{permissions['write'].map{|p| p.spalte.titleize}.join(', ')}"
+          %td= "Aktualisierungszugriff auf die Spalten: #{permissions['update'].map{|p| p.column.titleize}.join(', ')}"
+      - unless permissions['delete'].blank?
+        %tr
+          %td= "Löschzugriff auf die Spalten: #{permissions['delete'].map{|p| p.column.titleize}.join(', ')}"
+          
