@@ -1,18 +1,177 @@
-!!! XML
-!!! 1.1
-%html{html_attrs}
+!!!
+/[if lt IE 7 ] <html lang="en" class="no-js ie6">
+/[if IE 7 ] <html lang="en" class="no-js ie7">
+/[if IE 8 ] <html lang="en" class="no-js ie8">
+/[if IE 9 ] <html lang="en" class="no-js ie9">
+/ [if (gt IE 9)|!(IE)]><! 
+%html.no-js{:lang => "de"}
+  / <![endif]
   %head
-    %meta{:'http-equiv' => 'Content-Type', :content => "text/html; charset=UTF-8"}
-
-    %title= "Leipzig API"
-
-    = stylesheet_link_tag 'compiled/screen.css', :media => 'screen, projection'
-    = stylesheet_link_tag 'compiled/print.css', :media => 'print'
-    = stylesheet_link_tag 'compiled/ie.css', :media => 'screen, projection'
 
     - if controller.controller_name == 'admin'
-      = javascript_include_tag :jquery_ui
       = stylesheet_link_tag 'compiled/jquery/ui/ui-lightness.css', :media => 'screen, projection'
+    %meta{:charset => "utf-8"}/
+    /[if IE] <link rel="stylesheet" href="/stylesheets/ie.css">
+    %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
+    %title API.LEIPZIG - Backend
+    %meta{:content => "API.LEIPZIG - ist ein Portal, wo Daten aus Leipzig zusammengefasst und kreativ visualisiert werden", :name => "description"}/
+    %meta{:content => "", :name => "keywords"}/
+    %meta{:content => "Thomas Apfelbacher", :name => "author"}/
+    %meta{:content => "width=device-width; initial-scale=1.0", :name => "viewport"}/
+    / !CSS
+    %link{:href => "/stylesheets/api-style.css?v=1", :rel => "stylesheet"}/
+    / !Google Font Library
+    %link{:href => "http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold", :rel => "stylesheet", :type => "text/css"}/
+    /
+      Uncomment if you are specifically targeting less enabled mobile browsers
+      <link rel="stylesheet" media="handheld" href="/stylesheets/handheld.css?v=1">
+    / !Modernizr - All other JS at bottom
+    %script{:src => "/javascripts/modernizr-1.6.min.js"}
 
   %body
-    #mainContent= yield
+    %section#Backend
+      %header#PageHeader
+        %nav.container
+          %h1#Logo
+            %a{:href => "index.html", :title => "API.LEIPZIG"} API.LEIPZIG
+          %section#user.span-4
+            - if @current_user
+              Hallo,
+              %a{:href => "#profiledit", :title => "Nutzer-Profil editieren"}
+              = @current_user.name
+          %ul#GlobalNav.span-5.append-2
+            %li
+              %a{:href => "index.html", :title => "Startseite"} Start
+            %li
+              %a{:href => "#datenschutz", :title => "Datenschutz"} Datenschutz
+            %li
+              %a{:href => "#beteiligte", :title => "Hintergr\303\274nde"} Hintergründe
+            %li
+              %a{:href => "#hilfe", :title => "Hilfe"} Hilfe
+            / /#GlobalNav
+          - if @current_user
+            %a.LogoutLink.span-1.last{:href => "/logout", :title => "Logout"} Logout
+          - else
+            %a.LogoutLink.span-1.last{:href => "/login", :title => "Logout"} Login
+          %ul#GlobalTabs.prepend-4.span-5.last
+            %li
+              %a{:href => "wiki.html", :title => "WIKI"} WIKI
+            / /#GlobalTabs
+          %section#LinkktoBE
+            %a.current{:href => "backend.html", :title => "Einstellungen vornehmen"} Backend
+        / /nav.container
+      / /header
+      %section#Page.container.pane-backend{:role => "main"}
+        %article.span-8
+          %section#CatEdit
+            %ul#CatEditTabs.span-8
+              - if @current_user && @current_user.admin?
+                %li
+                  %a.admin{:href => "/admin", :title => "Adminbereich"} Admin
+          .clear &nbsp;
+          = yield
+        %aside.span-4.last
+          %section#Profil.span-5
+            - if @current_user
+              %ul#EditProfil
+                %li
+                  %a{:href => account_path, :title => "Profil ansehen"} Profil ansehen
+                %li
+                  %a{:href => edit_account_path, :title => "Profil bearbeiten"} Profil bearbeiten
+                %li
+                  %a.smallfield{:href => edit_account_path, :title => "Passwort ändern"} Passwort ändern
+          %h1.hide Sidebar
+          %section.Banner
+            %hgroup
+              %h1 Normaler Banner
+              %h2 Werbung? Mitglieder?
+            %section.Banner.notice
+              %h1 Information für die Entwickler
+              %p
+                Wir müssen uns noch einmal über die Validierung des HTML5-Formulars unterhalten!
+        .clear &nbsp;
+        / /#Content
+      .clear &nbsp;
+      %section#Legacy.container.pane-darker
+        %h1#SmallLogo API.LEIPZIG
+        %p
+          ist ein Projekt gefördert durch die
+          = succeed "," do
+            %a{:href => "http://www.leipzig.de", :rel => "external", :title => "Stadt Leipzig"} Stadt Leipzig
+            das in Zusammenarbeit mit
+            %a{:href => "#beteiligte", :rel => "external", :title => "Personen und Organisationen, welche LEIPZIG.API erstellt haben"} Selbstständigen der Kultur- &amp; Kreativwirtschaft
+            enstanden ist.
+      / /#Legacy
+    .page-hr
+      %hr/
+    %footer.container
+      %nav#FooterWikiNav
+        .span-8
+          %h1 Browse the WIKI
+          .span-2
+            %ul.FooterWikiList
+              %li
+                %a{:href => "#nowhere", :title => "Datenquellen"} Datenquellen
+              %li
+                %a{:href => "#nowhere", :title => "Kategorien"} Kategorien (A-Z)
+              %li
+                %a{:href => "#nowhere", :title => "Formate der Daten"} Formate der Daten
+              %li
+                %a{:href => "#nowhere", :title => "Wie k\303\266nnen Sie sich beteiligen"} Wie beteiligen?
+          / /.FooterWikiList 1
+          .span-2
+            %ul.FooterWikiList
+              %li
+                %a{:href => "#nowhere", :title => "Ausgew\303\244hlte Anwendung"} Kalender
+              %li
+                %a{:href => "#nowhere", :title => "Apps (\303\234bersicht)"} Anwendungen
+              %li
+                %a{:href => "#nowhere", :title => "Wie erstelle ich Anwendungen"} Wie erstelle ich Apps?
+              %li
+                %a{:href => "#nowhere", :title => "Tutorials"} Tutorials
+          / /.FooterWikiList 2
+          .span-2
+            %ul.FooterWikiList
+              %li
+                %a{:href => "#nowhere", :title => "Was ist api.leipzig?"} Was ist api.leipzig?
+              %li
+                %a{:href => "#nowhere", :title => "Nutzen von api.leipzig"} Nutzen API.LEIPZIG
+              %li
+                %a{:href => "#nowhere", :title => "F\303\274r wen?"} Für wen?
+              %li
+                %a{:href => "#nowhere", :title => "Hintergr\303\274nde"} Hintergründe
+          / /.FooterWikiList 3
+          .span-2.last
+            %ul.FooterWikiList
+              %li
+                %a{:href => "#nowhere", :title => "Startseite"} Datenschutz
+              %li
+                %a{:href => "#nowhere", :title => "FAQs"} FAQs
+              %li
+                %a{:href => "#nowhere", :title => "Hilfe"} Hilfe
+              %li
+                %a{:href => "#nowhere", :title => "Beteiligte"} Beteiligte
+          / /.FooterWikiList 4
+        #addFooterLinks.prepend-1.span-3.last
+          %a{:href => "#impressum", :title => "Link zum Impressum"} Impressum
+          \&middot;
+          %a{:href => "#kontakt", :title => "Link zur Kontaktseite"} Kontakt
+          %ul{:id => "FooterSocialList span-2"}
+            %li
+              %a.rss{:href => "#nowhere", :title => "RSS-Feed"} RSS-Feed
+            %li
+              %a.facebook{:href => "#nowhere", :title => "Facebook"} Facebook
+            %li
+              %a.twitter{:href => "#nowhere", :title => "Twitter"} Twitter
+          / /# FooterSocialList
+        / /footer
+      / !/Backend
+    / !Javascript - at the bottom for fast page loading
+    <script src="/javascripts/jquery-1.4.4.min.js"></script>
+    <script src="/javascripts/jquery-ui-1.8.9.min.js"></script>
+    / nice Slider on Homepage / maybe on the Gallery side
+    <script src="/javascripts/jquery.tools.min.js?v=1"></script>
+    / PlugIn to validate the forms on html5-doms : needed on all sites containing forms at api.leipzig
+    %script{:src => "/javascripts/jquery.h5validate.js"}
+    / Guess what? all the nice js-driven things on api.leipzig
+    %script{:src => "/javascripts/api-leipzig-global.js?v=1"}

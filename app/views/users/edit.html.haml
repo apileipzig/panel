@@ -1,30 +1,25 @@
-%h1 Profil bearbeiten
-- form_for @user, :url => account_path do |form|
-  = form.error_messages
-  = form.label :name
-  %br/
-  = form.text_field :name
-  %br/
-  %br/
-  = form.label :telefon
-  %br/
-  = form.text_field :telefon
-  %br/
-  %br/
-  = form.label :email, 'E-Mail-Adresse'
-  %br/
-  = form.text_field :email, :readonly => 'readonly'
-  %br/
-  %br/
-  = form.label :password, form.object.new_record? ? 'Passwort' : 'Passwort &auml;ndern'
-  %br/
-  = form.password_field :password
-  %br/
-  %br/
-  = form.label :password_confirmation, 'Passwortbestätigung'
-  %br/
-  = form.password_field :password_confirmation
-  %br/
-  = form.submit "Update"
-%br/
-= link_to "Meine Profilseite", account_path
+%header
+  %h1 Profil bearbeiten
+%p
+  Hier können Sie ihr Benutzerprofil bearbeiten. Ihre E-Mail-Adresse kann nicht geändert werden.  
+- form_for @user, :url => account_path, :html => {:class => 'api-form'} do |form|
+  %fieldset
+    %legend Benutzerdaten
+    .fieldset-desc
+      %p
+        Bitte geben Sie Ihre persönlichen Daten ein.
+    = form.error_messages :header_message => nil, :message => nil, :class => 'error'
+    = form.label :name
+    = form.text_field :name
+    = form.label :telefon
+    = form.text_field :telefon
+    = form.label :email, 'E-Mail-Adresse'
+    = form.text_field :email, :readonly => 'readonly'
+    = form.label :password, form.object.new_record? ? 'Passwort' : 'Passwort &auml;ndern'
+    = form.password_field :password
+    = form.label :password_confirmation, 'Passwortbestätigung'
+    = form.password_field :password_confirmation
+    %button{:name => 'commit', :type => 'submit'} Update
+    
+    
+

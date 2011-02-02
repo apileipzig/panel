@@ -1,25 +1,24 @@
 :javascript
-  $(function() {
-    $( "#accordion" ).accordion({ collapsible: true, active: false });
-  });
-
   function select_all(ids, select) {
     while(ids.length > 0) {
       $( "#permission_" + ids.shift() + "_" + select ).attr('checked', true);
     }
   }
-  
-%h1 Admin Konsole
-%p
-  %a{:href => account_path}
-    Zur&uuml;ck zur Profilseite
-%h2
-  = "Rechtevergabe f&uuml;r #{@user.name}"
-%p
-  - if @user.blank?
+
+%header
+  %h1 Nutzerdaten bearbeiten
+- if @user.blank?
+  %p
     Dieser Nutzer existiert nicht.
-  - else
-    - form_tag set_permissions_path, :name => 'set_permissions' do
+- else
+  %p
+    = "Rechtevergabe f&uuml;r #{@user.name}"
+  - form_tag set_permissions_path, :name => 'set_permissions' do
+    %fieldset
+      %legend Rechtevergabe
+      .fieldset-desc
+        %p
+          Bitte wählen Sie die Rechte für diesen Nutzer aus.
       = hidden_field(:user, :id)
       %div#accordion
         - @permissions.each do |tablename, table_permissions|
@@ -49,29 +48,28 @@
                         = radio_button('permission', permission.id, 0, :checked => !@user_permissions.include?(permission))
                       %td
                         = radio_button('permission', permission.id, 1, :checked => @user_permissions.include?(permission))
-      = submit_tag 'Absenden'
+      %button{:name => 'commit', :type => 'submit'} Absenden
     
-  %h2
-    = "Benutzerstatistik f&uuml;r #{@user.name}"
-  %p
-    Diese Funktion fehlt noch!
-  %h2
-    = "Account von #{@user.name} deaktivieren"
-  %p
-    - confirm_function = "return confirm('Wollen Sie den API-Key des Nutzers wirklich erneuern?')" 
-    - form_tag reset_apikey_path, :name => 'reset_apikey', :onsubmit => confirm_function do
-      Mit einem Klick auf Absenden wird der API-Key des Nutzers erneuert. Der Nutzer muss dar&uuml;ber in Kenntnis gesetzt werden,
-      da sein alter API-Key dann nicht mehr funktioniert.
+  - key_confirm_function = "return confirm('Wollen Sie den API-Key des Nutzers wirklich erneuern?')" 
+  - form_tag reset_apikey_path, :name => 'reset_apikey', :onsubmit => key_confirm_function do
+    %fieldset
+      %legend
+        = "API-Key für #{@user.name} zurücksetzen"
+      .fieldset-desc
+        %p
+          Mit einem Klick auf Absenden wird der API-Key des Nutzers erneuert. Der Nutzer muss dar&uuml;ber in Kenntnis gesetzt werden,
+          da sein alter API-Key dann nicht mehr funktioniert.
       = hidden_field :user, :id
-      %br/
-      = submit_tag 'Absenden'
-  %h2
-    = "Account von #{@user.name} deaktivieren"
-  %p
-    - confirm_function = "return confirm('Wollen Sie den Nutzer wirklich deaktivieren?')" 
-    - form_tag user_deactivation_path, :name => 'deactivation', :onsubmit => confirm_function do
-      Mit einem Klick auf Absenden wird der Nutzer deaktiviert. Der Nutzer hat dann keinen Zugang mehr zur Leipzig-API.
-      Seine Rechte bleiben bis zur einer erneuten Aktivierung erhalten.
+      %button{:name => 'commit', :type => 'submit'} API-Key erneuern
+
+  - deactivate_confirm_function = "return confirm('Wollen Sie den Nutzer wirklich deaktivieren?')" 
+  - form_tag user_deactivation_path, :name => 'deactivation', :onsubmit => deactivate_confirm_function do
+    %fieldset
+      %legend
+        = "Account von #{@user.name} deaktivieren"
+      .fieldset-desc
+        %p
+          Mit einem Klick auf Absenden wird der Nutzer deaktiviert. Der Nutzer hat dann keinen Zugang mehr zur Leipzig-API.
+          Seine Rechte bleiben bis zur einer erneuten Aktivierung erhalten.
       = hidden_field :user, :id
-      %br/
-      = submit_tag 'Absenden'
+      %button{:name => 'commit', :type => 'submit'} Deaktivieren
