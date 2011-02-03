@@ -10,6 +10,9 @@ namespace :permissions do
         %w[create read update delete].each do |access|
           if Permission.find_by_access_and_table_and_column(access, table_name, column.name).blank?
 	        Permission.create(:access => access, :table => table_name, :column => column.name)
+	        puts "Permission #{access} for column #{column.name} in table #{table_name} created"
+	      else
+	        puts "Permission #{access} for column #{column.name} in table #{table_name} already exists."	      
 	      end    
         end
       end
