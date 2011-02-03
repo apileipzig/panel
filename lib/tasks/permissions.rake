@@ -1,5 +1,5 @@
 namespace :permissions do
-  desc "Looks up all columns from tables beginning with data_ and creates read/write Permissions for them"
+  desc "Looks up all columns from tables beginning with data_ and creates CRUD Permissions for them"
   task :init => :environment do
     exclude_list = ['id', 'created_at', 'updated_at']
     ActiveRecord::Base.connection.tables.select{|t| t =~ /^data_/}.each do |table|
@@ -16,6 +16,29 @@ namespace :permissions do
 	      end    
         end
       end
+    end
+  end
+  
+  desc "Renames Permissions for a given table and column preserving the rights given to users"
+  task :rename, [:table, :old_name, :new_name] => :environment do |t, args|
+    unless args.table.blank? || args.old_name.blank? || args.new_name.blank?
+      if ActiveRecord::Base.connection.tables.select{|t| t =~ /^data_/}.include?(args.table)
+        old_permissions = Permission.find_all_by_table_and_column(args.table.split('_')[1], args.old_name)
+		unless old_permissions.blank?
+		  old_permissions.each do |permission|
+		    permission.column = args.new_name
+		    permission.save
+		    puts "Renamed #{permission.access} Permission #{args.table} => #{args.old_name} to #{args.table} => #{args.new_name}"
+		  end
+		else
+		  puts "No Permissions with name #{args.old_name} for table #{args.table} found. Try running permissions:init first."
+		end        
+      else
+        puts "Table #{args.table} does not exist!"
+      end
+    else
+      puts 'This script needs three parameters: table name, old column name, and new column name.'
+      puts 'Example: rake "permissions:rename[data_company, address, place]" <= Attention! Mind the quotes!' 
     end
   end
 end
