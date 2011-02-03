@@ -22,12 +22,14 @@ class UsersController < ApplicationController
     @user = @current_user
     @permissions = Hash.new
     Permission.all_tables.each do |tablename|
+      @permissions[tablename] = Hash.new
       %w[create read update delete].each do |access|
-        @permissions[tablename][access] = @user.permissions.select{|p| p.access == access && p.table == tablename}
+        permissions = @user.permissions.select{|p| p.access == access && p.table == tablename}
+        unless permissions.blank?
+          @permissions[tablename][access] = Hash.new 
+          @permissions[tablename][access] = permissions
+        end
       end
-      
-      # Prevent the display of a table if the user has no single permission on it
-      @permissions.delete(tablename) if @permissions[tablename].blank?
     end
   end
 

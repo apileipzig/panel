@@ -41,4 +41,33 @@ namespace :permissions do
       puts 'Example: rake "permissions:rename[data_company, address, place]" <= Attention! Mind the quotes!' 
     end
   end
+
+  desc "Deletes Permissions for a given table and column."
+  task :delete, [:table, :column] => :environment do |t, args|
+    unless args.table.blank? || args.column.blank?
+      if ActiveRecord::Base.connection.tables.select{|t| t =~ /^data_/}.include?(args.table)
+        permissions = Permission.find_all_by_table_and_column(args.table.split('_')[1], args.column)
+		unless permissions.blank?
+		  puts "Really delete the Permissions for column #{args.column} in table #{args.table}? Type \"Yes\" to confirm."
+		  confirm = STDIN.gets
+		  if confirm.downcase =~ /^yes/
+		    permissions.each do |permission|
+		      puts "Deleted #{permission.access} Permission with name #{args.column} for table #{args.table}"
+		      permission.users.clear
+		      permission.delete
+		    end
+		  else
+		    puts 'Aborting. Nothing deleted.'
+		  end
+		else
+		  puts "No Permissions with name #{args.column} for table #{args.table} found. Try running permissions:init first."
+		end        
+      else
+        puts "Table #{args.table} does not exist!"
+      end
+    else
+      puts 'This script needs two parameters: table name and column name.'
+      puts 'Example: rake "permissions:delete[data_company, address]" <= Attention! Mind the quotes!' 
+    end
+  end
 end
