@@ -9,40 +9,63 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110202105400) do
+ActiveRecord::Schema.define(:version => 20110205165712) do
 
-  create_table "data_firmen", :force => true do |t|
-    t.string  "Firma",                         :null => false
-    t.string  "Ansprechpartner",               :null => false
-    t.string  "Strasse",                       :null => false
-    t.integer "Hausnummer",       :limit => 2, :null => false
-    t.string  "HausnummerZusatz",              :null => false
-    t.integer "PLZ",              :limit => 3, :null => false
-    t.string  "Ort",                           :null => false
-    t.string  "Telefon",                       :null => false
-    t.string  "Fax",                           :null => false
-    t.string  "e-Mail",                        :null => false
-    t.string  "WWW",                           :null => false
+  create_table "data_mediahandbook_branches", :force => true do |t|
+    t.integer  "parent_id"
+    t.integer  "cluster_id"
+    t.string   "internal_key"
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "data_unternehmen", :force => true do |t|
-    t.string  "Firma",                         :null => false
-    t.string  "Ansprechpartner",               :null => false
-    t.string  "Strasse",                       :null => false
-    t.integer "Hausnummer",       :limit => 2, :null => false
-    t.string  "HausnummerZusatz",              :null => false
-    t.integer "PLZ",              :limit => 3, :null => false
-    t.string  "Ort",                           :null => false
-    t.string  "Telefon",                       :null => false
-    t.string  "Fax",                           :null => false
-    t.string  "e-Mail",                        :null => false
-    t.string  "WWW",                           :null => false
+  create_table "data_mediahandbook_companies", :force => true do |t|
+    t.integer  "sub_market_id"
+    t.integer  "main_branch_id"
+    t.string   "name"
+    t.string   "street"
+    t.integer  "housenumber"
+    t.string   "housenumber_additional"
+    t.string   "postcode"
+    t.string   "city"
+    t.string   "phone_primary"
+    t.string   "phone_secondary"
+    t.string   "fax_primary"
+    t.string   "fax_secondary"
+    t.string   "mobile_primary"
+    t.string   "mobile_secondary"
+    t.string   "email_primary"
+    t.string   "email_secondary"
+    t.string   "url_primary"
+    t.string   "url_secondary"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "mediahandbook_companies_branches", :id => false, :force => true do |t|
+    t.integer "company_id"
+    t.integer "branch_id"
+  end
+
+  create_table "mediahandbook_people", :force => true do |t|
+    t.integer  "company_id"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "title"
+    t.string   "position"
+    t.string   "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "permissions", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "access"
+    t.string   "source"
     t.string   "table"
     t.string   "column"
   end
@@ -50,6 +73,23 @@ ActiveRecord::Schema.define(:version => 20110202105400) do
   create_table "permissions_users", :id => false, :force => true do |t|
     t.integer  "permission_id"
     t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "request_logs", :force => true do |t|
+    t.string   "api_key"
+    t.string   "ip"
+    t.string   "source"
+    t.string   "model"
+    t.string   "request_path"
+    t.string   "query_string"
+    t.string   "method"
+    t.datetime "created_at"
+  end
+
+  create_table "temp_syncs", :force => true do |t|
+    t.text     "json"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
