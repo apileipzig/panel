@@ -3,4 +3,5 @@
 log/*
 tmp/*
 config/database.yml
+db/seeds.rb
 
