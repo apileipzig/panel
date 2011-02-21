@@ -5,22 +5,25 @@
   - if @user.active?
     Sie können mit folgendem API-Key auf API.LEIPZIG zugreifen: 
     = @user.single_access_token
-%P
-  Sie verfügen momentan über folgende Rechte:
-  - @permissions.each do |tablename, permissions|
-    %table
-      %tr
-        %th= "Datentabelle \"#{tablename.titleize}\""
-      - unless permissions['create'].blank?
+%p
+  - unless @permissions.blank?
+    Sie verfügen momentan über folgende Rechte:
+    - @permissions.each do |tablename, permissions|
+      %table
         %tr
-          %td= "Schreibzugriff auf die Spalten: #{permissions['create'].map{|p| p.column.titleize}.join(', ')}"
-      - unless permissions['read'].blank?
-        %tr
-          %td= "Lesezugriff auf die Spalten: #{permissions['read'].map{|p| p.column.titleize}.join(', ')}"
-      - unless permissions['update'].blank?
-        %tr
-          %td= "Aktualisierungszugriff auf die Spalten: #{permissions['update'].map{|p| p.column.titleize}.join(', ')}"
-      - unless permissions['delete'].blank?
-        %tr
-          %td= "Löschzugriff auf die Spalten: #{permissions['delete'].map{|p| p.column.titleize}.join(', ')}"
+          %th= "Datentabelle \"#{tablename.titleize}\""
+        - unless permissions['create'].blank?
+          %tr
+            %td= "Schreibzugriff auf die Spalten: #{permissions['create'].map{|p| p.column.titleize}.join(', ')}"
+        - unless permissions['read'].blank?
+          %tr
+            %td= "Lesezugriff auf die Spalten: #{permissions['read'].map{|p| p.column.titleize}.join(', ')}"
+        - unless permissions['update'].blank?
+          %tr
+            %td= "Aktualisierungszugriff auf die Spalten: #{permissions['update'].map{|p| p.column.titleize}.join(', ')}"
+        - unless permissions['delete'].blank?
+          %tr
+            %td= "Löschzugriff auf die Spalten: #{permissions['delete'].map{|p| p.column.titleize}.join(', ')}"
+  - else
+    .notice Sie verfügen momentan über keine Zugriffsrechte.
           
