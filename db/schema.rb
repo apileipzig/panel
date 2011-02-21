@@ -11,9 +11,48 @@
 
 ActiveRecord::Schema.define(:version => 20110205165712) do
 
+  create_table "data_calendar_events", :force => true do |t|
+    t.integer  "category_id"
+    t.integer  "host_id"
+    t.integer  "venue_id"
+    t.date     "date_from"
+    t.time     "time_from"
+    t.date     "date_to"
+    t.time     "time_to"
+    t.string   "name"
+    t.text     "description"
+    t.string   "url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "data_calendar_hosts", :force => true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "phone"
+    t.string   "mobile"
+    t.string   "url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "data_calendar_venues", :force => true do |t|
+    t.string   "name"
+    t.string   "street"
+    t.integer  "housenumber"
+    t.string   "housenumber_additional"
+    t.string   "postcode"
+    t.string   "city"
+    t.string   "phone"
+    t.text     "description"
+    t.string   "url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "data_mediahandbook_branches", :force => true do |t|
     t.integer  "parent_id"
-    t.integer  "cluster_id"
+    t.string   "internal_type"
     t.string   "internal_key"
     t.string   "name"
     t.string   "description"
@@ -22,6 +61,7 @@ ActiveRecord::Schema.define(:version => 20110205165712) do
   end
 
   create_table "data_mediahandbook_companies", :force => true do |t|
+    t.integer  "old_id"
     t.integer  "sub_market_id"
     t.integer  "main_branch_id"
     t.string   "name"
@@ -45,12 +85,7 @@ ActiveRecord::Schema.define(:version => 20110205165712) do
     t.datetime "updated_at"
   end
 
-  create_table "mediahandbook_companies_branches", :id => false, :force => true do |t|
-    t.integer "company_id"
-    t.integer "branch_id"
-  end
-
-  create_table "mediahandbook_people", :force => true do |t|
+  create_table "data_mediahandbook_people", :force => true do |t|
     t.integer  "company_id"
     t.string   "first_name"
     t.string   "last_name"
@@ -59,6 +94,11 @@ ActiveRecord::Schema.define(:version => 20110205165712) do
     t.string   "type"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "mediahandbook_branches_companies", :id => false, :force => true do |t|
+    t.integer "company_id"
+    t.integer "branch_id"
   end
 
   create_table "permissions", :force => true do |t|

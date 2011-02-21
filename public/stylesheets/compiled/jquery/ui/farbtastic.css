@@ -41,13 +41,13 @@
 }
 /* line 35, ../../../../../app/stylesheets/jquery/ui/farbtastic.scss */
 .farbtastic .wheel {
-  background-image: url('/images/jquery/ui/farbtastic/wheel.png?1295259312');
+  background-image: url('/images/jquery/ui/farbtastic/wheel.png?1296692380');
   width: 195px;
   height: 195px;
 }
 /* line 39, ../../../../../app/stylesheets/jquery/ui/farbtastic.scss */
 .farbtastic .overlay {
-  background-image: url('/images/jquery/ui/farbtastic/mask.png?1295259312');
+  background-image: url('/images/jquery/ui/farbtastic/mask.png?1296692380');
 }
 /* line 41, ../../../../../app/stylesheets/jquery/ui/farbtastic.scss */
 .farbtastic .marker {
@@ -55,5 +55,5 @@
   height: 17px;
   margin: -8px 0 0 -8px;
   overflow: hidden;
-  background-image: url('/images/jquery/ui/farbtastic/marker.png?1295259312');
+  background-image: url('/images/jquery/ui/farbtastic/marker.png?1296692380');
 }
