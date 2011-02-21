@@ -30,6 +30,7 @@ class UsersController < ApplicationController
           @permissions[tablename][access] = permissions
         end
       end
+      @permissions.delete_if{|k,v| v.blank?}
     end
   end
 
