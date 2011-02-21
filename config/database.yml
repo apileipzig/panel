@@ -18,10 +18,10 @@ development:
   adapter: mysql
   encoding: utf8
   reconnect: false
-  database: leipzig-api_development
+  database: test
   pool: 5
-  username: leipzig-api
-  password: leipzig-api
+  username: root
+  password: blubbi123
   socket: /var/run/mysqld/mysqld.sock
 
 # Warning: The database defined as "test" will be erased and
