@@ -1,7 +1,7 @@
 source :rubygems
 
 group :default do
-  gem "rails", "2.3.9"
+  gem "rails", "2.3.11"
   gem "rake"
   gem "mysql"
   gem "authlogic"
