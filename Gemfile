@@ -8,5 +8,5 @@ group :default do
   gem "haml"
   gem "compass", ">= 0.10.6"
   gem "compass-susy-plugin"
-  gem "compass-jquery-plugin"
+  gem "compass-jquery-plugin", "0.3.1.1"
 end

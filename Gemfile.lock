@@ -1,0 +1,48 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    actionmailer (2.3.11)
+      actionpack (= 2.3.11)
+    actionpack (2.3.11)
+      activesupport (= 2.3.11)
+      rack (~> 1.1.0)
+    activerecord (2.3.11)
+      activesupport (= 2.3.11)
+    activeresource (2.3.11)
+      activesupport (= 2.3.11)
+    activesupport (2.3.11)
+    authlogic (2.1.6)
+      activesupport
+    compass (0.10.6)
+      haml (>= 3.0.4)
+    compass-jquery-plugin (0.3.1.1)
+      compass (>= 0.10.6)
+      haml (>= 3.0.24)
+      ri_cal (>= 0.8.7)
+    compass-susy-plugin (0.8.1)
+      compass (>= 0.10.0)
+    haml (3.0.25)
+    mysql (2.8.1)
+    rack (1.1.0)
+    rails (2.3.11)
+      actionmailer (= 2.3.11)
+      actionpack (= 2.3.11)
+      activerecord (= 2.3.11)
+      activeresource (= 2.3.11)
+      activesupport (= 2.3.11)
+      rake (>= 0.8.3)
+    rake (0.8.7)
+    ri_cal (0.8.8)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  authlogic
+  compass (>= 0.10.6)
+  compass-jquery-plugin (= 0.3.1.1)
+  compass-susy-plugin
+  haml
+  mysql
+  rails (= 2.3.11)
+  rake
