@@ -983,7 +983,9 @@ button.ui-button::-moz-focus-inner {
   color: $ui_fcContent; }
 
 .ui-widget-content a {
-  color: $ui_fcContent; }
+  color: $ui_fcContent;
+  float: right;
+  margin: 0 10px; }
 
 .ui-widget-header {
   border: 1px solid $ui_borderColorHeader;
