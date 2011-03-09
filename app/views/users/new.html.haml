@@ -1,28 +1,26 @@
-%h1 Registrierung
-- form_for @user, :url => account_path do |form|
-  = form.error_messages
-  = form.label :name
-  %br/
-  = form.text_field :name
-  %br/
-  %br/
-  = form.label :telefon
-  %br/
-  = form.text_field :telefon
-  %br/
-  %br/
-  = form.label :email, 'E-Mail-Adresse'
-  %br/
-  = form.text_field :email
-  %br/
-  %br/
-  = form.label :password, form.object.new_record? ? 'Passwort' : 'Passwort &auml;ndern'
-  %br/
-  = form.password_field :password
-  %br/
-  %br/
-  = form.label :password_confirmation, 'Passwortbestätigung'
-  %br/
-  = form.password_field :password_confirmation
-  %br/
-  = form.submit "Registrieren"
+%header
+  %h1 Registrierung
+%p
+  Hier können Sie sich anmelden. Ihre E-Mail-Adresse wird als Login verwendet.  
+- form_for @user, :url => account_path, :html => {:class => 'api-form'} do |form|
+  %fieldset
+    %legend Benutzerdaten
+    .fieldset-desc
+      %p
+        Bitte geben Sie Ihre persönlichen Daten ein.
+    = form.error_messages :header_message => nil, :message => nil, :class => 'error'
+    = form.label :name
+    = form.text_field :name
+    = form.label :telefon
+    = form.text_field :telefon
+    = form.label :email, 'E-Mail-Adresse'
+    = form.text_field :email
+    = form.label :password, form.object.new_record? ? 'Passwort' : 'Passwort &auml;ndern'
+    = form.password_field :password
+    = form.label :password_confirmation, 'Passwortbestätigung'
+    = form.password_field :password_confirmation
+    %button{:name => 'commit', :type => 'submit'} Registrieren
+    
+    
+
+  
