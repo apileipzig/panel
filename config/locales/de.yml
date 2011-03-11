@@ -1,6 +1,7 @@
 de:
   authlogic:
       error_messages:
+        anonymous_error: Benutzername und/oder Passwort ist nicht korrekt.
         login_blank: darf nicht leer sein
         login_not_found: ist nicht korrekt
         login_invalid: darf nur Buchstaben, Ziffern und die Zeichen .-_@ enthalten.
