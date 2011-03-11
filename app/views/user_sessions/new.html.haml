@@ -9,7 +9,8 @@
     .fieldset-desc
       %p
         Bitte geben Sie Ihre Zugangsdaten ein.
-    = f.error_messages :header_message => nil, :message => nil, :class => 'error'
+    - unless f.error_messages.blank?
+      .error= t('authlogic.error_messages.anonymous_error')
     = f.label :email, 'E-Mail-Adresse'
     = f.text_field :email
     = f.label :password, 'Passwort'
