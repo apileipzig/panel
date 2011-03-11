@@ -50,9 +50,9 @@
               %a{:href => "#hilfe", :title => "Hilfe"} Hilfe
             / /#GlobalNav
           - if @current_user
-            %a.LogoutLink.span-1.last{:href => "/logout", :title => "Logout"} Logout
+            %a.LogoutLink.span-1.last{:href => logout_path, :title => "Logout"} Logout
           - else
-            %a.LogoutLink.span-1.last{:href => "/login", :title => "Logout"} Login
+            %a.LogoutLink.span-1.last{:href => login_path, :title => "Logout"} Login
           %ul#GlobalTabs.prepend-4.span-5.last
             %li
               %a{:href => "wiki.html", :title => "WIKI"} WIKI
@@ -67,7 +67,7 @@
             %ul#CatEditTabs.span-8
               - if @current_user && @current_user.admin?
                 %li
-                  %a.admin{:href => "/admin", :title => "Adminbereich"} Admin
+                  %a.admin{:href => admin_path, :title => "Adminbereich"} Admin
           .clear &nbsp;
           = yield
         %aside.span-4.last
