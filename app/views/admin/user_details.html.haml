@@ -31,13 +31,13 @@
                 = "Löschrechte für Tabelle \"#{tablename.titleize}\"" if access == 'delete'
             %div
               %span
-                - js_call = "select_all(new Array('" + table_permissions[access].map{|p| p.id}.join("','") + "'), 0);"
-                %a{:href => 'javascript:void(0)', :onclick => js_call}
-                  Alle abw&auml;hlen
-              %span
                 - js_call = "select_all(new Array('" + table_permissions[access].map{|p| p.id}.join("','") + "'), 1);"
-                %a{:href => 'javascript:void(0)', :onclick => js_call}
+                %a{:href => 'javascript:void(0)', :onclick => js_call, :class => 'select_all'}
                   Alle ausw&auml;hlen
+              %span
+                - js_call = "select_all(new Array('" + table_permissions[access].map{|p| p.id}.join("','") + "'), 0);"
+                %a{:href => 'javascript:void(0)', :onclick => js_call, :class => 'select_all'}
+                  Alle abw&auml;hlen
               %table
                 %tr
                   - %w[Spalte Nein Ja].each do |headline|
