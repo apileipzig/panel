@@ -13,6 +13,8 @@
 $(document).ready(function () {
 	$(function() {
 		$( "#accordion" ).accordion({ collapsible: true, active: false });
+		$( ".date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+		$( ".time" ).timepicker({hourText: 'Stunde', amPmText: ['', '']});
 	});
 
   	// check if the slider exists. if ist true init the slideshow

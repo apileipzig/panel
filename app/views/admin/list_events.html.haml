@@ -1,0 +1,17 @@
+%header
+  %h1
+    Kalendereinträge bearbeiten
+%p
+  Hier können Sie die Kalendereinträge ansehen und/oder bearbeiten
+%table  
+  %tr
+    %th Name
+    %th Start
+    %th Ende
+    %th Beschreibung
+  - @events.each do |event|
+    %tr
+      %td= event['name']
+      %td= "#{event['date_from']} - #{event['time_from']}"
+      %td= "#{event['date_to']} - #{event['time_to']}"
+      %td= event['description']
