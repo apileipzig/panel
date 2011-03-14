@@ -21,9 +21,10 @@
       %td= rich_event['venue']['name']
       - if @editor || @deletor
         %td
-          = image_tag '/images/edit.png' if @editor
+          - if @editor
+            %img{:src => '/images/edit.png'}
           -if @deletor
             %a{:href => "#{url_for delete_event_path}?event=#{rich_event['event']['id']}", :class => 'delete_event', :onclick => "return confirm('Soll diese Veranstaltung wirklich gelöscht werden?');"}
-              = image_tag '/images/delete.png' 
+              %img{:src => '/images/delete.png'}
     %tr
       %td{:span => '5'}= rich_event['event']['description']
