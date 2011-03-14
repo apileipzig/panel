@@ -20,6 +20,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.calendar '/admin/calendar', :controller => 'admin', :action => 'calendar'
   map.create_event '/admin/create_event', :controller => 'admin', :action => 'create_event'
+  map.delete_event '/admin/delete_event', :controller => 'admin', :action => 'delete_event'
   map.list_events '/admin/list_events', :controller => 'admin', :action => 'list_events'
   
   map.root :controller => 'users', :action => 'show'
