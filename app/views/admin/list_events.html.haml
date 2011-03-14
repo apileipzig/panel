@@ -8,10 +8,22 @@
     %th Name
     %th Start
     %th Ende
-    %th Beschreibung
-  - @events.each do |event|
+    %th Ort
+    - if @editor || @deletor
+      %th Aktionen
+  - @rich_events.each do |rich_event|
     %tr
-      %td= event['name']
-      %td= "#{event['date_from']} - #{event['time_from']}"
-      %td= "#{event['date_to']} - #{event['time_to']}"
-      %td= event['description']
+      %td= rich_event['event']['name']
+      - tf = rich_event['event']['time_from'].blank? ? ['--', '--'] : rich_event['event']['time_from'].split('T')[1].split(':')
+      - tt = rich_event['event']['time_to'].blank? ? ['--', '--'] : rich_event['event']['time_to'].split('T')[1].split(':')
+      %td= "#{rich_event['event']['date_from'].strftime("%d. %m. %Y") unless rich_event['event']['date_from'].blank?} #{tf[0]}:#{tf[1]}"
+      %td= "#{rich_event['event']['date_to'].strftime("%d. %m. %Y") unless rich_event['event']['date_to'].blank?} #{tt[0]}:#{tt[1]}"
+      %td= rich_event['venue']['name']
+      - if @editor || @deletor
+        %td
+          = image_tag '/images/edit.png' if @editor
+          -if @deletor
+            %a{:href => "#{url_for delete_event_path}?event=#{rich_event['event']['id']}", :class => 'delete_event', :onclick => "return confirm('Soll diese Veranstaltung wirklich gelöscht werden?');"}
+              = image_tag '/images/delete.png' 
+    %tr
+      %td{:span => '5'}= rich_event['event']['description']
