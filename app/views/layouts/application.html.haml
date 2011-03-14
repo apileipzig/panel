@@ -33,7 +33,7 @@
       %header#PageHeader
         %nav.container
           %h1#Logo
-            %a{:href => "index.html", :title => "API.LEIPZIG"} API.LEIPZIG
+            %a{:href => "/", :title => "API.LEIPZIG"} API.LEIPZIG
           %section#user.span-4
             - if @current_user
               Hallo,
@@ -41,13 +41,11 @@
               = @current_user.name
           %ul#GlobalNav.span-5.append-2
             %li
-              %a{:href => "index.html", :title => "Startseite"} Start
+              %a{:href => "/wiki/show/Was-ist-die-API-LEIPZIG", :title => "Hintergründe"} Hintergründe
             %li
-              %a{:href => "#datenschutz", :title => "Datenschutz"} Datenschutz
+              %a{:href => "/wiki/show/Dokumentation", :title => "Dokumentation"} Dokumentation
             %li
-              %a{:href => "#beteiligte", :title => "Hintergr\303\274nde"} Hintergründe
-            %li
-              %a{:href => "#hilfe", :title => "Hilfe"} Hilfe
+              %a{:href => "/wiki/show/Nutzungsbedingungen", :title => "Nutzungsbedingungen"} Nutzungsbedingungen
             / /#GlobalNav
           - if @current_user
             %a.LogoutLink.span-1.last{:href => logout_path, :title => "Logout"} Logout
@@ -55,10 +53,14 @@
             %a.LogoutLink.span-1.last{:href => login_path, :title => "Logout"} Login
           %ul#GlobalTabs.prepend-4.span-5.last
             %li
-              %a{:href => "wiki.html", :title => "WIKI"} WIKI
+              %a{:href => "/wiki/show/Datenquellen", :title => "WIKI"} Datenquellen
+            %li
+              %a{:href => "/wiki/show/Anwendungen", :title => "WIKI"} Anwendungen
+            %li
+              %a{:href => "/wiki", :title => "Wiki"} Wiki
             / /#GlobalTabs
           %section#LinkktoBE
-            %a.current{:href => "backend.html", :title => "Einstellungen vornehmen"} Backend
+            %a.current{:href => "178.77.99.225/panel", :title => "Einstellungen vornehmen"} Backend
         / /nav.container
       / /header
       %section#Page.container.pane-backend{:role => "main"}
@@ -126,16 +128,16 @@
                 %a{:href => "/wiki/show/Nutzungsbedingungen", :title => "Nutzungsbedingungen"} Nutzungsbedingungen
           / /.FooterWikiList 3
         #addFooterLinks.prepend-1.span-3.last
-          %a{:href => "/wiki/show/Impressum", :title => "Link zum Impressum"} Impressum
-          \&middot;
-          %a{:href => "/wiki/show/Kontakt", :title => "Link zur Kontaktseite"} Kontakt
-          %ul{:id => "FooterSocialList span-2"}
-            %li
-              %a.rss{:href => "#nowhere", :title => "RSS-Feed"} RSS-Feed
-            %li
-              %a.facebook{:href => "#nowhere", :title => "Facebook"} Facebook
-            %li
-              %a.twitter{:href => "#nowhere", :title => "Twitter"} Twitter
+          / %a{:href => "/wiki/show/Impressum", :title => "Link zum Impressum"} Impressum
+          / \&middot;
+          / %a{:href => "/wiki/show/Kontakt", :title => "Link zur Kontaktseite"} Kontakt
+          / %ul{:id => "FooterSocialList span-2"}
+          /  %li
+          /    %a.rss{:href => "#nowhere", :title => "RSS-Feed"} RSS-Feed
+          /  %li
+          /    %a.facebook{:href => "#nowhere", :title => "Facebook"} Facebook
+          /  %li
+          /    %a.twitter{:href => "#nowhere", :title => "Twitter"} Twitter
           / /# FooterSocialList
         / /footer
       / !/Backend
@@ -147,4 +149,5 @@
     / PlugIn to validate the forms on html5-doms : needed on all sites containing forms at api.leipzig
     %script{:src => "/javascripts/jquery.h5validate.js"}
     / Guess what? all the nice js-driven things on api.leipzig
-    %script{:src => "/javascripts/api-leipzig-global.js?v=1"}
+    / %script{:src => "/javascripts/api-leipzig-global.js?v=1"}
+    = javascript_include_tag 'api-leipzig-global.js'
