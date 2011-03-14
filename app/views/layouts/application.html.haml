@@ -20,6 +20,7 @@
     %meta{:content => "width=device-width; initial-scale=1.0", :name => "viewport"}/
     / !CSS
     %link{:href => "/stylesheets/api-style.css?v=1", :rel => "stylesheet"}/
+    %link{:href => "/stylesheets/jquery-ui-timepicker", :rel => "stylesheet"}/
     / !Google Font Library
     %link{:href => "http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold", :rel => "stylesheet", :type => "text/css"}/
     /
@@ -67,10 +68,21 @@
         %article.span-8
           %section#CatEdit
             %ul#CatEditTabs.span-8
+              - if @current_user.may_edit_calendar?
+                %li
+                  %a{:href => list_events_path, :title => "Kalender"} Kalender
+                %li
+                  %a{:href => calendar_path, :title => "Neuer Kalendereintrag"} Neuer Kalendereintrag
               - if @current_user && @current_user.admin?
                 %li
                   %a.admin{:href => admin_path, :title => "Adminbereich"} Admin
           .clear &nbsp;
+          - if flash[:notice]
+            .notice
+              = flash[:notice]
+          - if flash[:error]
+            .error
+              = flash[:error]
           = yield
         %aside.span-4.last
           %section#Profil.span-5
@@ -143,11 +155,12 @@
       / !/Backend
     / !Javascript - at the bottom for fast page loading
     <script src="/javascripts/jquery-1.4.4.min.js"></script>
-    <script src="/javascripts/jquery-ui-1.8.9.min.js"></script>
+    <script src="/javascripts/jquery-ui-1.8.10.custom.min.js"></script>
+    <script src="/javascripts/jquery.ui.datepicker-de.js"></script>
+    <script src="/javascripts/jquery.ui.timepicker-0.0.8.js"></script>
     / nice Slider on Homepage / maybe on the Gallery side
     <script src="/javascripts/jquery.tools.min.js?v=1"></script>
     / PlugIn to validate the forms on html5-doms : needed on all sites containing forms at api.leipzig
     %script{:src => "/javascripts/jquery.h5validate.js"}
     / Guess what? all the nice js-driven things on api.leipzig
-    / %script{:src => "/javascripts/api-leipzig-global.js?v=1"}
-    = javascript_include_tag 'api-leipzig-global.js'
+    %script{:src => "/javascripts/api-leipzig-global.js?v=1"}

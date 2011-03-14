@@ -1,0 +1,110 @@
+:javascript
+  function new_host(value) {
+    if (value == 'new') {
+      $("#new_host").fadeIn();
+    } else {
+      $("#new_host").fadeOut();
+    }
+  }
+  function new_venue(value) {
+    if (value == 'new') {
+      $("#new_venue").fadeIn();
+    } else {
+      $("#new_venue").fadeOut();
+    }
+  }
+  
+  function validate_empty() {
+    // validate new_host
+    if($("#new_host").is(':visible')) {
+      if(!$("#new_host_first_name").val() || !$("#new_host_last_name").val()) {
+        alert("Sie müssen mindestens den Namen des Veranstalters ausfüllen.");
+        return false;
+      }
+    }
+    //validate new_venue
+    if($("#new_venue").is(':visible')) {
+      if(!$("#new_venue_name").val() || !$("#new_venue_description").val() || !$("#new_venue_street").val() || !$("#new_venue_housenumber").val() || !$("#new_venue_postcode").val() || !$("#new_venue_city").val()) {
+        alert("Sie müssen mindestens Name, Beschreibung und Adresse des Veranstaltungsortes ausfüllen.");
+        return false;
+      }
+    }
+    
+    //validate event
+    if (!$("#event_name").val() || !$("#event_description").val() || !$("#event_date_from").val() || !$("#event_date_to").val() || !$("#event_time_from").val() || !$("#event_time_to").val()) {
+      alert("Sie müssen Name, Beschreibung und Startdatum/-zeit sowie Enddatum/-zeit der Veranstaltung ausfüllen.");
+      return false;
+    } else if ($("#branch option:selected").val() == '0') {
+      alert("Sie müssen eine Branche auswählen.");
+      return false;
+    } else if ($("#host option:selected").val() == '0') {
+      alert("Sie müssen einen Veranstalter auswählen.");
+      return false;
+    } else if ($("#venue option:selected").val() == '0') {
+      alert("Sie müssen einen Veranstaltungsort auswählen.");
+      return false;
+    }
+    return true;    
+  }
+
+%header
+  %h1
+    Kalendereintrag eingeben
+%p
+  Hier können Sie einen neuen Termin für den Veranstaltungskalender eingeben  
+- form_tag create_event_path, :onsubmit => 'return validate_empty();' do
+  - unless @event_permissions.blank?
+    - unless @event_rows.blank?
+      %fieldset
+        %legend Einzelheiten des Termins
+        .fieldset-desc
+          %p
+            Bitte geben Sie die grundlegenden Informationen des Termins ein.
+          %p
+            Sie müssen alle Felder ausfüllen, lediglich die Url kann frei bleiben.
+        - %w[name description date_from time_from date_to time_to url].each do |row|
+          - if @event_rows.include?(row)
+            = label_tag row
+            - if row =~ /time/
+              = text_field_tag "event[#{row}]", '', :class => 'time'
+            - elsif row =~ /date/
+              = text_field_tag "event[#{row}]", '', :class => 'date'
+            - else
+              = row == 'description' ? "#{text_area_tag "event[#{row}]"}" : "#{text_field_tag "event[#{row}]"}"
+        - unless @branches.blank?
+          - blank_branch = "<option value='0' selected='selected'>Wählen Sie eine Branche ...</option>"
+          = label_tag 'Branche'
+          = select_tag 'branch', blank_branch + @branches.map{|h| "<option value='#{h['id']}'>#{h['name']}</option>"}.to_s                    
+    %fieldset
+      %legend Veranstalter
+      .fieldset-desc
+        %p
+          Bitte geben Sie Informationen zum Veranstalter ein.
+      - unless @hosts.blank?
+        - blank_host = "<option value='0' selected='selected'>Wählen Sie einen Veranstalter ...</option>"
+        - new_host = @host_rows.blank? ? "" : "<option value='new'>Neuen Veranstalter anlegen ...</option>"
+        - onchange = @host_rows.blank? ? "" : "new_host(this.options[this.selectedIndex].value);"
+        = select_tag 'host', blank_host + @hosts.map{|h| "<option value='#{h['id']}'>#{h['first_name']} #{h['last_name']}</option>"}.to_s + new_host, :onchange => onchange
+      - unless @host_rows.blank?
+        %span{:style => 'display:none;', :id => 'new_host'}
+          - %w[first_name last_name url phone mobile].each do |row|
+            - if @host_rows.include?(row)
+              = label_tag row
+              = text_field_tag "new_host[#{row}]"
+    %fieldset
+      %legend Veranstaltungsort
+      .fieldset-desc
+        %p
+          Bitte geben Sie Informationen zum Veranstaltungsort ein.
+      - unless @venues.blank?
+        - blank_venue = "<option value='0' selected='selected'>Wählen Sie einen Veranstaltungsort ...</option>"
+        - new_venue = @venue_rows.blank? ? "" : "<option value='new'>Neuen Veranstaltungsort anlegen ...</option>"
+        - onchange = @venue_rows.blank? ? "" : "new_venue(this.options[this.selectedIndex].value);"
+        = select_tag 'venue', blank_venue + @venues.map{|h| "<option value='#{h['id']}'>#{h['name']}</option>"}.to_s + new_venue, :onchange => onchange
+      - unless @venue_rows.blank?
+        %span{:style => 'display:none;', :id => 'new_venue'}
+          - %w[name description street housenumber housenumber_additional postcode city phone url].each do |row|
+            - if @venue_rows.include?(row)
+              = label_tag row
+              = row == 'description' ? "#{text_area_tag "new_venue[#{row}]"}" : "#{text_field_tag "new_venue[#{row}]"}"
+  %button{:name => 'commit', :type => 'submit'} Eintragen
