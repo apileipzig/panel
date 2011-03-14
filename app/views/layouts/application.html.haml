@@ -68,7 +68,7 @@
         %article.span-8
           %section#CatEdit
             %ul#CatEditTabs.span-8
-              - if @current_user.may_edit_calendar?
+              - if @current_user && @current_user.may_edit_calendar?
                 %li
                   %a{:href => list_events_path, :title => "Kalender"} Kalender
                 %li
