@@ -49,43 +49,28 @@
 
 %header
   %h1
-    Kalendereintrag eingeben
+    Kalendereintrag bearbeiten
 %p
-  Hier können Sie einen neuen Termin für den Veranstaltungskalender eingeben  
-- form_tag create_event_path, :onsubmit => 'return validate_empty();' do
+  Hier können Sie einen Termin bearbeiten  
+- form_tag update_event_path, :onsubmit => 'return validate_empty();' do
   - unless @event_permissions.blank?
     - unless @event_rows.blank?
-      = render :partial => "admin/partials/event", :locals => {:event_rows => @event_rows, :branches => @branches}
+      = render :partial => "events/partials/event", :locals => {:event_rows => @event_rows, :branches => @branches, :data => @data}
+      = hidden_field_tag 'event_id', @event_id
     %fieldset
       %legend Veranstalter
       .fieldset-desc
         %p
           Bitte geben Sie Informationen zum Veranstalter ein.
-      - unless @hosts.blank?
-        - blank_host = "<option value='0' selected='selected'>Wählen Sie einen Veranstalter ...</option>"
-        - new_host = @host_rows.blank? ? "" : "<option value='new'>Neuen Veranstalter anlegen ...</option>"
-        - onchange = @host_rows.blank? ? "" : "new_host(this.options[this.selectedIndex].value);"
-        = select_tag 'host', blank_host + @hosts.map{|h| "<option value='#{h['id']}'>#{h['first_name']} #{h['last_name']}</option>"}.to_s + new_host, :onchange => onchange
-      - unless @host_rows.blank?
-        %span{:style => 'display:none;', :id => 'new_host'}
-          - %w[first_name last_name url phone mobile].each do |row|
-            - if @host_rows.include?(row)
-              = label_tag row
-              = text_field_tag "new_host[#{row}]"
+      - unless @host.blank?
+        = "#{@host['first_name']} #{@host['last_name']}"
+        = hidden_field_tag 'host_id', @host['id']
     %fieldset
       %legend Veranstaltungsort
       .fieldset-desc
         %p
           Bitte geben Sie Informationen zum Veranstaltungsort ein.
-      - unless @venues.blank?
-        - blank_venue = "<option value='0' selected='selected'>Wählen Sie einen Veranstaltungsort ...</option>"
-        - new_venue = @venue_rows.blank? ? "" : "<option value='new'>Neuen Veranstaltungsort anlegen ...</option>"
-        - onchange = @venue_rows.blank? ? "" : "new_venue(this.options[this.selectedIndex].value);"
-        = select_tag 'venue', blank_venue + @venues.map{|h| "<option value='#{h['id']}'>#{h['name']}</option>"}.to_s + new_venue, :onchange => onchange
-      - unless @venue_rows.blank?
-        %span{:style => 'display:none;', :id => 'new_venue'}
-          - %w[name description street housenumber housenumber_additional postcode city phone url].each do |row|
-            - if @venue_rows.include?(row)
-              = label_tag row
-              = row == 'description' ? "#{text_area_tag "new_venue[#{row}]"}" : "#{text_field_tag "new_venue[#{row}]"}"
-  %button{:name => 'commit', :type => 'submit'} Eintragen
+      - unless @venue.blank?
+        = "#{@venue['name']}"
+        = hidden_field_tag 'venue_id', @venue['id']
+  %button{:name => 'commit', :type => 'submit'} Ändern
