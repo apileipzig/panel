@@ -94,13 +94,12 @@ fieldset:hover, fieldset:focus {background-color: #fefbec;}
 legend {font-weight:bold;font-size:1.4em;margin-top:-0.2em;margin-bottom:1em;}
 fieldset, #IE8#HACK {padding-top:1.4em;}
 legend, #IE8#HACK {margin-top:0;margin-bottom:0;}
-input, input[type=text], input[type=password], input.text, input.title, textarea {font-size:1.2em;color:#292929;border:1px solid #EEEEEE; background-color: #eee;-webkit-transition: background-color 300ms ease-in;-moz-border-radius: 5px;border-radius: 5px;}
-input:focus, input[type=text]:focus, input[type=password]:focus, input.text:focus, input.title:focus, textarea:focus {background: #f7f7f7; border: 1px solid #83c6e6; -webkit-box-shadow: inset 1px 1px 2px #d1d1d1; -moz-box-shadow: inset 1px 1px 2px #d1d1d1; box-shadow: inset 1px 1px 2px #d1d1d1;}
-select {}
+input, input[type=text], input[type=password], input.text, input.title, textarea, select {font-size:1.2em;color:#292929;border:1px solid #EEEEEE; background-color: #eee;-webkit-transition: background-color 300ms ease-in;-moz-border-radius: 5px;border-radius: 5px;}
+input:focus, input[type=text]:focus, input[type=password]:focus, input.text:focus, input.title:focus, textarea:focus, select:focus {background: #f7f7f7; border: 1px solid #83c6e6; -webkit-box-shadow: inset 1px 1px 2px #d1d1d1; -moz-box-shadow: inset 1px 1px 2px #d1d1d1; box-shadow: inset 1px 1px 2px #d1d1d1;}
 input[type=text], input[type=password],input[type=url], input[type=email], input[type=tel], input.text, input.title, textarea, select {margin: 0 0 12px 0;}
 input[type=submit] {-moz-border-radius: 5px; border-radius: 5px; font-size: 1.2em; color: #fff; padding: 8px 15px;}
 
-input, input.text, input.title {width:560px; padding:8px 5px;}
+input, input.text, input.title, select {width:560px; padding:8px 5px;}
 input.title {font-size:1.5em;}
 textarea {width:560px;height:230px;padding:8px 5px;font-family:'PT Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif;}
 form.inline .fieldset-desc
