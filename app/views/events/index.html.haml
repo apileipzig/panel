@@ -22,7 +22,8 @@
       - if @editor || @deletor
         %td
           - if @editor
-            %img{:src => '/images/edit.png'}
+            %a{:href => "#{url_for edit_event_path}?event=#{rich_event['event']['id']}", :class => 'edit_event'}
+              %img{:src => '/images/edit.png'}
           -if @deletor
             %a{:href => "#{url_for delete_event_path}?event=#{rich_event['event']['id']}", :class => 'delete_event', :onclick => "return confirm('Soll diese Veranstaltung wirklich gelöscht werden?');"}
               %img{:src => '/images/delete.png'}

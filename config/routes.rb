@@ -21,6 +21,8 @@ ActionController::Routing::Routes.draw do |map|
   map.events '/events', :controller => 'events', :action => 'index'
   map.new_event '/events/new', :controller => 'events', :action => 'new'
   map.create_event '/events/create', :controller => 'events', :action => 'create'
+  map.edit_event '/events/edit', :controller => 'events', :action => 'edit'
+  map.update_event '/events/update', :controller => 'events', :action => 'update'
   map.delete_event '/events/delete', :controller => 'events', :action => 'delete'
   
   map.root :controller => 'users', :action => 'show'

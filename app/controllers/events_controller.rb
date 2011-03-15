@@ -2,7 +2,6 @@ require 'net/http'
 
 class EventsController < ApplicationController
   before_filter :require_user
-  
   def index
     @branches = retrieve_data('mediahandbook', 'branches').select{|b| b['internal_type'] == 'sub_market'}
     @venues = retrieve_data('calendar', 'venues')
@@ -23,11 +22,9 @@ class EventsController < ApplicationController
   end
 
   def new
-    # get all permissions for creation
+    # get all permissions
     @event_permissions = @current_user.calendar_create_permissions
-    @event_rows = @event_permissions.select{|p| p.table == 'events'}.map{|p| p.column}
-    @host_rows = @event_permissions.select{|p| p.table == 'hosts'}.map{|p| p.column}
-    @venue_rows = @event_permissions.select{|p| p.table == 'venues'}.map{|p| p.column}
+    item_permissions(@event_permissions)
 
     @branches = retrieve_data('mediahandbook', 'branches').select{|b| b['internal_type'] == 'sub_market'}
     @venues = retrieve_data('calendar', 'venues')
@@ -51,7 +48,7 @@ class EventsController < ApplicationController
           if @result.has_key?('success')
             host_id = @result['success'].split(' ')[4]
           else
-            flash[:error] = @result['error'].to_s
+            flash[:error] = "Die API meldet folgenden Fehler: " + @result['error'].to_a.flatten.join(' ')
             redirect_to new_event_path and return
           end
         end
@@ -73,7 +70,7 @@ class EventsController < ApplicationController
           if @result.has_key?('success')
             venue_id = @result['success'].split(' ')[4]
           else
-            flash[:error] = @result['error'].to_s
+            flash[:error] = "Die API meldet folgenden Fehler: " + @result['error'].to_a.flatten.join(' ')
             redirect_to new_event_path and return
           end
         end
@@ -100,13 +97,86 @@ class EventsController < ApplicationController
           flash[:success] = "Termin gespeichert"
           redirect_to events_path and return
         else
-          flash[:error] = @result['error'].to_s
+          flash[:error] = "Die API meldet folgenden Fehler: " + @result['error'].to_a.flatten.join(' ')
           redirect_to new_event_path and return
         end
       else
         flash[:error] = "Es ist ein Fehler aufgetreten"
         redirect_to new_event_path and return
       end
+    else
+      flash[:error] = "Es ist ein Fehler aufgetreten"
+      redirect_to new_event_path and return
+    end
+  end
+
+  def edit
+    if @current_user.may_update_calendar?
+      @event_permissions = @current_user.calendar_update_permissions
+      item_permissions(@event_permissions)
+      @event_id = params[:event]
+      events_uri = URI.parse("http://178.77.99.225/api/v1/calendar/events/#{@event_id}?api_key=#{@current_user.single_access_token}")
+      connection = Net::HTTP.new(events_uri.host, events_uri.port)
+      connection.start do |http|
+        req = Net::HTTP::Get.new("#{events_uri.path}?#{events_uri.query}")
+        @data = ActiveSupport::JSON.decode(http.request(req).read_body)
+      end
+      unless @data.has_key?('error')
+        # get the host
+        host_uri = URI.parse("http://178.77.99.225/api/v1/calendar/hosts/#{@data['host_id']}?api_key=#{@current_user.single_access_token}")
+        connection = Net::HTTP.new(host_uri.host, host_uri.port)
+        connection.start do |http|
+          req = Net::HTTP::Get.new("#{host_uri.path}?#{host_uri.query}")
+          @host = ActiveSupport::JSON.decode(http.request(req).read_body)
+        end
+        # get the venue
+        venue_uri = URI.parse("http://178.77.99.225/api/v1/calendar/venues/#{@data['venue_id']}?api_key=#{@current_user.single_access_token}")
+        connection = Net::HTTP.new(venue_uri.host, venue_uri.port)
+        connection.start do |http|
+          req = Net::HTTP::Get.new("#{venue_uri.path}?#{venue_uri.query}")
+          @venue = ActiveSupport::JSON.decode(http.request(req).read_body)
+        end
+        @branches = retrieve_data('mediahandbook', 'branches').select{|b| b['internal_type'] == 'sub_market'}
+      else
+        flash[:error] = "Die API meldet folgenden Fehler: " + @result['error'].to_a.flatten.join(' ')
+        redirect_to events_path and return
+      end
+    else
+      flash[:error] = "Berechtigung fehlt!"
+      redirect_to events_path and return
+    end
+  end
+
+  def update
+    if params.has_key?('commit')
+      e = params[:event].delete_if{|k, v| v.blank?}
+      unless e.empty?
+        e['api_key'] = @current_user.single_access_token
+        e['category_id'] = params[:branch]
+        e['time_from'] = e['time_from'].split(':').length > 2 ? e['time_from'] : e['time_from'] + ":00"
+        e['time_to'] = e['time_to'].split(':').length > 2 ? e['time_to'] : e['time_to'] + ":00"
+        event_uri = URI.parse("http://178.77.99.225/api/v1/calendar/events/#{params[:event_id]}")
+        connection = Net::HTTP.new(event_uri.host, event_uri.port)
+        connection.start do |http|
+          req = Net::HTTP::Put.new(event_uri.path)
+          req.set_form_data(e)
+          @result = ActiveSupport::JSON.decode(http.request(req).read_body)
+          Rails.logger.info @result.inspect
+        end
+        if @result.has_key?('success')
+          flash[:success] = "Termin gespeichert"
+          redirect_to events_path and return
+        else
+          flash[:error] = "Die API meldet folgenden Fehler: " + @result['error'].to_a.flatten.join(' ')
+          redirect_to new_event_path and return
+        end
+      else
+        flash[:error] = "Es ist ein Fehler aufgetreten"
+        redirect_to new_event_path and return
+      end
+    else
+      flash[:error] = "Es ist ein Fehler aufgetreten"
+      redirect_to new_event_path and return
     end
   end
 
@@ -140,4 +210,9 @@ class EventsController < ApplicationController
     end
   end
 
+  def item_permissions(event_permissions)
+    @event_rows = event_permissions.select{|p| p.table == 'events'}.map{|p| p.column}
+    @host_rows = event_permissions.select{|p| p.table == 'hosts'}.map{|p| p.column}
+    @venue_rows = event_permissions.select{|p| p.table == 'venues'}.map{|p| p.column}
+  end
 end
