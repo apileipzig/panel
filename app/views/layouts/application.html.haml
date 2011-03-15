@@ -8,7 +8,7 @@
   / <![endif]
   %head
 
-    - if controller.controller_name == 'admin'
+    - if %w[admin events].include?(controller.controller_name)
       = stylesheet_link_tag 'compiled/jquery/ui/ui-lightness.css', :media => 'screen, projection'
     %meta{:charset => "utf-8"}/
     /[if IE] <link rel="stylesheet" href="/stylesheets/ie.css">
