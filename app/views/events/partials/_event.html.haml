@@ -1,0 +1,21 @@
+- data ||= Hash.new
+%fieldset
+  %legend Einzelheiten des Termins
+  .fieldset-desc
+    %p
+      Bitte geben Sie die grundlegenden Informationen des Termins ein.
+    %p
+      Sie müssen alle Felder ausfüllen, lediglich die Url kann frei bleiben.
+  - %w[name description date_from time_from date_to time_to url].each do |row|
+    - if event_rows.include?(row)
+      = label_tag row
+      - if row =~ /time/
+        = text_field_tag "event[#{row}]", data[row].blank? ? '' : data[row], :class => 'time'
+      - elsif row =~ /date/
+        = text_field_tag "event[#{row}]", data[row].blank? ? '' : data[row], :class => 'date'
+      - else
+        = row == 'description' ? "#{text_area_tag "event[#{row}]", data[row].blank? ? '' : data[row]}" : "#{text_field_tag "event[#{row}]", data[row].blank? ? '' : data[row]}"
+  - unless branches.blank?
+    - blank_branch = "<option value='0' selected='selected'>Wählen Sie eine Branche ...</option>"
+    = label_tag 'Branche'
+    = select_tag 'branch', blank_branch + branches.map{|h| "<option value='#{h['id']}'>#{h['name']}</option>"}.to_s                    
