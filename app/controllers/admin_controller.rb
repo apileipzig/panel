@@ -75,29 +75,9 @@ class AdminController < ApplicationController
     @host_rows = @event_permissions.select{|p| p.table == 'hosts'}.map{|p| p.column}
     @venue_rows = @event_permissions.select{|p| p.table == 'venues'}.map{|p| p.column}
 
-    #get all branches
-    branch_uri = URI.parse("http://178.77.99.225/api/v1/mediahandbook/branches?api_key=#{@current_user.single_access_token}")
-    connection = Net::HTTP.new(branch_uri.host, branch_uri.port)
-    connection.start do |http|
-      req = Net::HTTP::Get.new("#{branch_uri.path}?#{branch_uri.query}")
-      @branches = ActiveSupport::JSON.decode(http.request(req).read_body)['data']
-    end
-
-    #get already existing venues
-    venue_uri = URI.parse("http://178.77.99.225/api/v1/calendar/venues?api_key=#{@current_user.single_access_token}")
-    connection = Net::HTTP.new(venue_uri.host, venue_uri.port)
-    connection.start do |http|
-      req = Net::HTTP::Get.new("#{venue_uri.path}?#{venue_uri.query}")
-      @venues = ActiveSupport::JSON.decode(http.request(req).read_body)['data']
-    end
-
-    #get already existing hosts
-    host_uri = URI.parse("http://178.77.99.225/api/v1/calendar/hosts?api_key=#{@current_user.single_access_token}")
-    connection = Net::HTTP.new(host_uri.host, host_uri.port)
-    connection.start do |http|
-      req = Net::HTTP::Get.new("#{host_uri.path}?#{host_uri.query}")
-      @hosts = ActiveSupport::JSON.decode(http.request(req).read_body)['data']
-    end
+    @branches = retrieve_data('mediahandbook', 'branches').select{|b| b['internal_type'] == 'sub_market'}
+    @venues = retrieve_data('calendar', 'venues')
+    @hosts = retrieve_data('calendar', 'hosts')
   end
 
   def create_event
@@ -177,36 +157,11 @@ class AdminController < ApplicationController
   end
 
   def list_events
-    #get all branches
-    branch_uri = URI.parse("http://178.77.99.225/api/v1/mediahandbook/branches?api_key=#{@current_user.single_access_token}")
-    connection = Net::HTTP.new(branch_uri.host, branch_uri.port)
-    connection.start do |http|
-      req = Net::HTTP::Get.new("#{branch_uri.path}?#{branch_uri.query}")
-      @branches = ActiveSupport::JSON.decode(http.request(req).read_body)['data']
-    end
+    @branches = retrieve_data('mediahandbook', 'branches').select{|b| b['internal_type'] == 'sub_market'}
+    @venues = retrieve_data('calendar', 'venues')
+    @hosts = retrieve_data('calendar', 'hosts')
+    @events = retrieve_data('calendar', 'events')
 
-    #get already existing venues
-    venue_uri = URI.parse("http://178.77.99.225/api/v1/calendar/venues?api_key=#{@current_user.single_access_token}")
-    connection = Net::HTTP.new(venue_uri.host, venue_uri.port)
-    connection.start do |http|
-      req = Net::HTTP::Get.new("#{venue_uri.path}?#{venue_uri.query}")
-      @venues = ActiveSupport::JSON.decode(http.request(req).read_body)['data']
-    end
-
-    #get already existing hosts
-    host_uri = URI.parse("http://178.77.99.225/api/v1/calendar/hosts?api_key=#{@current_user.single_access_token}")
-    connection = Net::HTTP.new(host_uri.host, host_uri.port)
-    connection.start do |http|
-      req = Net::HTTP::Get.new("#{host_uri.path}?#{host_uri.query}")
-      @hosts = ActiveSupport::JSON.decode(http.request(req).read_body)['data']
-    end
-
-    events_uri = URI.parse("http://178.77.99.225/api/v1/calendar/events?api_key=#{@current_user.single_access_token}")
-    connection = Net::HTTP.new(events_uri.host, events_uri.port)
-    connection.start do |http|
-      req = Net::HTTP::Get.new("#{events_uri.path}?#{events_uri.query}")
-      @events = ActiveSupport::JSON.decode(http.request(req).read_body)['data']
-    end
     @rich_events = Array.new
     @events.each do |event|
       e = Hash.new
@@ -237,5 +192,16 @@ class AdminController < ApplicationController
     end
     flash[:error] = "Berechtigung fehlt!"
     redirect_to list_events_path and return
+  end
+
+  private
+
+  def retrieve_data(source, table)
+    uri = URI.parse("http://178.77.99.225/api/v1/#{source}/#{table}?api_key=#{@current_user.single_access_token}")
+    connection = Net::HTTP.new(uri.host, uri.port)
+    connection.start do |http|
+      req = Net::HTTP::Get.new("#{uri.path}?#{uri.query}")
+      return ActiveSupport::JSON.decode(http.request(req).read_body)['data']
+    end
   end
 end
