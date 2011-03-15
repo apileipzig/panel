@@ -55,26 +55,7 @@
 - form_tag create_event_path, :onsubmit => 'return validate_empty();' do
   - unless @event_permissions.blank?
     - unless @event_rows.blank?
-      %fieldset
-        %legend Einzelheiten des Termins
-        .fieldset-desc
-          %p
-            Bitte geben Sie die grundlegenden Informationen des Termins ein.
-          %p
-            Sie müssen alle Felder ausfüllen, lediglich die Url kann frei bleiben.
-        - %w[name description date_from time_from date_to time_to url].each do |row|
-          - if @event_rows.include?(row)
-            = label_tag row
-            - if row =~ /time/
-              = text_field_tag "event[#{row}]", '', :class => 'time'
-            - elsif row =~ /date/
-              = text_field_tag "event[#{row}]", '', :class => 'date'
-            - else
-              = row == 'description' ? "#{text_area_tag "event[#{row}]"}" : "#{text_field_tag "event[#{row}]"}"
-        - unless @branches.blank?
-          - blank_branch = "<option value='0' selected='selected'>Wählen Sie eine Branche ...</option>"
-          = label_tag 'Branche'
-          = select_tag 'branch', blank_branch + @branches.map{|h| "<option value='#{h['id']}'>#{h['name']}</option>"}.to_s                    
+      = render :partial => "admin/partials/event", :locals => {:event_rows => @event_rows, :branches => @branches}
     %fieldset
       %legend Veranstalter
       .fieldset-desc

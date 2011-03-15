@@ -18,10 +18,10 @@ ActionController::Routing::Routes.draw do |map|
   map.reset_apikey '/admin/reset_apikey', :controller => 'admin', :action => 'reset_apikey'
   map.set_permissions '/admin/set_permissions', :controller => 'admin', :action => 'set_permissions'
   
-  map.calendar '/admin/calendar', :controller => 'admin', :action => 'calendar'
-  map.create_event '/admin/create_event', :controller => 'admin', :action => 'create_event'
-  map.delete_event '/admin/delete_event', :controller => 'admin', :action => 'delete_event'
-  map.list_events '/admin/list_events', :controller => 'admin', :action => 'list_events'
+  map.events '/events', :controller => 'events', :action => 'index'
+  map.new_event '/events/new', :controller => 'events', :action => 'new'
+  map.create_event '/events/create', :controller => 'events', :action => 'create'
+  map.delete_event '/events/delete', :controller => 'events', :action => 'delete'
   
   map.root :controller => 'users', :action => 'show'
 end

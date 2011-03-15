@@ -70,14 +70,17 @@
             %ul#CatEditTabs.span-8
               - if @current_user && @current_user.may_read_calendar?
                 %li
-                  %a{:href => list_events_path, :title => "Kalender"} Kalender
+                  %a{:href => events_path, :title => "Kalender"} Kalender
               - if @current_user && @current_user.may_create_calendar?
                 %li
-                  %a{:href => calendar_path, :title => "Neuer Kalendereintrag"} Neuer Kalendereintrag
+                  %a{:href => new_event_path, :title => "Neuer Kalendereintrag"} Neuer Kalendereintrag
               - if @current_user && @current_user.admin?
                 %li
                   %a.admin{:href => admin_path, :title => "Adminbereich"} Admin
           .clear &nbsp;
+          - if flash[:success]
+            .success
+              = flash[:success]
           - if flash[:notice]
             .notice
               = flash[:notice]
