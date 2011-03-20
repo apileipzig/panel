@@ -12,7 +12,7 @@
 /* jQueryTools tabs with slideshow*/
 $(document).ready(function () {
 	$(function() {
-		$( "#accordion" ).accordion({ collapsible: true, active: false });
+		$( "#accordion" ).accordion({ collapsible: true, active: false, autoHeight: false });
 		$( ".date" ).datepicker({ dateFormat: 'yy-mm-dd' });
 		$( ".time" ).timepicker({hourText: 'Stunde', amPmText: ['', '']});
 	});
