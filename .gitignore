@@ -4,6 +4,6 @@ log/*
 tmp/*
 config/database.yml
 db/seeds.rb
-app/views/layouts/header.html
+app/views/layouts/_header.html.haml
 app/views/layouts/footer.html
 

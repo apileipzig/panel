@@ -1,11 +1,11 @@
-= render :file => 'layouts/header.html'
+= render 'layouts/header.html.haml'
 %section#Page.container.pane-backend{:role => "main"}
   %article.span-8
     %section#CatEdit
       %ul#CatEditTabs.span-8
         - if @current_user && @current_user.may_read_calendar?
           %li
-          %a{:href => events_path, :title => "Kalender"} Kalender
+            %a{:href => events_path, :title => "Kalender"} Kalender
         - if @current_user && @current_user.may_create_calendar?
           %li
             %a{:href => new_event_path, :title => "Neuer Kalendereintrag"} Neuer Kalendereintrag
