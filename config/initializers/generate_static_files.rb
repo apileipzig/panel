@@ -20,15 +20,15 @@ begin
   end
 
   header = doc.to_s
-  
+
   #add greeting to the template
-  greeter = "<section id=\"user\" class=\"span-4\">\n- if @current_user\n\tHallo,\n\t%a{:href => '#profiledit', :title => 'Nutzer-Profil editieren'}\n\t= @current_user.name\n</section>"
-  header.gsub!('<section id="user" class="span-4">&nbsp;</section>',greeter)
+  greeter = "<section id=\"user\" class=\"span-4\">\n- if @current_user\n\tHallo,\n\t%a{:href => '#profiledit', :title => 'Nutzer-Profil editieren'}\n\t= @current_user.name\n"
+  header.gsub!('<section id="user" class="span-4">',greeter)
   
   #add login/logout switch to the template string
   login_switch = "\n- if @current_user\n\t%a.LogoutLink.span-1.last{:href => logout_path, :title => 'Login'} Logout \n- else\n\t%a.LogoutLink.span-1.last{:href => login_path, :title => 'Login'} Login\n"
 
-  header.gsub!('<a id="login" class="LoginLink span-1 last" href="panel/login" title="Anmelden">Anmelden</a>',login_switch)
+  header.gsub!('<a class="LoginLink span-1 last" id="login" href="/panel/login" title="Anmelden">Anmelden</a>',login_switch)
   
   write_to = File.new(Rails.root + "app/views/layouts/_header.html.haml", "w+")
 	write_to.puts(header[0,header.length-16]) #extreme ugly because nokogiri add </body></html> at the end of its document
