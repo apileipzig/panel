@@ -9,7 +9,7 @@
   %head
 
     - if %w[admin events].include?(controller.controller_name)
-      = stylesheet_link_tag 'compiled/jquery/ui/ui-lightness.css', :media => 'screen, projection'
+      %link{:href => '/stylesheets/compiled/jquery/ui/ui-lightness.css', :media => 'screen, projection', :rel => 'stylesheet'}
     %meta{:charset => "utf-8"}/
     /[if IE] <link rel="stylesheet" href="/stylesheets/ie.css">
     %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
@@ -61,7 +61,7 @@
               %a{:href => "/wiki", :title => "Wiki"} Wiki
             / /#GlobalTabs
           %section#LinkktoBE
-            %a.current{:href => "178.77.99.225/panel", :title => "Einstellungen vornehmen"} Backend
+            %a.current{:href => "/panel", :title => "panel"} Backend
         / /nav.container
       / /header
       %section#Page.container.pane-backend{:role => "main"}
