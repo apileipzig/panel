@@ -1,171 +1,50 @@
-!!!
-/[if lt IE 7 ] <html lang="en" class="no-js ie6">
-/[if IE 7 ] <html lang="en" class="no-js ie7">
-/[if IE 8 ] <html lang="en" class="no-js ie8">
-/[if IE 9 ] <html lang="en" class="no-js ie9">
-/ [if (gt IE 9)|!(IE)]><! 
-%html.no-js{:lang => "de"}
-  / <![endif]
-  %head
-
-    - if %w[admin events].include?(controller.controller_name)
-      = stylesheet_link_tag 'compiled/jquery/ui/ui-lightness.css', :media => 'screen, projection'
-    %meta{:charset => "utf-8"}/
-    /[if IE] <link rel="stylesheet" href="/stylesheets/ie.css">
-    %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
-    %title API.LEIPZIG - Backend
-    %meta{:content => "API.LEIPZIG - ist ein Portal, wo Daten aus Leipzig zusammengefasst und kreativ visualisiert werden", :name => "description"}/
-    %meta{:content => "", :name => "keywords"}/
-    %meta{:content => "Thomas Apfelbacher", :name => "author"}/
-    %meta{:content => "width=device-width; initial-scale=1.0", :name => "viewport"}/
-    / !CSS
-    %link{:href => "/stylesheets/api-style.css?v=1", :rel => "stylesheet"}/
-    %link{:href => "/stylesheets/jquery-ui-timepicker", :rel => "stylesheet"}/
-    / !Google Font Library
-    %link{:href => "http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold", :rel => "stylesheet", :type => "text/css"}/
-    /
-      Uncomment if you are specifically targeting less enabled mobile browsers
-      <link rel="stylesheet" media="handheld" href="/stylesheets/handheld.css?v=1">
-    / !Modernizr - All other JS at bottom
-    %script{:src => "/javascripts/modernizr-1.6.min.js"}
-
-  %body
-    %section#Backend
-      %header#PageHeader
-        %nav.container
-          %h1#Logo
-            %a{:href => "/", :title => "API.LEIPZIG"} API.LEIPZIG
-          %section#user.span-4
-            - if @current_user
-              Hallo,
-              %a{:href => "#profiledit", :title => "Nutzer-Profil editieren"}
-              = @current_user.name
-          %ul#GlobalNav.span-5.append-2
-            %li
-              %a{:href => "/wiki/show/Was-ist-die-API-LEIPZIG", :title => "Hintergründe"} Hintergründe
-            %li
-              %a{:href => "/wiki/show/Dokumentation", :title => "Dokumentation"} Dokumentation
-            %li
-              %a{:href => "/wiki/show/Nutzungsbedingungen", :title => "Nutzungsbedingungen"} Nutzungsbedingungen
-            / /#GlobalNav
-          - if @current_user
-            %a.LogoutLink.span-1.last{:href => logout_path, :title => "Logout"} Logout
-          - else
-            %a.LogoutLink.span-1.last{:href => login_path, :title => "Logout"} Login
-          %ul#GlobalTabs.prepend-4.span-5.last
-            %li
-              %a{:href => "/wiki/show/Datenquellen", :title => "WIKI"} Datenquellen
-            %li
-              %a{:href => "/wiki/show/Anwendungen", :title => "WIKI"} Anwendungen
-            %li
-              %a{:href => "/wiki", :title => "Wiki"} Wiki
-            / /#GlobalTabs
-          %section#LinkktoBE
-            %a.current{:href => "178.77.99.225/panel", :title => "Einstellungen vornehmen"} Backend
-        / /nav.container
-      / /header
-      %section#Page.container.pane-backend{:role => "main"}
-        %article.span-8
-          %section#CatEdit
-            %ul#CatEditTabs.span-8
-              - if @current_user && @current_user.may_read_calendar?
-                %li
-                  %a{:href => events_path, :title => "Kalender"} Kalender
-              - if @current_user && @current_user.may_create_calendar?
-                %li
-                  %a{:href => new_event_path, :title => "Neuer Kalendereintrag"} Neuer Kalendereintrag
-              - if @current_user && @current_user.admin?
-                %li
-                  %a.admin{:href => admin_path, :title => "Adminbereich"} Admin
-          .clear &nbsp;
-          - if flash[:success]
-            .success
-              = flash[:success]
-          - if flash[:notice]
-            .notice
-              = flash[:notice]
-          - if flash[:error]
-            .error
-              = flash[:error]
-          .clear &nbsp;
-          = yield
-        %aside.span-4.last
-          %section#Profil.span-5
-            - if @current_user
-              %ul#EditProfil
-                %li
-                  %a{:href => account_path, :title => "Profil ansehen"} Profil ansehen
-                %li
-                  %a{:href => edit_account_path, :title => "Profil bearbeiten"} Profil bearbeiten
-                %li
-                  %a.smallfield{:href => edit_account_path, :title => "Passwort ändern"} Passwort ändern
-        .clear &nbsp;
-        / /#Content
+= render :file => 'layouts/header.html'
+%section#Page.container.pane-backend{:role => "main"}
+  %article.span-8
+    %section#CatEdit
+      %ul#CatEditTabs.span-8
+        - if @current_user && @current_user.may_read_calendar?
+          %li
+          %a{:href => events_path, :title => "Kalender"} Kalender
+        - if @current_user && @current_user.may_create_calendar?
+          %li
+            %a{:href => new_event_path, :title => "Neuer Kalendereintrag"} Neuer Kalendereintrag
+        - if @current_user && @current_user.admin?
+          %li
+            %a.admin{:href => admin_path, :title => "Adminbereich"} Admin
       .clear &nbsp;
-      %section#Legacy.container.pane-darker
-        %h1#SmallLogo API.LEIPZIG
-        %p
-          ist ein Projekt der
-          %a{:href => "/wiki/show/Beteiligte", :rel => "external", :title => "Personen und Organisationen, die LEIPZIG.API erstellt haben"} Selbständigen der Leipziger Kultur- und Kreativwirtschaft,
-          das in Zusammenarbeit mit der
-          %a{:href => "http://www.leipzig.de", :rel => "external", :title => "Stadt Leipzig"} Stadt Leipzig
-          enstanden ist.
-      / /#Legacy
-    .page-hr
-      %hr/
-    %footer.container
-      %nav#FooterWikiNav
-        .span-8
-          %h1 Besuchen Sie das Wiki
-          .span-2
-            %ul.FooterWikiList
-              %li
-                %a{:href => "/wiki/show/Leipziger-Agenda-21", :title => "Agenda 21"} Leipziger Agenda 21
-              %li
-                %a{:href => "/wiki/show/Was-ist-die-API-LEIPZIG", :title => "API.LEIPZIG"} Was ist API.LEIPZIG
-              %li
-                %a{:href => "/wiki/show/FAQ", :title => "FAQ"} FAQ
-          / /.FooterWikiList 1
-          .span-2
-            %ul.FooterWikiList
-              %li
-                %a{:href => "/wiki/show/Datenquellen", :title => "Datenquellen"} Datenquellen
-              %li
-                %a{:href => "/wiki/show/Anwendungen", :title => "Anwendungen"} Anwendungen
-              %li
-                %a{:href => "/wiki/show/Dokumentation", :title => "Dokumentation"} Dokumentation
-          / /.FooterWikiList 2
-          .span-2
-            %ul.FooterWikiList
-              %li
-                %a{:href => "/wiki/show/HomePage", :title => "Wiki"} Wiki
-              %li
-                %a{:href => "/wiki/show/Beteiligte", :title => "Beteiligte"} Beteiligte
-              %li
-                %a{:href => "/wiki/show/Nutzungsbedingungen", :title => "Nutzungsbedingungen"} Nutzungsbedingungen
-          / /.FooterWikiList 3
-        #addFooterLinks.prepend-1.span-3.last
-          / %a{:href => "/wiki/show/Impressum", :title => "Link zum Impressum"} Impressum
-          / \&middot;
-          / %a{:href => "/wiki/show/Kontakt", :title => "Link zur Kontaktseite"} Kontakt
-          / %ul{:id => "FooterSocialList span-2"}
-          /  %li
-          /    %a.rss{:href => "#nowhere", :title => "RSS-Feed"} RSS-Feed
-          /  %li
-          /    %a.facebook{:href => "#nowhere", :title => "Facebook"} Facebook
-          /  %li
-          /    %a.twitter{:href => "#nowhere", :title => "Twitter"} Twitter
-          / /# FooterSocialList
-        / /footer
-      / !/Backend
-    / !Javascript - at the bottom for fast page loading
-    <script src="/javascripts/jquery-1.4.4.min.js"></script>
-    <script src="/javascripts/jquery-ui-1.8.10.custom.min.js"></script>
-    <script src="/javascripts/jquery.ui.datepicker-de.js"></script>
-    <script src="/javascripts/jquery.ui.timepicker-0.0.8.js"></script>
-    / nice Slider on Homepage / maybe on the Gallery side
-    <script src="/javascripts/jquery.tools.min.js?v=1"></script>
-    / PlugIn to validate the forms on html5-doms : needed on all sites containing forms at api.leipzig
-    %script{:src => "/javascripts/jquery.h5validate.js"}
-    / Guess what? all the nice js-driven things on api.leipzig
-    %script{:src => "/javascripts/api-leipzig-global.js?v=1"}
+      - if flash[:success]
+        .success
+          = flash[:success]
+      - if flash[:notice]
+        .notice
+          = flash[:notice]
+      - if flash[:error]
+        .error
+          = flash[:error]
+      .clear &nbsp;
+      = yield
+    %aside.span-4.last
+      %section#Profil.span-5
+        - if @current_user
+          %ul#EditProfil
+            %li
+              %a{:href => account_path, :title => "Profil ansehen"} Profil ansehen
+            %li
+              %a{:href => edit_account_path, :title => "Profil bearbeiten"} Profil bearbeiten
+            %li
+              %a.smallfield{:href => edit_account_path, :title => "Passwort ändern"} Passwort ändern
+    .clear &nbsp;
+/ !Javascript - at the bottom for fast page loading
+<script src="/js/jquery-1.4.4.min.js"></script>
+<script src="/js/jquery-ui-1.8.10.custom.min.js"></script>
+<script src="/js/jquery.ui.datepicker-de.js"></script>
+<script src="/js/jquery.ui.timepicker-0.0.8.js"></script>
+/ nice Slider on Homepage / maybe on the Gallery side
+<script src="/js/jquery.tools.min.js?v=1"></script>
+/ PlugIn to validate the forms on html5-doms : needed on all sites containing forms at api.leipzig
+%script{:src => "/js/jquery.h5validate.js"}
+/ Guess what? all the nice js-driven things on api.leipzig
+%script{:src => "/js/api-leipzig-global.js?v=1"}
+= render :file => 'layouts/footer.html'
+

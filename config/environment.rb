@@ -44,3 +44,4 @@ Rails::Initializer.run do |config|
 
   #ActionController::Base.relative_url_root = "/panel"
 end
+

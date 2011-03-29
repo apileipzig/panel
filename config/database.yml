@@ -15,34 +15,8 @@
 # And be sure to use new-style password hashing:
 #   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
 development:
-  adapter: mysql
-  encoding: utf8
-  reconnect: false
-  database: leipzig-api_development
+  adapter: sqlite3
+  database: ../api/development.sqlite3
   pool: 5
-  username: root
-  password: 384182
-  socket: /var/run/mysqld/mysqld.sock
+  timeout: 5000
 
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
-test:
-  adapter: mysql
-  encoding: utf8
-  reconnect: false
-  database: leipzig-api_test
-  pool: 5
-  username: leipzig-api
-  password: leipzig-api
-  socket: /var/run/mysqld/mysqld.sock
-
-production:
-  adapter: mysql
-  encoding: utf8
-  reconnect: false
-  database: leipzig-api_production
-  pool: 5
-  username: leipzig-api
-  password: leipzig-api
-  socket: /var/run/mysqld/mysqld.sock
