@@ -19,11 +19,11 @@ begin
     e.content = "Mitgliederbereich"
   end
 
-  header = doc.to_s
-  
-  #add greeting to the template
-  greeter = "<section id=\"user\" class=\"span-4\">\n- if @current_user\n\tHallo,\n\t%a{:href => '#profiledit', :title => 'Nutzer-Profil editieren'}\n\t= @current_user.name\n</section>"
-  header.gsub!('<section id="user" class="span-4">&nbsp;</section>',greeter)
+  doc.search('section[@id="user"]').each do |e|
+    e.inner_html = "\n- if @current_user\n\tHallo,\n\t= link_to @current_user.name, '/panel/account/edit'\n"
+  end
+
+  header = doc.to_html
   
   #add login/logout switch to the template string
   login_switch = "\n- if @current_user\n\t%a.LogoutLink.span-1.last{:href => logout_path, :title => 'Login'} Logout \n- else\n\t%a.LogoutLink.span-1.last{:href => login_path, :title => 'Login'} Login\n"
