@@ -35,6 +35,16 @@ begin
 
 	write_to = File.new(Rails.root + "app/views/layouts/footer.html", "w+")
 	write_to.puts(html[html.index(marker_footer)+marker_footer.length,html.length])
+
+  #copy fresh static files from the frontend on every startup only on dev mode
+  if Rails.env == 'development'
+    %x[rm -r public/css]
+    %x[rm -r public/js]
+    %x[rm -r public/images]
+    %x[cp -R ../css public/]
+    %x[cp -R ../js public/]
+    %x[cp -R ../images public/]
+  end
  
 rescue Exception => e
 	puts "Can't generate static HTML Header and Footer! Do nothing!"

@@ -8,6 +8,6 @@ db/seeds.rb
 app/views/layouts/_header.html.haml
 app/views/layouts/footer.html
 #for dev files
-public/images/*
+public/images
 public/css
 public/js
