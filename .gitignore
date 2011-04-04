@@ -1,5 +1,6 @@
 .project
 .rvmrc
+.bundle
 log/*
 tmp/*
 config/database.yml
