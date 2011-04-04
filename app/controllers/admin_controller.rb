@@ -55,34 +55,34 @@ class AdminController < ApplicationController
     flash[:success] = "Der API-Key wurde zurückgesetzt."
     redirect_to user_details_path(:user => params[:user]) and return
   end
-
+  
   def user_details
     redirect_to admin_path and return if params[:user].blank?
     @user = User.find(params[:user][:id])
     @user_permissions = @user.permissions
-    @permissions = Hash.new
-    Permission.all_tables.each do |tablename|
-      @permissions[tablename] = Hash.new
-      %w[create read update delete].each do |access|
-        permissions = Permission.all.select{|p| p.access == access && p.table == tablename}
-        unless permissions.blank?
-          @permissions[tablename][access] = Hash.new
-          @permissions[tablename][access] = permissions
-        end
-      end
+    @permissions = {}
+    Permission.all.each do |p|
+      @permissions[p.source] = {} unless @permissions[p.source]
+      @permissions[p.source][p.table] = {} unless @permissions[p.source][p.table]
+      @permissions[p.source][p.table][p.column] = {} unless @permissions[p.source][p.table][p.column]
+      @permissions[p.source][p.table][p.column][p.access] = p.id unless @permissions[p.source][p.table][p.column][p.access]
     end
   end
 
   def set_permissions
-    redirect_to user_details_path and return if params[:permission].blank? || params[:user].blank?
+
+    redirect_to user_details_path and return if params[:user].blank?
     @user = User.find(params[:user][:id])
-    params[:permission].each do |id, value|
-      if value == '1'
-        @user.permissions << Permission.find(id)
-      elsif value == '0'
-        @user.permissions.delete(Permission.find(id))
+    @updated_permissions = []
+    unless params[:permissions].nil?
+      params[:permissions].each do |id, value|
+        @updated_permissions << Permission.find(id)
       end
     end
+    #delete all elements from @user.permissions which are not in @updated_permissions
+    #and merge all new elements from @updated_permissions to @user.permissions
+    @user.permissions = @user.permissions & @updated_permissions | @updated_permissions
+
     flash[:success] = "Die Rechte wurden geändert."
     redirect_to user_details_path(:user => params[:user])
   end

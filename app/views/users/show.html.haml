@@ -9,7 +9,7 @@
 
 - unless @permissions.blank?
   Sie verfügen momentan über folgende Rechte:
-  #accordion
+  .accordion
     - @permissions.each do |sourcename, tables|
       - unless tables.blank?
         %h3
@@ -24,7 +24,7 @@
               - columns.each do |columnname, permissions|
                 %tr
                   %td= "#{t("data.#{sourcename}.#{tablename}.#{columnname}")} (#{columnname})"
-                  - %w[create read update delete].each do |access|
+                  - %w[read create update delete].each do |access|
                     %td
                       %img{:src => "#{permissions.select{|p| p.access == access}.blank? ? "/images/nein.png" : "/images/ja.png"}"}
                 

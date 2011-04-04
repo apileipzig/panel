@@ -20,36 +20,41 @@
         %p
           Bitte wählen Sie die Rechte für diesen Nutzer aus.
       = hidden_field(:user, :id)
-      %div#accordion
-        - @permissions.each do |tablename, table_permissions|
-          - %w[create read update delete].each do |access|
+      - @permissions.sort.each do |source,tables|
+        %h3
+          = source.capitalize
+        - tables.sort.each do |table,columns|
+          %div.accordion
             %h3
               %a{:href => '#'}
-                = "Schreibrechte für Tabelle \"#{tablename.titleize}\"" if access == 'create'
-                = "Leserechte für Tabelle \"#{tablename.titleize}\"" if access == 'read'
-                = "Aktualisierungsrechte für Tabelle \"#{tablename.titleize}\"" if access == 'update'
-                = "Löschrechte für Tabelle \"#{tablename.titleize}\"" if access == 'delete'
+                = table.capitalize
             %div
-              %span
-                - js_call = "select_all(new Array('" + table_permissions[access].map{|p| p.id}.join("','") + "'), 1);"
-                %a{:href => 'javascript:void(0)', :onclick => js_call, :class => 'select_all'}
-                  Alle ausw&auml;hlen
-              %span
-                - js_call = "select_all(new Array('" + table_permissions[access].map{|p| p.id}.join("','") + "'), 0);"
-                %a{:href => 'javascript:void(0)', :onclick => js_call, :class => 'select_all'}
-                  Alle abw&auml;hlen
               %table
                 %tr
-                  - %w[Spalte Nein Ja].each do |headline|
-                    %th= headline
-                - table_permissions[access].each do |permission|
+                  %td
+                    &nbsp;
+                  %td{:style => 'text-align:center;'}
+                    Lesen
+                  %td{:style => 'text-align:center;'}
+                    Erstellen
+                  %td{:style => 'text-align:center;'}
+                    Ändern
+                  %td{:style => 'text-align:center;'}
+                    Löschen
+                - columns.sort.each do |column, accesses|
                   %tr
-                    %td
-                      = permission.column.titleize
-                      %td
-                        = radio_button('permission', permission.id, 0, :checked => !@user_permissions.include?(permission))
-                      %td
-                        = radio_button('permission', permission.id, 1, :checked => @user_permissions.include?(permission))
+                    %td{:style => 'width:40%;'}
+                      = column
+                    - %w[read create update delete].each do |access|
+                      %td{:style => 'width:15%;text-align:center;'}
+                        - unless accesses[access].nil?
+                          - if @user_permissions.reject! {|p| p.source == source and p.table == table and p.column == column and p.access == access}
+                            %input{:type => "checkbox", :name => "permissions[#{accesses[access]}]", :checked => true}
+                          - else
+                            %input{:type => "checkbox", :name => "permissions[#{accesses[access]}]"}
+                        - else
+                          &nbsp;
+
       %button{:name => 'commit', :type => 'submit'} Absenden
     
   - key_confirm_function = "return confirm('Wollen Sie den API-Key des Nutzers wirklich erneuern?')" 
