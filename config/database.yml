@@ -1,9 +1,0 @@
-production:
-  adapter: mysql
-  encoding: utf8
-  reconnect: false
-  database: api
-  pool: 5
-  username: panel
-  password: sd5G6II62D095ASWWET
-  socket: /var/run/mysqld/mysqld.sock
