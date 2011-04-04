@@ -3,8 +3,9 @@
     = "Profil von #{@current_user.name}"
 %p
   - if @user.active?
-    Sie können mit folgendem API-Key auf API.LEIPZIG zugreifen: 
-    = @user.single_access_token
+    .notice
+      Sie können mit folgendem API-Key auf API.LEIPZIG zugreifen: 
+      %b= @user.single_access_token
 %p
   - unless @permissions.blank?
     Sie verfügen momentan über folgende Rechte:
