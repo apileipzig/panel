@@ -21,16 +21,17 @@ class UsersController < ApplicationController
   def show
     @user = @current_user
     @permissions = Hash.new
-    Permission.all_tables.each do |tablename|
-      @permissions[tablename] = Hash.new
-      %w[create read update delete].each do |access|
-        permissions = @user.permissions.select{|p| p.access == access && p.table == tablename}
-        unless permissions.blank?
-          @permissions[tablename][access] = Hash.new 
-          @permissions[tablename][access] = permissions
+    Permission.all_sources.each do |source|
+      @permissions[source] = Hash.new{|k,v| k[v] = Hash.new{|i,j| i[j] = []}}
+      all_permissions = @user.permissions.select{|p| p.source == source}
+      tables = all_permissions.map{|p| p.table}.uniq
+      tables.each do |table|
+        permissions = all_permissions.select{|p| p.table == table}
+        columns = permissions.map{|p| p.column}.uniq
+        columns.each do |column|
+          @permissions[source][table][column] = permissions.select{|p| p.column = column}
         end
       end
-      @permissions.delete_if{|k,v| v.blank?}
     end
   end
 

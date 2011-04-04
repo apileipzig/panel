@@ -156,3 +156,44 @@ de:
         less_than_or_equal_to: "muss kleiner oder gleich {{count}} sein"
         odd: "muss ungerade sein"
         even: "muss gerade sein"
+
+  data:
+    calendar:
+      events:
+        name: "Name"
+        description: "Beschreibung"
+        date_from: "Startdatum"
+        date_to: "Enddatum"
+        time_from: "Startzeit"
+        time_to: "Endzeit"
+        url: "Website"
+        venue_id: "Veranstaltungsort"
+        category_id: "Kategorie"
+        host_id: "Veranstalter"
+      hosts:
+        url: "Website"
+        mobile: "Mobilnummer"
+        phone: "Telefon"
+        events: "Veranstaltungen"
+        first_name: "Vorname"
+        last_name: "Nachname"
+      venues:
+        name: "Name"
+        url: "Website"
+        city: "stadt"
+        housenumber: "Hausnummer"
+        housenumber_additional: "Hausnummernzusatz"
+        postcode: "Postleitzahl"
+        street: "Straße"
+        events: "Veranstaltungen"
+        phone: "Telefon"
+        description: "Beschreibung"
+              
+    mediahandbook:
+      people:
+        first_name: "Vorname"
+        last_name: "Nachname"
+        title: "Titel"
+        position: "Position"
+        occupation: "Tätigkeit"
+        company_id: "Firma"
