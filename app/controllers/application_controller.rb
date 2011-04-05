@@ -55,15 +55,16 @@ class ApplicationController < ActionController::Base
   def retrieve_data(verb, source, table, id = "", form_data = {})
     host_address = "http://178.77.99.225/api/v1"
     api_key = @current_user.single_access_token
+    http_header = {"User-Agent" => "api.leipzig panel"} 
 
     case verb
     when "get"
       uri = URI.parse("#{host_address}/#{source}/#{table}#{id.to_s.length > 0 ? "/#{id}" : ""}?api_key=#{api_key}")
       connection = Net::HTTP.new(uri.host, uri.port)
       connection.start do |http|
-        req = Net::HTTP::Get.new("#{uri.path}?#{uri.query}")
+        req = Net::HTTP::Get.new(uri.request_uri)
+        req.initialize_http_header(http_header)
         res = ActiveSupport::JSON.decode(http.request(req).read_body)
-        Rails.logger.info res.inspect
         return res if id.to_s.length > 0
         return res['data']
       end
@@ -73,16 +74,17 @@ class ApplicationController < ActionController::Base
       connection = Net::HTTP.new(uri.host, uri.port)
       connection.start do |http|
         req = Net::HTTP::Post.new(uri.path)
+        req.initialize_http_header(http_header)
         req.set_form_data(form_data)
         return ActiveSupport::JSON.decode(http.request(req).read_body)
       end
     when "put"
       form_data['api_key'] = api_key
       uri = URI.parse("#{host_address}/#{source}/#{table}#{id.to_s.length > 0 ? "/#{id}" : ""}")
-      Rails.logger.info uri.inspect
       connection = Net::HTTP.new(uri.host, uri.port)
       connection.start do |http|
         req = Net::HTTP::Put.new(uri.path)
+        req.initialize_http_header(http_header)
         req.set_form_data(form_data)
         return ActiveSupport::JSON.decode(http.request(req).read_body)
       end
@@ -90,7 +92,8 @@ class ApplicationController < ActionController::Base
       uri = URI.parse("#{host_address}/#{source}/#{table}#{id.to_s.length > 0 ? "/#{id}" : ""}?api_key=#{api_key}")
       connection = Net::HTTP.new(uri.host, uri.port)
       connection.start do |http|
-        req = Net::HTTP::Delete.new("#{uri.path}?#{uri.query}")
+        req = Net::HTTP::Delete.new(uri.request_uri)
+        req.initialize_http_header(http_header)
         return ActiveSupport::JSON.decode(http.request(req).read_body)
       end
     end
