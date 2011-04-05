@@ -3,10 +3,10 @@ require 'net/http'
 class EventsController < ApplicationController
   before_filter :require_user
   def index
-    @branches = retrieve_data('mediahandbook', 'branches').select{|b| b['internal_type'] == 'sub_market'}
-    @venues = retrieve_data('calendar', 'venues')
-    @hosts = retrieve_data('calendar', 'hosts')
-    @events = retrieve_data('calendar', 'events')
+    @branches = retrieve_data('get', 'mediahandbook', 'branches').select{|b| b['internal_type'] == 'sub_market'}
+    @venues = retrieve_data('get', 'calendar', 'venues')
+    @hosts = retrieve_data('get', 'calendar', 'hosts')
+    @events = retrieve_data('get', 'calendar', 'events')
 
     @rich_events = Array.new
     @events.each do |event|
@@ -17,128 +17,67 @@ class EventsController < ApplicationController
       e['branches'] = @branches.select{|b| b['id'] == event['category_id']}.first
       @rich_events << e
     end
-    @editor = @current_user.may_update_calendar?
-    @deletor = @current_user.may_delete_calendar?
+    @editor = @current_user.may_update_resource?('calendar', 'events')
+    @deletor = @current_user.may_delete_resource?('calendar', 'events')
   end
 
   def new
     # get all permissions
-    @event_permissions = @current_user.calendar_create_permissions
+    @event_permissions = @current_user.source_permissions('calendar', 'create')
     item_permissions(@event_permissions)
 
-    @branches = retrieve_data('mediahandbook', 'branches').select{|b| b['internal_type'] == 'sub_market'}
-    @venues = retrieve_data('calendar', 'venues')
-    @hosts = retrieve_data('calendar', 'hosts')
+    @branches = retrieve_data('get', 'mediahandbook', 'branches').select{|b| b['internal_type'] == 'sub_market'}
+    @venues = retrieve_data('get', 'calendar', 'venues')
+    @hosts = retrieve_data('get', 'calendar', 'hosts')
+
+    # data from prviously failed attempts
+    @data = params[:event] ||= Hash.new
   end
 
   def create
     if params.has_key?('commit')
-      if params[:host] == 'new'
-        # try to create the new host
-        h = params[:new_host].delete_if{|k, v| v.blank?}
-        unless h.empty?
-          h['api_key'] = @current_user.single_access_token
-          host_uri = URI.parse("http://178.77.99.225/api/v1/calendar/hosts")
-          connection = Net::HTTP.new(host_uri.host, host_uri.port)
-          connection.start do |http|
-            req = Net::HTTP::Post.new(host_uri.path)
-            req.set_form_data(h)
-            @result = ActiveSupport::JSON.decode(http.request(req).read_body)
-          end
-          if @result.has_key?('success')
-            host_id = @result['success'].split(' ')[4]
-          else
-            flash[:error] = "Die API meldet folgenden Fehler: " + @result['error'].to_a.flatten.join(' ')
-            redirect_to new_event_path and return
-          end
-        end
-      else
-        host_id = params[:host]
-      end
-      if params[:venue] == 'new'
-        #try to create the new venue
-        v = params[:new_venue].delete_if{|k, v| v.blank?}
-        unless v.empty?
-          v['api_key'] = @current_user.single_access_token
-          venue_uri = URI.parse("http://178.77.99.225/api/v1/calendar/venues")
-          connection = Net::HTTP.new(venue_uri.host, venue_uri.port)
-          connection.start do |http|
-            req = Net::HTTP::Post.new(venue_uri.path)
-            req.set_form_data(v)
-            @result = ActiveSupport::JSON.decode(http.request(req).read_body)
-          end
-          if @result.has_key?('success')
-            venue_id = @result['success'].split(' ')[4]
-          else
-            flash[:error] = "Die API meldet folgenden Fehler: " + @result['error'].to_a.flatten.join(' ')
-            redirect_to new_event_path and return
-          end
-        end
-      else
-        venue_id = params[:venue]
-      end
       e = params[:event].delete_if{|k, v| v.blank?}
       unless e.empty?
-        e['api_key'] = @current_user.single_access_token
-        e['venue_id'] = venue_id
-        e['host_id'] = host_id
         e['category_id'] = params[:branch]
         e['time_from'] = e['time_from'] + ":00"
         e['time_to'] = e['time_to'] + ":00"
-        event_uri = URI.parse("http://178.77.99.225/api/v1/calendar/events")
-        connection = Net::HTTP.new(event_uri.host, event_uri.port)
-        connection.start do |http|
-          req = Net::HTTP::Post.new(event_uri.path)
-          req.set_form_data(e)
-          @result = ActiveSupport::JSON.decode(http.request(req).read_body)
-          Rails.logger.info @result.inspect
-        end
+        e['host_id'] = params[:host]
+        e['venue_id'] = params[:venue]
+        @result = retrieve_data('post', 'calendar', 'events', "", e)
         if @result.has_key?('success')
           flash[:success] = "Termin gespeichert"
           redirect_to events_path and return
         else
-          flash[:error] = "Die API meldet folgenden Fehler: " + @result['error'].to_a.flatten.join(' ')
-          redirect_to new_event_path and return
+          flash[:error] = "Die API meldet folgenden Fehler: #{t("data.calendar.events.#{@result['error'].to_a.first.first}")} #{t("data.api.messages.#{@result['error'].to_a.first.second.gsub(' ', '_')}")}"
+          @data = params[:event]
+          redirect_to :action => "new", :event => e and return
         end
       else
         flash[:error] = "Es ist ein Fehler aufgetreten"
-        redirect_to new_event_path and return
+        @data = params[:event]
+        redirect_to :action => "new", :event => e and return
       end
     else
       flash[:error] = "Es ist ein Fehler aufgetreten"
-      redirect_to new_event_path and return
+      @data = params[:event]
+      redirect_to :action => "new", :event => e and return
     end
   end
 
   def edit
-    if @current_user.may_update_calendar?
-      @event_permissions = @current_user.calendar_update_permissions
+    if @current_user.may_update_resource?('calendar', 'events')
+      @event_permissions = @current_user.source_permissions('calendar', 'update')
       item_permissions(@event_permissions)
       @event_id = params[:event]
-      events_uri = URI.parse("http://178.77.99.225/api/v1/calendar/events/#{@event_id}?api_key=#{@current_user.single_access_token}")
-      connection = Net::HTTP.new(events_uri.host, events_uri.port)
-      connection.start do |http|
-        req = Net::HTTP::Get.new("#{events_uri.path}?#{events_uri.query}")
-        @data = ActiveSupport::JSON.decode(http.request(req).read_body)
-      end
-      unless @data.has_key?('error')
+      @result = retrieve_data('get', 'calendar', 'events', params[:event])
+      unless @result.has_key?('error')
         # get the host
-        host_uri = URI.parse("http://178.77.99.225/api/v1/calendar/hosts/#{@data['host_id']}?api_key=#{@current_user.single_access_token}")
-        connection = Net::HTTP.new(host_uri.host, host_uri.port)
-        connection.start do |http|
-          req = Net::HTTP::Get.new("#{host_uri.path}?#{host_uri.query}")
-          @host = ActiveSupport::JSON.decode(http.request(req).read_body)
-        end
+        @host = retrieve_data('get', 'calendar', 'hosts', @result['host_id'])
         # get the venue
-        venue_uri = URI.parse("http://178.77.99.225/api/v1/calendar/venues/#{@data['venue_id']}?api_key=#{@current_user.single_access_token}")
-        connection = Net::HTTP.new(venue_uri.host, venue_uri.port)
-        connection.start do |http|
-          req = Net::HTTP::Get.new("#{venue_uri.path}?#{venue_uri.query}")
-          @venue = ActiveSupport::JSON.decode(http.request(req).read_body)
-        end
-        @branches = retrieve_data('mediahandbook', 'branches').select{|b| b['internal_type'] == 'sub_market'}
+        @venue = retrieve_data('get', 'calendar', 'venues', @result['venue_id'])
+        @branches = retrieve_data('get', 'mediahandbook', 'branches').select{|b| b['internal_type'] == 'sub_market'}
       else
-        flash[:error] = "Die API meldet folgenden Fehler: " + @result['error'].to_a.flatten.join(' ')
+        flash[:error] = "Die API meldet folgenden Fehler: #{t("data.calendar.events.#{@result['error'].to_a.first.first}")} #{t("data.api.messages.#{@result['error'].to_a.first.second.gsub(' ', '_')}")}"
         redirect_to events_path and return
       end
     else
@@ -155,19 +94,12 @@ class EventsController < ApplicationController
         e['category_id'] = params[:branch]
         e['time_from'] = e['time_from'].split(':').length > 2 ? e['time_from'] : e['time_from'] + ":00"
         e['time_to'] = e['time_to'].split(':').length > 2 ? e['time_to'] : e['time_to'] + ":00"
-        event_uri = URI.parse("http://178.77.99.225/api/v1/calendar/events/#{params[:event_id]}")
-        connection = Net::HTTP.new(event_uri.host, event_uri.port)
-        connection.start do |http|
-          req = Net::HTTP::Put.new(event_uri.path)
-          req.set_form_data(e)
-          @result = ActiveSupport::JSON.decode(http.request(req).read_body)
-          Rails.logger.info @result.inspect
-        end
+        @result = retrieve_data('put', 'calendar', 'events', params[:event_id], e)
         if @result.has_key?('success')
           flash[:success] = "Termin gespeichert"
           redirect_to events_path and return
         else
-          flash[:error] = "Die API meldet folgenden Fehler: " + @result['error'].to_a.flatten.join(' ')
+          flash[:error] = "Die API meldet folgenden Fehler: #{t("data.calendar.events.#{@result['error'].to_a.first.first}")} #{t("data.api.messages.#{@result['error'].to_a.first.second.gsub(' ', '_')}")}"
           redirect_to new_event_path and return
         end
       else
@@ -181,34 +113,18 @@ class EventsController < ApplicationController
   end
 
   def delete
-    if @current_user.may_delete_calendar?
-      event = params[:event]
-      events_uri = URI.parse("http://178.77.99.225/api/v1/calendar/events/#{event}?api_key=#{@current_user.single_access_token}")
-      connection = Net::HTTP.new(events_uri.host, events_uri.port)
-      connection.start do |http|
-        req = Net::HTTP::Delete.new("#{events_uri.path}?#{events_uri.query}")
-        @result = ActiveSupport::JSON.decode(http.request(req).read_body)
-        if @result.has_key?('success')
-          flash[:success] = "Veranstaltung erfolgreich gelöscht"
-          redirect_to events_path and return
-        end
+    if @current_user.may_delete_resource?('calendar', 'events')
+      @result = retrieve_data('delete', 'calendar', 'events', params[:event])
+      if @result.has_key?('success')
+        flash[:success] = "Veranstaltung erfolgreich gelöscht"
+        redirect_to events_path and return
       end
-      Rails.logger.info @result.inspect
     end
     flash[:error] = "Berechtigung fehlt!"
     redirect_to events_path and return
   end
 
   private
-
-  def retrieve_data(source, table)
-    uri = URI.parse("http://178.77.99.225/api/v1/#{source}/#{table}?api_key=#{@current_user.single_access_token}")
-    connection = Net::HTTP.new(uri.host, uri.port)
-    connection.start do |http|
-      req = Net::HTTP::Get.new("#{uri.path}?#{uri.query}")
-      return ActiveSupport::JSON.decode(http.request(req).read_body)['data']
-    end
-  end
 
   def item_permissions(event_permissions)
     @event_rows = event_permissions.select{|p| p.table == 'events'}.map{|p| p.column}

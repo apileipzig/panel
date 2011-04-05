@@ -1,0 +1,8 @@
+%header
+  %h1
+    Veranstalter
+%p
+  Hier können Sie einen Veranstalter bearbeiten
+            
+- if @current_user.may_create_resource?('calendar', 'hosts')
+  = render :partial => "/hosts/form", :locals => {:data => @result, :target => update_host_path}

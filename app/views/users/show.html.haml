@@ -9,9 +9,9 @@
 
 - unless @permissions.blank?
   Sie verfügen momentan über folgende Rechte:
-  .accordion
-    - @permissions.each do |sourcename, tables|
-      - unless tables.blank?
+  - @permissions.each do |sourcename, tables|
+    - unless tables.blank?
+      .accordion
         %h3
           %a{:href => '#'}= "Datenquelle #{sourcename.titleize}"
         %div

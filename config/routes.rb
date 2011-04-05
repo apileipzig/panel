@@ -25,5 +25,17 @@ ActionController::Routing::Routes.draw do |map|
   map.update_event '/events/update', :controller => 'events', :action => 'update'
   map.delete_event '/events/delete', :controller => 'events', :action => 'delete'
   
+  map.venues '/venues', :controller => 'venues', :action => 'index'
+  map.create_venue '/venues/create', :controller => 'venues', :action => 'create'
+  map.edit_venue '/venues/edit', :controller => 'venues', :action => 'edit'
+  map.update_venue '/venues/update', :controller => 'venues', :action => 'update'
+  map.delete_venue '/venues/delete', :controller => 'venues', :action => 'delete'
+  
+  map.hosts '/hosts', :controller => 'hosts', :action => 'index'
+  map.create_host '/hosts/create', :controller => 'hosts', :action => 'create'
+  map.edit_host '/hosts/edit', :controller => 'hosts', :action => 'edit'
+  map.update_host '/hosts/update', :controller => 'hosts', :action => 'update'
+  map.delete_host '/hosts/delete', :controller => 'hosts', :action => 'delete'
+
   map.root :controller => 'users', :action => 'show'
 end

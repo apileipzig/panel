@@ -1,0 +1,23 @@
+:javascript
+  function validate_empty() {
+    // validate new_host
+    if(!$("#new_host_first_name").val() || !$("#new_host_last_name").val()) {
+      alert("Sie müssen mindestens den Namen des Veranstalters ausfüllen.");
+      return false;
+    }
+    return true;
+  }
+- data ||= Hash.new
+- Rails.logger.info "Data: #{data.inspect}"
+- form_tag target, :onsubmit => 'return validate_empty();' do
+  %fieldset
+    .fieldset-desc
+      %p
+        Bitte geben Sie Informationen zum Veranstalter ein.
+  - unless @host_rows.blank?
+    = hidden_field_tag 'host_id', data['id'].blank? ? '' : data['id'] 
+    - %w[first_name last_name url phone mobile].each do |row|
+      - if @host_rows.include?(row)
+        = label_tag t("data.calendar.hosts.#{row}")
+        = text_field_tag "new_host[#{row}]", data[row].blank? ? '' : data[row]
+  %button{:name => 'commit', :type => 'submit'} Eintragen

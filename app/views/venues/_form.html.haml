@@ -1,0 +1,24 @@
+:javascript
+  function validate_empty() {
+    // validate new_host
+    if(!$("#new_venue_name").val() || !$("#new_venue_description").val() || !$("#new_venue_street").val() || !$("#new_venue_housenumber").val() || !$("#new_venue_postcode").val() || !$("#new_venue_city").val()) {
+        alert("Sie müssen mindestens Name, Beschreibung und Adresse des Veranstaltungsortes ausfüllen.");
+        return false;
+      }
+    return true;
+  }
+- data ||= Hash.new
+- form_tag target, :onsubmit => 'return validate_empty();' do
+  %fieldset
+    .fieldset-desc
+      %p
+        Bitte geben Sie Informationen zum Veranstaltungsort ein.
+  - unless @venue_rows.blank?
+    = hidden_field_tag 'venue_id', data['id'].blank? ? '' : data['id'] 
+    - %w[name description street housenumber housenumber_additional postcode city phone url].each do |row|
+      - if @venue_rows.include?(row)
+        = label_tag t("data.calendar.venues.#{row}")
+        = row == 'description' ? "#{text_area_tag "new_venue[#{row}]", data[row].blank? ? '' : data[row]}" : "#{text_field_tag "new_venue[#{row}]", data[row].blank? ? '' : data[row]}"
+  %button{:name => 'commit', :type => 'submit'} Eintragen
+
+  

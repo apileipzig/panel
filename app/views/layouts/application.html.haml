@@ -3,12 +3,18 @@
   %article.span-8
     %section#CatEdit
       %ul#CatEditTabs.span-8
-        - if @current_user && @current_user.may_read_calendar?
-          %li
-            %a{:href => events_path, :title => "Kalender"} Kalender
-        - if @current_user && @current_user.may_create_calendar?
+        - if @current_user && @current_user.may_create_resource?('calendar', 'events')
           %li
             %a{:href => new_event_path, :title => "Neuer Kalendereintrag"} Neuer Kalendereintrag
+        - if @current_user && @current_user.may_read_resource?('calendar', 'events')
+          %li
+            %a{:href => events_path, :title => "Kalender"} Kalender
+        - if @current_user && @current_user.may_read_resource?('calendar', 'venues')
+          %li
+            %a{:href => venues_path, :title => "Veranstaltungsorte"} Veranstaltungsorte
+        - if @current_user && @current_user.may_read_resource?('calendar', 'hosts')
+          %li
+            %a{:href => hosts_path, :title => "Veranstalter"} Veranstalter
         - if @current_user && @current_user.admin?
           %li
             %a.admin{:href => admin_path, :title => "Adminbereich"} Admin

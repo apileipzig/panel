@@ -1,0 +1,30 @@
+%header
+  %h1
+    Veranstalter
+%p
+  Hier können Sie die eingetragenen Veranstalter ansehen und/oder bearbeiten
+%table  
+  %tr
+    %th Name
+    %th Kontakt
+    %th Website
+    %th
+      - if @editor || @deletor
+        Aktionen
+  - @hosts.each do |host|
+    %tr
+      %td= "#{host['first_name']} #{host['last_name']}"
+      %td
+        = "Telefon: #{host['phone'].blank? ? "--" : host['phone'].to_s}<br/>"
+        = "Mobil: #{host['mobile'].blank? ? "--" : host['mobile'].to_s}"
+      %td= host['url'].blank? ? "--" : link_to(host['url'], host['url'])
+      %td
+        - if @editor
+          %a{:href => "#{url_for edit_host_path}?host=#{host['id']}", :class => 'edit_event'}
+            %img{:src => '/images/edit.png'}
+        -if @deletor
+          %a{:href => "#{url_for delete_host_path}?host=#{host['id']}", :class => 'delete_event', :onclick => "return confirm('Soll dieser Veranstalter wirklich gelöscht werden?');"}
+            %img{:src => '/images/delete.png'}
+            
+- if @current_user.may_create_resource?('calendar', 'hosts')
+  = render :partial => "/hosts/form", :locals => {:target => create_host_path, :data => @data}

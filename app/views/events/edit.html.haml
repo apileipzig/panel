@@ -1,35 +1,5 @@
 :javascript
-  function new_host(value) {
-    if (value == 'new') {
-      $("#new_host").fadeIn();
-    } else {
-      $("#new_host").fadeOut();
-    }
-  }
-  function new_venue(value) {
-    if (value == 'new') {
-      $("#new_venue").fadeIn();
-    } else {
-      $("#new_venue").fadeOut();
-    }
-  }
-  
   function validate_empty() {
-    // validate new_host
-    if($("#new_host").is(':visible')) {
-      if(!$("#new_host_first_name").val() || !$("#new_host_last_name").val()) {
-        alert("Sie müssen mindestens den Namen des Veranstalters ausfüllen.");
-        return false;
-      }
-    }
-    //validate new_venue
-    if($("#new_venue").is(':visible')) {
-      if(!$("#new_venue_name").val() || !$("#new_venue_description").val() || !$("#new_venue_street").val() || !$("#new_venue_housenumber").val() || !$("#new_venue_postcode").val() || !$("#new_venue_city").val()) {
-        alert("Sie müssen mindestens Name, Beschreibung und Adresse des Veranstaltungsortes ausfüllen.");
-        return false;
-      }
-    }
-    
     //validate event
     if (!$("#event_name").val() || !$("#event_description").val() || !$("#event_date_from").val() || !$("#event_date_to").val() || !$("#event_time_from").val() || !$("#event_time_to").val()) {
       alert("Sie müssen Name, Beschreibung und Startdatum/-zeit sowie Enddatum/-zeit der Veranstaltung ausfüllen.");
@@ -55,7 +25,7 @@
 - form_tag update_event_path, :onsubmit => 'return validate_empty();' do
   - unless @event_permissions.blank?
     - unless @event_rows.blank?
-      = render :partial => "events/partials/event", :locals => {:event_rows => @event_rows, :branches => @branches, :data => @data}
+      = render :partial => "events/partials/event", :locals => {:event_rows => @event_rows, :branches => @branches, :data => @result}
       = hidden_field_tag 'event_id', @event_id
     %fieldset
       %legend Veranstalter

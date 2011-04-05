@@ -6,49 +6,93 @@ class ApplicationController < ActionController::Base
   helper :all
   helper_method :current_user_session, :current_user
   filter_parameter_logging :password, :password_confirmation
-  
-  private
-    def current_user_session
-      return @current_user_session if defined?(@current_user_session)
-      @current_user_session = UserSession.find
-    end
-    
-    def current_user
-      return @current_user if defined?(@current_user)
-      @current_user = current_user_session && current_user_session.record
-    end
-    
-    def require_user
-      unless current_user
-        store_location
-        flash[:notice] = "You must be logged in to access this page"
-        redirect_to new_user_session_url
-        return false
-      end
-    end
 
-    def require_no_user
-      if current_user
-        store_location
-        flash[:notice] = "You must be logged out to access this page"
-        redirect_to account_url
-        return false
+  private
+  def current_user_session
+    return @current_user_session if defined?(@current_user_session)
+    @current_user_session = UserSession.find
+  end
+
+  def current_user
+    return @current_user if defined?(@current_user)
+    @current_user = current_user_session && current_user_session.record
+  end
+
+  def require_user
+    unless current_user
+      store_location
+      flash[:notice] = "You must be logged in to access this page"
+      redirect_to new_user_session_url
+      return false
+    end
+  end
+
+  def require_no_user
+    if current_user
+      store_location
+      flash[:notice] = "You must be logged out to access this page"
+      redirect_to account_url
+      return false
+    end
+  end
+
+  def require_admin
+    unless current_user.admin?
+      flash[:notice] = "You are not authorized to access this page"
+      redirect_to account_url
+    end
+  end
+
+  def store_location
+    session[:return_to] = request.request_uri
+  end
+
+  def redirect_back_or_default(default)
+    redirect_to(session[:return_to] || default)
+    session[:return_to] = nil
+  end
+
+  def retrieve_data(verb, source, table, id = "", form_data = {})
+    host_address = "http://178.77.99.225/api/v1"
+    api_key = @current_user.single_access_token
+
+    case verb
+    when "get"
+      uri = URI.parse("#{host_address}/#{source}/#{table}#{id.to_s.length > 0 ? "/#{id}" : ""}?api_key=#{api_key}")
+      connection = Net::HTTP.new(uri.host, uri.port)
+      connection.start do |http|
+        req = Net::HTTP::Get.new("#{uri.path}?#{uri.query}")
+        res = ActiveSupport::JSON.decode(http.request(req).read_body)
+        Rails.logger.info res.inspect
+        return res if id.to_s.length > 0
+        return res['data']
+      end
+    when "post"
+      form_data['api_key'] = api_key
+      uri = URI.parse("#{host_address}/#{source}/#{table}")
+      connection = Net::HTTP.new(uri.host, uri.port)
+      connection.start do |http|
+        req = Net::HTTP::Post.new(uri.path)
+        req.set_form_data(form_data)
+        return ActiveSupport::JSON.decode(http.request(req).read_body)
+      end
+    when "put"
+      form_data['api_key'] = api_key
+      uri = URI.parse("#{host_address}/#{source}/#{table}#{id.to_s.length > 0 ? "/#{id}" : ""}")
+      Rails.logger.info uri.inspect
+      connection = Net::HTTP.new(uri.host, uri.port)
+      connection.start do |http|
+        req = Net::HTTP::Put.new(uri.path)
+        req.set_form_data(form_data)
+        return ActiveSupport::JSON.decode(http.request(req).read_body)
+      end
+    when "delete"
+      uri = URI.parse("#{host_address}/#{source}/#{table}#{id.to_s.length > 0 ? "/#{id}" : ""}?api_key=#{api_key}")
+      connection = Net::HTTP.new(uri.host, uri.port)
+      connection.start do |http|
+        req = Net::HTTP::Delete.new("#{uri.path}?#{uri.query}")
+        return ActiveSupport::JSON.decode(http.request(req).read_body)
       end
     end
-    
-    def require_admin
-      unless current_user.admin?
-        flash[:notice] = "You are not authorized to access this page"
-        redirect_to account_url
-      end
-    end
-    
-    def store_location
-      session[:return_to] = request.request_uri
-    end
-    
-    def redirect_back_or_default(default)
-      redirect_to(session[:return_to] || default)
-      session[:return_to] = nil
-    end
+  end
 end

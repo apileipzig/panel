@@ -158,6 +158,10 @@ de:
         even: "muss gerade sein"
 
   data:
+    api:
+      messages:
+        is_invalid: "ist ungültig"
+        can't_be_blank: "darf nicht leer sein"
     calendar:
       events:
         name: "Name"
@@ -180,7 +184,7 @@ de:
       venues:
         name: "Name"
         url: "Website"
-        city: "stadt"
+        city: "Stadt"
         housenumber: "Hausnummer"
         housenumber_additional: "Hausnummernzusatz"
         postcode: "Postleitzahl"

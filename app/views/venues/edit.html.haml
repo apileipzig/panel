@@ -1,0 +1,8 @@
+%header
+  %h1
+    Veranstaltungsort
+%p
+  Hier können Sie einen Veranstaltungsort bearbeiten
+            
+- if @current_user.may_create_resource?('calendar', 'venues')
+  = render :partial => "/venues/form", :locals => {:data => @result, :target => update_venue_path}

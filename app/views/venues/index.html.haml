@@ -1,0 +1,35 @@
+%header
+  %h1
+    Veranstaltungsorte
+%p
+  Hier können Sie die eingetragenen Veranstaltungsorte ansehen und/oder bearbeiten
+%table  
+  %tr
+    %th Name
+    %th Adresse
+    %th Kontakt
+    %th
+      - if @editor || @deletor
+        Aktionen
+  - @venues.each do |venue|
+    %tr
+      %td= venue['name']
+      - address = "#{venue['street']}, #{venue['housenumber']} #{venue['housenumber_additional']}<br/>#{venue['postcode']} #{venue['city']}" 
+      %td= address.strip.length < 9 ? "--" : address 
+      %td
+        = "Telefon: #{venue['phone'].blank? ? "--" : venue['phone'].to_s}<br/>"
+        = link_to(venue['url']) unless venue['url'].blank? 
+      %td
+        - if @editor
+          %a{:href => "#{url_for edit_venue_path}?venue=#{venue['id']}", :class => 'edit_event'}
+            %img{:src => '/images/edit.png'}
+        -if @deletor
+          %a{:href => "#{url_for delete_venue_path}?venue=#{venue['id']}", :class => 'delete_event', :onclick => "return confirm('Soll dieser Veranstaltungsort wirklich gelöscht werden?');"}
+            %img{:src => '/images/delete.png'}
+    %tr
+      %td{:colspan => '4'}
+        %b= venue['description'].blank? ? "Keine Beschreibung vorhanden" : "Beschreibung:"
+        = venue['description']
+            
+- if @current_user.may_create_resource?('calendar', 'venues')
+  = render :partial => "/venues/form", :locals => {:target => create_venue_path, :data => @data}
