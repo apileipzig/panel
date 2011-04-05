@@ -203,6 +203,7 @@ de:
         name: "Name"
         internal_key: "Branchenschlüssel"
         internal_type: "Typ des Branchenschlüssels"
+        parent_id: "Übergeordneter Branchenschlüssel"
       companies:
         city: "Stadt"
         description: "Beschreibung"
@@ -216,7 +217,7 @@ de:
         mobile_primary: "Primäre Mobilfunknummer"
         mobile_secondary: "Sekundäre Mobilfunknummer"
         name: "Name"
-        old_id: ""
+        old_id: "Alte Id"
         people: "Personen"
         phone_primary: "Primäre Telefonnummer"
         phone_secondary: "Sekundäre Telefonnummer"
