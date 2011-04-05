@@ -44,7 +44,7 @@
                 - columns.sort.each do |column, accesses|
                   %tr
                     %td{:style => 'width:40%;'}
-                      = column
+                      = "#{t("data.#{source}.#{table}.#{column}")} (#{column})"
                     - %w[read create update delete].each do |access|
                       %td{:style => 'width:15%;text-align:center;'}
                         - unless accesses[access].nil?

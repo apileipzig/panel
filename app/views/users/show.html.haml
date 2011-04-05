@@ -13,7 +13,7 @@
     - @permissions.each do |sourcename, tables|
       - unless tables.blank?
         %h3
-          %a{:href => '#'}= "Datenquelle #{sourcename.titleize}"      
+          %a{:href => '#'}= "Datenquelle #{sourcename.titleize}"
         %div
           - tables.each do |tablename, columns|
             %table
@@ -26,7 +26,7 @@
                   %td= "#{t("data.#{sourcename}.#{tablename}.#{columnname}")} (#{columnname})"
                   - %w[read create update delete].each do |access|
                     %td
-                      %img{:src => "#{permissions.select{|p| p.access == access}.blank? ? "/images/nein.png" : "/images/ja.png"}"}
+                      %img{:src => "#{permissions[access].blank? ? "/images/nein.png" : "/images/ja.png"}"}
                 
 - else
   .notice Sie verfügen momentan über keine Zugriffsrechte.

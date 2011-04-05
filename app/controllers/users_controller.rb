@@ -21,17 +21,11 @@ class UsersController < ApplicationController
   def show
     @user = @current_user
     @permissions = Hash.new
-    Permission.all_sources.each do |source|
-      @permissions[source] = Hash.new{|k,v| k[v] = Hash.new{|i,j| i[j] = []}}
-      all_permissions = @user.permissions.select{|p| p.source == source}
-      tables = all_permissions.map{|p| p.table}.uniq
-      tables.each do |table|
-        permissions = all_permissions.select{|p| p.table == table}
-        columns = permissions.map{|p| p.column}.uniq
-        columns.each do |column|
-          @permissions[source][table][column] = permissions.select{|p| p.column = column}
-        end
-      end
+    @user.permissions.each do |p|
+      @permissions[p.source] = {} unless @permissions[p.source]
+      @permissions[p.source][p.table] = {} unless @permissions[p.source][p.table]
+      @permissions[p.source][p.table][p.column] = {} unless @permissions[p.source][p.table][p.column]
+      @permissions[p.source][p.table][p.column][p.access] = p unless @permissions[p.source][p.table][p.column][p.access]
     end
   end
 
