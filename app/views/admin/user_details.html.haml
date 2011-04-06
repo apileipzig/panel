@@ -73,7 +73,7 @@
                 %td
                   Alles auswählen
                 %td
-                  %input{:type => "checkbox", :name => "select-all-#{source}-delete-delete", :class => "parent #{source}-delete-delete"}
+                  %input{:type => "checkbox", :name => "select-all-#{source}-delete-delete", :class => "parent #{source}-delete"}
               %tr
                 %td
                   &nbsp;
@@ -86,9 +86,9 @@
                         = "Datensätze aus #{table.capitalize}"
                       %td
                         - if @user_permissions.reject! {|p| p.source == source and p.table == table and p.column == nil and p.access == 'delete'}
-                          %input{:type => "checkbox", :name => "permissions[#{accesses['delete']}]", :checked => true, :class => "child #{source}-#{table}-delete"}
+                          %input{:type => "checkbox", :name => "permissions[#{accesses['delete']}]", :checked => true, :class => "child #{source}-delete"}
                         - else
-                          %input{:type => "checkbox", :name => "permissions[#{accesses['delete']}]", :class => "child #{source}-#{table}-delete"}
+                          %input{:type => "checkbox", :name => "permissions[#{accesses['delete']}]", :class => "child #{source}-delete"}
 
       %button{:name => 'commit', :type => 'submit'} Absenden
     
