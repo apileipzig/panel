@@ -4,7 +4,8 @@ class AdminController < ApplicationController
   before_filter :require_admin
   def index
     @users = User.all
-    @stats = RequestLog.simple_stats
+    @stats_data = RequestLog.table_stats
+    @stats_tables = RequestLog.all_tables
   end
 
   def user_activation

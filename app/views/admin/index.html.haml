@@ -1,3 +1,7 @@
+%script{:type => 'text/javascript'}
+  = "var stats_user_array = #{@stats_tables.to_json};"
+  = "var stats_data_series_array = #{@stats_data.to_json};"
+  
 %header
   %h1
     Admin Konsole
@@ -47,3 +51,4 @@
 %header
   %h1
     API-Statistik
+#stats-container
