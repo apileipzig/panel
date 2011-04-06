@@ -16,6 +16,7 @@ class AdminController < ApplicationController
           redirect_to admin_path and return  # There's no user with this id
         end
         user.update_attributes(form_values)
+        EmailNotifier.deliver_activation_confirmation(user)
       end
     end
     flash[:success] = "Der/Die Benutzer wurde/n aktiviert."
