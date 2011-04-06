@@ -32,26 +32,37 @@
               %table
                 %tr
                   %td
+                    Alles auswählen
+                  %td
+                    %input{:type => "checkbox", :name => "select-all-#{source}-#{table}-read", :class => "select-all-#{source}-#{table}-read"}
+                  %td
+                    %input{:type => "checkbox", :name => "select-all-#{source}-#{table}-create", :class => "select-all-#{source}-#{table}-create"}
+                  %td
+                    %input{:type => "checkbox", :name => "select-all-#{source}-#{table}-update", :class => "select-all-#{source}-#{table}-update"}
+                  %td
+                    %input{:type => "checkbox", :name => "select-all-#{source}-#{table}-delete", :class => "select-all-#{source}-#{table}-delete"}
+                %tr
+                  %td
                     &nbsp;
-                  %td{:style => 'text-align:center;'}
+                  %td
                     Lesen
-                  %td{:style => 'text-align:center;'}
+                  %td
                     Erstellen
-                  %td{:style => 'text-align:center;'}
+                  %td
                     Ändern
-                  %td{:style => 'text-align:center;'}
+                  %td
                     Löschen
                 - columns.sort.each do |column, accesses|
                   %tr
-                    %td{:style => 'width:40%;'}
+                    %td
                       = "#{t("data.#{source}.#{table}.#{column}")} (#{column})"
                     - %w[read create update delete].each do |access|
-                      %td{:style => 'width:15%;text-align:center;'}
+                      %td
                         - unless accesses[access].nil?
                           - if @user_permissions.reject! {|p| p.source == source and p.table == table and p.column == column and p.access == access}
-                            %input{:type => "checkbox", :name => "permissions[#{accesses[access]}]", :checked => true}
+                            %input{:type => "checkbox", :name => "permissions[#{accesses[access]}]", :checked => true, :class => "select-#{source}-#{table}-#{access}"}
                           - else
-                            %input{:type => "checkbox", :name => "permissions[#{accesses[access]}]"}
+                            %input{:type => "checkbox", :name => "permissions[#{accesses[access]}]", :class => "select-#{source}-#{table}-#{access}"}
                         - else
                           &nbsp;
 
