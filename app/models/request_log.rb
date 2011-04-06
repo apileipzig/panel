@@ -11,10 +11,11 @@ class RequestLog < ActiveRecord::Base
     tables.each do |table|
       bar = Hash.new
       bar['name'] = table
-      bar['data'] = [log.select{|l| l.model == table}.length.to_s]
+      c = log.select{|l| l.model == table}.length
+      bar['data'] = c
       stats << bar
     end
+    return stats
   end
-
 end
 

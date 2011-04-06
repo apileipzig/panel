@@ -4,8 +4,13 @@ class AdminController < ApplicationController
   before_filter :require_admin
   def index
     @users = User.all
-    @stats_data = RequestLog.table_stats
-    @stats_tables = RequestLog.all_tables
+    @stats_tables = []
+    data_points = {'data' => []}
+    RequestLog.table_stats.each do |stat|
+      @stats_tables << stat['name']
+      data_points['data'] << stat['data']
+    end
+    @stats_data = [data_points]
   end
 
   def user_activation
