@@ -14,7 +14,8 @@ ActionController::Routing::Routes.draw do |map|
   map.admin '/admin', :controller => 'admin', :action => 'index' # the admin console
   map.user_details '/admin/user_details', :controller => 'admin', :action => 'user_details'
   map.user_activation '/admin/user_activation', :controller => 'admin', :action => 'user_activation'
-  map.user_deactivation '/admin/user_deactivation', :controller => 'admin', :action => 'user_deactivation'
+  map.delete_user '/admin/delete_user', :controller => 'admin', :action => 'delete_user'
+  map.set_admin '/admin/set_admin', :controller => 'admin', :action => 'set_admin'
   map.reset_apikey '/admin/reset_apikey', :controller => 'admin', :action => 'reset_apikey'
   map.set_permissions '/admin/set_permissions', :controller => 'admin', :action => 'set_permissions'
   

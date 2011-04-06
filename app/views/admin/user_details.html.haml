@@ -68,15 +68,3 @@
           da sein alter API-Key dann nicht mehr funktioniert.
       = hidden_field :user, :id
       %button{:name => 'commit', :type => 'submit'} API-Key erneuern
-
-  - deactivate_confirm_function = "return confirm('Wollen Sie den Nutzer wirklich deaktivieren?')" 
-  - form_tag user_deactivation_path, :name => 'deactivation', :onsubmit => deactivate_confirm_function do
-    %fieldset
-      %legend
-        = "Account von #{@user.name} deaktivieren"
-      .fieldset-desc
-        %p
-          Mit einem Klick auf Absenden wird der Nutzer deaktiviert. Der Nutzer hat dann keinen Zugang mehr zur Leipzig-API.
-          Seine Rechte bleiben bis zur einer erneuten Aktivierung erhalten.
-      = hidden_field :user, :id
-      %button{:name => 'commit', :type => 'submit'} Deaktivieren

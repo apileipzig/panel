@@ -1,34 +1,49 @@
 %header
   %h1
     Admin Konsole
-- if @inactive_users.blank?
   %p
-    Derzeit gibt es keine Nutzer, die freigeschaltet werden müssen.
-- else
-  %p
-    Folgende Benutzer sind noch nicht freigeschaltet:
-  - form_tag user_activation_path do
-    %fieldset
-      %legend Freizuschaltende Benutzer
-      .fieldset-desc
-        %p
-          Bitte wählen Sie die Nutzer aus, die Sie freischalten wollen.
-      %table
-        - @inactive_users.each do |user|
-          %tr
-            %td= user.name 
-            %td= check_box "activation[#{user.id}]", 'active'
-      %button{:name => 'commit', :type => 'submit'} Absenden
-
-- if @active_users.blank?
-  %p
-    Es gibt keine aktiven Benutzer.
-- else
-  - form_tag user_details_path do
-    %fieldset
-      %legend Benutzerdaten bearbeiten
-      .fieldset-desc
-        %p
-          Bitte wählen Sie den Nutzer aus, dessen Daten Sie bearbeiten wollen.
-      = collection_select('user', 'id', @active_users, :id, :name)
-      %button{:name => 'commit', :type => 'submit'} Bearbeiten   
+    Hier erhalten sie eine Übersicht über die am System vorhandenen Nutzer und können die einzelnen Nutzer bearbeiten.
+    Folgende Aktionen stehen zur Verfügung:
+    %ul
+      %li
+        %img{:src => '/images/active.png'}
+        Benutzer aktivieren bzw. deaktivieren
+      %li
+        %img{:src => '/images/admin.png'}
+        Benutzer zum Admin ernennen bzw. Ernennung zurückziehen
+      %li
+        %img{:src => '/images/edit.png'}
+        API-Zugriffsrechte eines Benutzers bearbeiten
+      %li
+        %img{:src => '/images/delete.png'}
+        Benutzer löschen
+%table
+  %tr
+    %th Benutzer
+    %th Aktiv?
+    %th Admin?
+    %th Aktionen
+  - @users.each do |user|
+    %tr
+      %td= mail_to(user.email, user.name)
+      %td
+        %img{:src => "#{user.active? ? "/images/ja.png" : "/images/nein.png"}"}
+      %td
+        %img{:src => "#{user.admin? ? "/images/ja.png" : "/images/nein.png"}"}
+      %td
+        - onclick_activate = "return confirm('Soll dieser Benutzer wirklich aktiviert werden?\nDer Benutzer erhält eine automatische Aktivierungsnachricht per E-Mail.');"
+        - onclick_deactivate = "return confirm('Soll dieser Benutzer wirklich deaktiviert werden?');"
+        %a{:href => "#{url_for(:controller => 'admin', :action => "user_activation", :user => user.id)}", :class => 'edit_user', :onclick => "#{user.active? ? onclick_deactivate : onclick_activate}"}
+          %img{:src => '/images/active.png'}
+        - onclick_admin = "return confirm('Soll dieser Benutzer wirklich zum Admin ernannt werden?');"
+        - onclick_deadmin = "return confirm('Soll dieser Admin wirklich seinen Admin-Status verlieren?');"
+        %a{:href => "#{url_for(:controller => 'admin', :action => 'set_admin', :user => user.id)}", :class => 'edit_user', :onclick => "#{user.admin? ? onclick_deadmin : onclick_admin}"}
+          %img{:src => '/images/admin.png'}
+        %a{:href => "#{url_for(:controller => 'admin', :action => 'user_details', :user => user.id)}", :class => 'edit_user'}
+          %img{:src => '/images/edit.png'}
+        %a{:href => "#{url_for(:controller => 'admin', :action => 'delete_user', :user => user.id)}", :class => 'edit_user', :onclick => "return confirm('Soll dieser Benutzer wirklich gelöscht werden?');"}
+          %img{:src => '/images/delete.png'}
+          
+%header
+  %h1
+    API-Statistik

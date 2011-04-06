@@ -3,43 +3,43 @@ require 'net/http'
 class AdminController < ApplicationController
   before_filter :require_admin
   def index
-    @inactive_users = User.find(:all, :conditions => [ "active = ?", false ])
-    @active_users = User.find(:all, :conditions => [ "active = ?", true])
+    @users = User.all
   end
 
   def user_activation
-    unless params[:activation].blank?
-      params[:activation].each do |id,form_values|
-        user = User.find(id)
-        if user.blank?
-          flash[:error] = "Dieser Benutzer existiert nicht"
-          redirect_to admin_path and return  # There's no user with this id
-        end
-        user.update_attributes(form_values)
-        EmailNotifier.deliver_activation_confirmation(user)
+    unless params[:user].blank?
+      user = User.find(params[:user])
+      if user.blank?
+        flash[:error] = "Dieser Benutzer existiert nicht"
+        redirect_to admin_path and return
       end
+      if user == @current_user && user.active?
+        flash[:error] = "Sie können sich nicht selbst deaktivieren."
+        redirect_to admin_path and return
+      end
+      new_status = user.active? ? '0' : '1'
+      user.update_attributes({:active => new_status})
+      EmailNotifier.deliver_activation_confirmation(user) if user.active?
+      flash[:success] = "Der Benutzer wurde erfolgreich aktiviert. Ihm wurde automatisch eine E-Mail-Benachrichtigung zugestellt." if user.active?
+      flash[:success] = "Der Benutzer wurde erfolgreich deaktiviert." unless user.active?
     end
-    flash[:success] = "Der/Die Benutzer wurde/n aktiviert."
     redirect_to admin_path and return
   end
 
-  def user_deactivation
+  def set_admin
     unless params[:user].blank?
-      user = User.find(params[:user][:id])
+      user = User.find(params[:user])
       if user.blank?
         flash[:error] = "Dieser Benutzer existiert nicht"
         redirect_to admin_path and return  # There's no user with this id
       end
-      if user == @current_user
-        flash[:error] = "Ein Admin kann sich nicht selbst deaktivieren."
-        redirect_to user_details_path(:user => params[:user]) and return if user == @current_user # Admin may not change its own key.
-      end
-      user.update_attributes({:active => '0'})
+      new_status = user.admin? ? '0' : '1'
+      user.update_attributes({:admin => new_status})
     end
-    flash[:success] = "Der Benutzer wurde deaktiviert."
+    flash[:success] = "Der Benutzer wurde erfolgreich aktiviert. Ihm wurde automatisch eine E-Mail-Benachrichtigung zugestellt."
     redirect_to admin_path and return
   end
-
+  
   def reset_apikey
     unless params[:user].blank?
       user = User.find(params[:user][:id])
@@ -59,7 +59,7 @@ class AdminController < ApplicationController
   
   def user_details
     redirect_to admin_path and return if params[:user].blank?
-    @user = User.find(params[:user][:id])
+    @user = User.find(params[:user])
     @user_permissions = @user.permissions
     @permissions = {}
     Permission.all.each do |p|
@@ -70,8 +70,19 @@ class AdminController < ApplicationController
     end
   end
 
+  def delete_user
+    redirect_to admin_path and return if params[:user].blank?
+    user = User.find(params[:user])
+    if user == @current_user
+      flash[:error] = "Sie können sich nicht selbst löschen."
+      redirect_to admin_path and return 
+    end
+    user.destroy
+    flash[:success] = "Der Benutzer wurde erfolgreich gelöscht."
+    redirect_to admin_path and return
+  end
+  
   def set_permissions
-
     redirect_to user_details_path and return if params[:user].blank?
     @user = User.find(params[:user][:id])
     @updated_permissions = []
@@ -85,6 +96,6 @@ class AdminController < ApplicationController
     @user.permissions = @user.permissions & @updated_permissions | @updated_permissions
 
     flash[:success] = "Die Rechte wurden geändert."
-    redirect_to user_details_path(:user => params[:user])
+    redirect_to user_details_path(:user => params[:user][:id])
   end
 end
