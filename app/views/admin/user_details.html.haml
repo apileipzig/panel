@@ -44,20 +44,20 @@
                 %tr
                   %td
                     &nbsp;
-                  %td{:style => 'text-align:center;'}
+                  %td
                     Lesen
-                  %td{:style => 'text-align:center;'}
+                  %td
                     Erstellen
-                  %td{:style => 'text-align:center;'}
+                  %td
                     Ändern
-                  %td{:style => 'text-align:center;'}
+                  %td
                     Löschen
                 - columns.sort.each do |column, accesses|
                   %tr
-                    %td{:style => 'width:40%;'}
+                    %td
                       = "#{t("data.#{source}.#{table}.#{column}")} (#{column})"
                     - %w[read create update delete].each do |access|
-                      %td{:style => 'width:15%;text-align:center;'}
+                      %td
                         - unless accesses[access].nil?
                           - if @user_permissions.reject! {|p| p.source == source and p.table == table and p.column == column and p.access == access}
                             %input{:type => "checkbox", :name => "permissions[#{accesses[access]}]", :checked => true, :class => "select-#{source}-#{table}-#{access}"}
