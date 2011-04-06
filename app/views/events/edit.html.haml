@@ -1,8 +1,8 @@
 :javascript
   function validate_empty() {
     //validate event
-    if (!$("#event_name").val() || !$("#event_description").val() || !$("#event_date_from").val() || !$("#event_date_to").val() || !$("#event_time_from").val() || !$("#event_time_to").val()) {
-      alert("Sie müssen Name, Beschreibung und Startdatum/-zeit sowie Enddatum/-zeit der Veranstaltung ausfüllen.");
+    if (!$("#event_name").val() || !$("#event_description").val() || !$("#event_date_from").val()) {
+      alert("Sie müssen Name, Beschreibung und Startdatum der Veranstaltung ausfüllen.");
       return false;
     } else if ($("#branch option:selected").val() == '0') {
       alert("Sie müssen eine Branche auswählen.");
@@ -27,20 +27,3 @@
     - unless @event_rows.blank?
       = render :partial => "events/partials/event", :locals => {:event_rows => @event_rows, :branches => @branches, :data => @result}
       = hidden_field_tag 'event_id', @event_id
-    %fieldset
-      %legend Veranstalter
-      .fieldset-desc
-        %p
-          Bitte geben Sie Informationen zum Veranstalter ein.
-      - unless @host.blank?
-        = "#{@host['first_name']} #{@host['last_name']}"
-        = hidden_field_tag 'host_id', @host['id']
-    %fieldset
-      %legend Veranstaltungsort
-      .fieldset-desc
-        %p
-          Bitte geben Sie Informationen zum Veranstaltungsort ein.
-      - unless @venue.blank?
-        = "#{@venue['name']}"
-        = hidden_field_tag 'venue_id', @venue['id']
-  %button{:name => 'commit', :type => 'submit'} Ändern

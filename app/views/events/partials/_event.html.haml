@@ -5,7 +5,8 @@
     %p
       Bitte geben Sie die grundlegenden Informationen des Termins ein.
     %p
-      Sie müssen alle Felder ausfüllen, lediglich die Url kann frei bleiben.
+      Die Felder für Name, Beschreibung und Startdatum müssen ausgefüllt werden.
+      Ebenso müssen Branche, Veranstalter und Veranstaltungsort gewählt werden.
   - %w[name description date_from time_from date_to time_to url].each do |row|
     - if event_rows.include?(row)
       = label_tag t("data.calendar.events.#{row}")
@@ -19,4 +20,13 @@
   - unless branches.blank?
     - blank_branch = "<option value='0' #{data['category_id'].blank? ? 'selected="selected"' : ""}>Wählen Sie eine Branche ...</option>"
     = label_tag 'Branche'
-    = select_tag 'branch', blank_branch + branches.map{|h| "<option #{data['category_id'] == h['id'] ? 'selected="selected"' : ""}  value='#{h['id']}'>#{h['name']}</option>"}.to_s                    
+    = select_tag 'branch', blank_branch + branches.map{|h| "<option #{data['category_id'] == h['id'] ? 'selected="selected"' : ""} value='#{h['id']}'>#{h['name']}</option>"}.to_s                    
+  - unless @hosts.blank?
+    - blank_host = "<option value='0' #{data['host_id'].blank? ? 'selected="selected"' : ""}>Wählen Sie einen Veranstalter ...</option>"
+    = label_tag 'Veranstalter'
+    = select_tag 'host', blank_host + @hosts.map{|h| "<option #{data['host_id'] == h['id'] ? 'selected="selected"' : ""} value='#{h['id']}'>#{h['first_name']} #{h['last_name']}</option>"}.to_s
+  - unless @venues.blank?
+    - blank_venue = "<option value='0' #{data['venue_id'].blank? ? 'selected="selected"' : ""}>Wählen Sie einen Veranstaltungsort ...</option>"
+    = label_tag 'Veranstaltungsort'
+    = select_tag 'venue', blank_venue + @venues.map{|v| "<option #{data['venue_id'] == v['id'] ? 'selected="selected"' : ""} value='#{v['id']}'>#{v['name']}</option>"}.to_s
+  %button{:name => 'commit', :type => 'submit'} Eintragen

@@ -39,8 +39,8 @@ class EventsController < ApplicationController
       e = params[:event].delete_if{|k, v| v.blank?}
       unless e.empty?
         e['category_id'] = params[:branch]
-        e['time_from'] = e['time_from'] + ":00"
-        e['time_to'] = e['time_to'] + ":00"
+        e['time_from'] = e['time_from'] + ":00" if e['time_from']
+        e['time_to'] = e['time_to'] + ":00" if e['time_to']
         e['host_id'] = params[:host]
         e['venue_id'] = params[:venue]
         @result = retrieve_data('post', 'calendar', 'events', "", e)
@@ -71,10 +71,9 @@ class EventsController < ApplicationController
       @event_id = params[:event]
       @result = retrieve_data('get', 'calendar', 'events', params[:event])
       unless @result.has_key?('error')
-        # get the host
-        @host = retrieve_data('get', 'calendar', 'hosts', @result['host_id'])
-        # get the venue
-        @venue = retrieve_data('get', 'calendar', 'venues', @result['venue_id'])
+        # get all venues, hosts, and branches for selection
+        @venues = retrieve_data('get', 'calendar', 'venues')
+        @hosts = retrieve_data('get', 'calendar', 'hosts')
         @branches = retrieve_data('get', 'mediahandbook', 'branches').select{|b| b['internal_type'] == 'sub_market'}
       else
         flash[:error] = "Die API meldet folgenden Fehler: #{t("data.calendar.events.#{@result['error'].to_a.first.first}")} #{t("data.api.messages.#{@result['error'].to_a.first.second.gsub(' ', '_')}")}"
@@ -92,8 +91,10 @@ class EventsController < ApplicationController
       unless e.empty?
         e['api_key'] = @current_user.single_access_token
         e['category_id'] = params[:branch]
-        e['time_from'] = e['time_from'].split(':').length > 2 ? e['time_from'] : e['time_from'] + ":00"
-        e['time_to'] = e['time_to'].split(':').length > 2 ? e['time_to'] : e['time_to'] + ":00"
+        e['time_from'] = e['time_from'].split(':').length > 2 ? e['time_from'] : e['time_from'] + ":00" if e['time_from']
+        e['time_to'] = e['time_to'].split(':').length > 2 ? e['time_to'] : e['time_to'] + ":00" if e['time_to']
+        e['host_id'] = params[:host]
+        e['venue_id'] = params[:venue]
         @result = retrieve_data('put', 'calendar', 'events', params[:event_id], e)
         if @result.has_key?('success')
           flash[:success] = "Termin gespeichert"

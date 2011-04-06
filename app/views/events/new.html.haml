@@ -1,8 +1,8 @@
 :javascript
   function validate_empty() {
     //validate event
-    if (!$("#event_name").val() || !$("#event_description").val() || !$("#event_date_from").val() || !$("#event_date_to").val() || !$("#event_time_from").val() || !$("#event_time_to").val()) {
-      alert("Sie müssen Name, Beschreibung und Startdatum/-zeit sowie Enddatum/-zeit der Veranstaltung ausfüllen.");
+    if (!$("#event_name").val() || !$("#event_description").val() || !$("#event_date_from").val()) {
+      alert("Sie müssen Name, Beschreibung und Startdatum der Veranstaltung ausfüllen.");
       return false;
     } else if ($("#branch option:selected").val() == '0') {
       alert("Sie müssen eine Branche auswählen.");
@@ -21,26 +21,8 @@
   %h1
     Kalendereintrag eingeben
 %p
-  Hier können Sie einen neuen Termin für den Veranstaltungskalender eingeben  
+  Hier können Sie einen neuen Termin für den Veranstaltungskalender eingeben.
 - form_tag create_event_path, :onsubmit => 'return validate_empty();' do
   - unless @event_permissions.blank?
     - unless @event_rows.blank?
       = render :partial => "events/partials/event", :locals => {:event_rows => @event_rows, :branches => @branches, :data => @data}
-    %fieldset
-      %legend Veranstalter
-      .fieldset-desc
-        %p
-          Bitte geben Sie Informationen zum Veranstalter ein.
-      - unless @hosts.blank?
-        - blank_host = "<option value='0' selected='selected'>Wählen Sie einen Veranstalter ...</option>"
-        = select_tag 'host', blank_host + @hosts.map{|h| "<option value='#{h['id']}'>#{h['first_name']} #{h['last_name']}</option>"}.to_s
-      
-    %fieldset
-      %legend Veranstaltungsort
-      .fieldset-desc
-        %p
-          Bitte wählen Sie einen Veranstaltungsort aus.
-      - unless @venues.blank?
-        - blank_venue = "<option value='0' selected='selected'>Wählen Sie einen Veranstaltungsort ...</option>"
-        = select_tag 'venue', blank_venue + @venues.map{|h| "<option value='#{h['id']}'>#{h['name']}</option>"}.to_s
-  %button{:name => 'commit', :type => 'submit'} Eintragen
