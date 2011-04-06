@@ -13,10 +13,18 @@
     .fieldset-desc
       %p
         Bitte geben Sie Informationen zum Veranstalter ein.
-  - unless @host_rows.blank?
-    = hidden_field_tag 'host_id', data['id'].blank? ? '' : data['id'] 
-    - %w[first_name last_name url phone mobile].each do |row|
-      - if @host_rows.include?(row)
-        = label_tag t("data.calendar.hosts.#{row}")
-        = text_field_tag "new_host[#{row}]", data[row].blank? ? '' : data[row]
-  %button{:name => 'commit', :type => 'submit'} Eintragen
+      %p
+        %b Pflichtfelder:
+        %br
+        Die Felder für Vor- und Nachname müssen ausgefüllt werden.
+      %p
+        %b Hinweise:
+        %br
+        Bitte geben Sie Telefonnummern inklusive der internationalen Vorwahl an (bspw. +49 341 12345-01). 
+    - unless @host_rows.blank?
+      = hidden_field_tag 'host_id', data['id'].blank? ? '' : data['id'] 
+      - %w[first_name last_name url phone mobile].each do |row|
+        - if @host_rows.include?(row)
+          = label_tag t("data.calendar.hosts.#{row}")
+          = text_field_tag "new_host[#{row}]", data[row].blank? ? '' : data[row]
+    %button{:name => 'commit', :type => 'submit'} Eintragen

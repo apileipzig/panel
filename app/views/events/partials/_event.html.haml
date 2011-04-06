@@ -5,8 +5,14 @@
     %p
       Bitte geben Sie die grundlegenden Informationen des Termins ein.
     %p
+      %b Pflichtfelder:
+      %br
       Die Felder für Name, Beschreibung und Startdatum müssen ausgefüllt werden.
       Ebenso müssen Branche, Veranstalter und Veranstaltungsort gewählt werden.
+    %p
+      %b Hinweise:
+      %br
+      Datumsangaben müssen im angelsächsischen Format erfolgen (bspw. 2011-01-01).
   - %w[name description date_from time_from date_to time_to url].each do |row|
     - if event_rows.include?(row)
       = label_tag t("data.calendar.events.#{row}")

@@ -13,7 +13,7 @@ class HostsController < ApplicationController
       if @result.has_key?('success')
         flash[:success] = "Der Veranstalter wurde erfolgreich angelegt"
       else
-        flash[:error] = "Die API meldet folgenden Fehler: #{t("data.calendar.hosts.#{@result['error'].to_a.first.first}")} #{t("data.api.messages.#{@result['error'].to_a.first.second.gsub(' ', '_')}")}"
+        flash[:error] = "Die API meldet folgenden Fehler: #{extract_error_message(@result['error'])}"
         prepare_index
         @data = h.delete_if{|k,v| k == 'api_key'}
         render :action => "index" and return
@@ -28,7 +28,7 @@ class HostsController < ApplicationController
       @host_id = params[:host]
       @result = retrieve_data('get', 'calendar', 'hosts', @host_id)
       if @result.has_key?('error')
-        flash[:error] = "Die API meldet folgenden Fehler: #{t("data.calendar.hosts.#{@result['error'].to_a.first.first}")} #{t("data.api.messages.#{@result['error'].to_a.first.second.gsub(' ', '_')}")}"
+        flash[:error] = "Die API meldet folgenden Fehler: #{extract_error_message(@result['error'])}"
         redirect_to hosts_path and return
       end
     else
@@ -46,7 +46,7 @@ class HostsController < ApplicationController
           flash[:success] = "Veranstalter gespeichert"
           redirect_to hosts_path and return
         else
-          flash[:error] = "Die API meldet folgenden Fehler: #{t("data.calendar.hosts.#{@result['error'].to_a.first.first}")} #{t("data.api.messages.#{@result['error'].to_a.first.second.gsub(' ', '_')}")}"
+          flash[:error] = "Die API meldet folgenden Fehler: #{extract_error_message(@result['error'])}"
           redirect_to hosts_path and return
         end
       else
@@ -73,6 +73,12 @@ class HostsController < ApplicationController
 
   private
 
+  def extract_error_message(error)
+      first_error = error.to_a.first
+      column = first_error.first
+      message = first_error.second.gsub(' ', '_').delete(".,'").downcase
+      return "#{t("data.calendar.hosts.#{column}")} #{t("data.api.messages.#{message}")}"
+    end
   def prepare_index
     @hosts = retrieve_data('get', 'calendar', 'hosts')
     @host_rows = @current_user.table_permissions('calendar', 'hosts', 'create').map{|p| p.column}

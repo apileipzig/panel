@@ -13,7 +13,7 @@ class VenuesController < ApplicationController
       if @result.has_key?('success')
         flash[:success] = "Der Veranstalter wurde erfolgreich angelegt"
       else
-        flash[:error] = "Die API meldet folgenden Fehler: #{t("data.calendar.venues.#{@result['error'].to_a.first.first}")} #{t("data.api.messages.#{@result['error'].to_a.first.second.gsub(' ', '_')}")}"
+        flash[:error] = "Die API meldet folgenden Fehler: #{extract_error_message(@result['error'])}"
         prepare_index
         @data = v.delete_if{|k,v| k == 'api_key'}
         render :action => "index" and return
@@ -28,7 +28,7 @@ class VenuesController < ApplicationController
       @venue_id = params[:venue]
       @result = retrieve_data('get', 'calendar', 'venues', @venue_id)
       if @result.has_key?('error')
-        flash[:error] = "Die API meldet folgenden Fehler: #{t("data.calendar.venues.#{@result['error'].to_a.first.first}")} #{t("data.api.messages.#{@result['error'].to_a.first.second.gsub(' ', '_')}")}"
+        flash[:error] = "Die API meldet folgenden Fehler: #{extract_error_message(@result['error'])}"
         redirect_to venues_path and return
       end
     else
@@ -46,7 +46,7 @@ class VenuesController < ApplicationController
           flash[:success] = "Veranstaltungsort gespeichert"
           redirect_to venues_path and return
         else
-          flash[:error] = "Die API meldet folgenden Fehler: #{t("data.calendar.venues.#{@result['error'].to_a.first.first}")} #{t("data.api.messages.#{@result['error'].to_a.first.second.gsub(' ', '_')}")}"
+          flash[:error] = "Die API meldet folgenden Fehler: #{extract_error_message(@result['error'])}"
           redirect_to venues_path and return
         end
       else
@@ -78,5 +78,12 @@ class VenuesController < ApplicationController
     @venue_rows = @current_user.table_permissions('calendar', 'venues', 'create').map{|p| p.column}
     @editor = @current_user.may_update_resource?('calendar', 'venues')
     @deletor = @current_user.may_delete_resource?('calendar', 'venues')
+  end
+  
+  def extract_error_message(error)
+    first_error = error.to_a.first
+    column = first_error.first
+    message = first_error.second.gsub(' ', '_').delete(".,'").downcase
+    return "#{t("data.calendar.venues.#{column}")} #{t("data.api.messages.#{message}")}"
   end
 end

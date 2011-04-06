@@ -13,12 +13,22 @@
     .fieldset-desc
       %p
         Bitte geben Sie Informationen zum Veranstaltungsort ein.
-  - unless @venue_rows.blank?
-    = hidden_field_tag 'venue_id', data['id'].blank? ? '' : data['id'] 
-    - %w[name description street housenumber housenumber_additional postcode city phone url].each do |row|
-      - if @venue_rows.include?(row)
-        = label_tag t("data.calendar.venues.#{row}")
-        = row == 'description' ? "#{text_area_tag "new_venue[#{row}]", data[row].blank? ? '' : data[row]}" : "#{text_field_tag "new_venue[#{row}]", data[row].blank? ? '' : data[row]}"
-  %button{:name => 'commit', :type => 'submit'} Eintragen
+      %p
+        %b Pflichtfelder:
+        %br
+        Die Felder für Name, Beschreibung und Adresse müssen ausgefüllt werden.
+      %p
+        %b Hinweise:
+        %br
+        Angaben zur Straße bitte ausschreiben (bspw. Schillerstraße statt Schillerstr.).
+        Die Postleitzahl muss aus genau fünf Ziffern bestehen.
+        Bitte geben Sie Telefonnummern inklusive der internationalen Vorwahl an (bspw. +49 341 12345-01). 
+    - unless @venue_rows.blank?
+      = hidden_field_tag 'venue_id', data['id'].blank? ? '' : data['id'] 
+      - %w[name description street housenumber housenumber_additional postcode city phone url].each do |row|
+        - if @venue_rows.include?(row)
+          = label_tag t("data.calendar.venues.#{row}")
+          = row == 'description' ? "#{text_area_tag "new_venue[#{row}]", data[row].blank? ? '' : data[row]}" : "#{text_field_tag "new_venue[#{row}]", data[row].blank? ? '' : data[row]}"
+    %button{:name => 'commit', :type => 'submit'} Eintragen
 
   

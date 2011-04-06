@@ -48,7 +48,7 @@ class EventsController < ApplicationController
           flash[:success] = "Termin gespeichert"
           redirect_to events_path and return
         else
-          flash[:error] = "Die API meldet folgenden Fehler: #{t("data.calendar.events.#{@result['error'].to_a.first.first}")} #{t("data.api.messages.#{@result['error'].to_a.first.second.gsub(' ', '_')}")}"
+          flash[:error] = "Die API meldet folgenden Fehler: #{extract_error_message(@result['error'])}"
           @data = params[:event]
           redirect_to :action => "new", :event => e and return
         end
@@ -76,7 +76,7 @@ class EventsController < ApplicationController
         @hosts = retrieve_data('get', 'calendar', 'hosts')
         @branches = retrieve_data('get', 'mediahandbook', 'branches').select{|b| b['internal_type'] == 'sub_market'}
       else
-        flash[:error] = "Die API meldet folgenden Fehler: #{t("data.calendar.events.#{@result['error'].to_a.first.first}")} #{t("data.api.messages.#{@result['error'].to_a.first.second.gsub(' ', '_')}")}"
+        flash[:error] = "Die API meldet folgenden Fehler: #{extract_error_message(@result['error'])}"
         redirect_to events_path and return
       end
     else
@@ -100,7 +100,7 @@ class EventsController < ApplicationController
           flash[:success] = "Termin gespeichert"
           redirect_to events_path and return
         else
-          flash[:error] = "Die API meldet folgenden Fehler: #{t("data.calendar.events.#{@result['error'].to_a.first.first}")} #{t("data.api.messages.#{@result['error'].to_a.first.second.gsub(' ', '_')}")}"
+          flash[:error] = "Die API meldet folgenden Fehler: #{extract_error_message(@result['error'])}"
           redirect_to new_event_path and return
         end
       else
@@ -127,6 +127,12 @@ class EventsController < ApplicationController
 
   private
 
+  def extract_error_message(error)
+      first_error = error.to_a.first
+      column = first_error.first
+      message = first_error.second.gsub(' ', '_').delete(".,'").downcase
+      return "#{t("data.calendar.events.#{column}")} #{t("data.api.messages.#{message}")}"
+    end
   def item_permissions(event_permissions)
     @event_rows = event_permissions.select{|p| p.table == 'events'}.map{|p| p.column}
     @host_rows = event_permissions.select{|p| p.table == 'hosts'}.map{|p| p.column}
