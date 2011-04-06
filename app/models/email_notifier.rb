@@ -8,20 +8,20 @@ class EmailNotifier < ActionMailer::Base
   
   def activation_confirmation(user)
     setup_mailer(user.email)
-    subject       "Maiana - Activation Completed"
-    body          :root_url => root_url
+    subject       "API.LEIPZIG - Freischaltung erfolgt"
+    body          :name => user.name
   end
   
   def password_reset_instructions(user)  
     setup_mailer(user.email)
-    subject       "Maiana - Password Reset Instructions"  
+    subject       "API.LEIPZIG - Passwort ändern"  
     body          :edit_password_reset_url => url_for(:controller => 'password_resets', :action => 'edit', :id => user.perishable_token)  
   end  
 
   def new_datasource_request(user)
     setup_mailer(user.email)
-    subject       "Maiana - Password Reset Instructions"  
-    body          :edit_password_reset_url => url_for(:controller => 'password_resets', :action => 'edit', :id => user.perishable_token)  
+    subject       "API.LEIPZIG - Neue Datenquelle angefragt"  
+    body          :name => user.name
   end  
   
   protected
