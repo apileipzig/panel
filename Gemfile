@@ -9,6 +9,7 @@ group :default do
   gem "compass-susy-plugin"
   gem "compass-jquery-plugin", "0.3.1.1"
   gem "nokogiri"
+  gem "daemons", "1.0.10"
 end
 
 group :development do
