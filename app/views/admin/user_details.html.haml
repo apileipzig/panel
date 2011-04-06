@@ -23,7 +23,8 @@
       - @permissions.sort.each do |source,tables|
         %h3
           = source.capitalize
-        - tables.sort.each do |table,columns|
+        - tables_sort = tables.sort
+        - tables_sort.each do |table,columns|
           .accordion
             %h3
               %a{:href => '#'}
@@ -39,8 +40,6 @@
                     %input{:type => "checkbox", :name => "select-all-#{source}-#{table}-create", :class => "select-all #{source}-#{table}-create"}
                   %td
                     %input{:type => "checkbox", :name => "select-all-#{source}-#{table}-update", :class => "select-all #{source}-#{table}-update"}
-                  %td
-                    %input{:type => "checkbox", :name => "select-all-#{source}-#{table}-delete", :class => "select-all #{source}-#{table}-delete"}
                 %tr
                   %td
                     &nbsp;
@@ -50,9 +49,8 @@
                     Erstellen
                   %td
                     Ändern
-                  %td
-                    Löschen
-                - columns.sort.each do |column, accesses|
+                / Remove all nil elements which means a permission where no column is specified (delete permission)
+                - columns.reject{|k,v| k.nil?}.sort.each do |column, accesses|
                   %tr
                     %td
                       = "#{t("data.#{source}.#{table}.#{column}")} (#{column})"
@@ -65,6 +63,32 @@
                             %input{:type => "checkbox", :name => "permissions[#{accesses[access]}]", :class => "#{source}-#{table}-#{access}"}
                         - else
                           &nbsp;
+        .accordion
+          %h3
+            %a{:href => '#'}
+              Löschrechte
+          %div
+            %table
+              %tr
+                %td
+                  Alles auswählen
+                %td
+                  %input{:type => "checkbox", :name => "select-all-#{source}-delete-delete", :class => "select-all #{source}-delete-delete"}
+              %tr
+                %td
+                  &nbsp;
+                %td
+                  Löschen
+                - tables_sort.each do |table,columns|
+                  - columns.reject!{|k,v| !k.nil?}.sort.each do |column, accesses|
+                    %tr                         
+                      %td
+                        = "Datensätze aus #{table.capitalize}"
+                      %td
+                        - if @user_permissions.reject! {|p| p.source == source and p.table == table and p.column == nil and p.access == 'delete'}
+                          %input{:type => "checkbox", :name => "permissions[#{accesses['delete']}]", :checked => true, :class => "#{source}-#{table}-delete"}
+                        - else
+                          %input{:type => "checkbox", :name => "permissions[#{accesses['delete']}]", :class => "#{source}-#{table}-delete"}
 
       %button{:name => 'commit', :type => 'submit'} Absenden
     
