@@ -19,14 +19,23 @@
             %table
               %tr
                 %th= "Tabelle \"#{tablename.titleize}\""
-                - %w[Lesen Erstellen Ändern Löschen].each do |headline|
+                - %w[Lesen Erstellen Ändern].each do |headline|
                   %th= headline
+              - @deletor = false
               - columns.each do |columnname, permissions|
+                - @deletor = (columnname.blank? && !permissions['delete'].blank?) unless @deletor
+                - Rails.logger.info "Deletor: #{@deletor}"
+                - unless columnname.blank?
+                  %tr
+                    %td= "#{t("data.#{sourcename}.#{tablename}.#{columnname}")} (#{columnname})"
+                    - %w[read create update].each do |access|
+                      %td
+                        %img{:src => "#{permissions[access].blank? ? "/images/nein.png" : "/images/ja.png"}"}
+              - Rails.logger.info "Deletor2: #{@deletor}"
+              - if @deletor
                 %tr
-                  %td= "#{t("data.#{sourcename}.#{tablename}.#{columnname}")} (#{columnname})"
-                  - %w[read create update delete].each do |access|
-                    %td
-                      %img{:src => "#{permissions[access].blank? ? "/images/nein.png" : "/images/ja.png"}"}
+                  %td{:colspan => 4}
+                    Sie d&uuml;rfen Eintr&auml;ge dieser Tabelle l&ouml;schen. 
                 
 - else
   .notice Sie verfügen momentan über keine Zugriffsrechte.
