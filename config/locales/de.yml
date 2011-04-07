@@ -176,6 +176,9 @@ de:
         venue_id: "Veranstaltungsort"
         category_id: "Kategorie"
         host_id: "Veranstalter"
+        created_at: "Erstellungsdatum"
+        updated_at: "Aktualisierungsdatum"
+        id: "Primärschlüssel"
       hosts:
         url: "Website"
         mobile: "Mobilnummer"
@@ -183,6 +186,9 @@ de:
         events: "Veranstaltungen"
         first_name: "Vorname"
         last_name: "Nachname"
+        created_at: "Erstellungsdatum"
+        updated_at: "Aktualisierungsdatum"
+        id: "Primärschlüssel"
       venues:
         name: "Name"
         url: "Website"
@@ -194,6 +200,9 @@ de:
         events: "Veranstaltungen"
         phone: "Telefon"
         description: "Beschreibung"
+        created_at: "Erstellungsdatum"
+        updated_at: "Aktualisierungsdatum"
+        id: "Primärschlüssel"
               
     mediahandbook:
       people:
@@ -203,6 +212,9 @@ de:
         position: "Position"
         occupation: "Tätigkeit"
         company_id: "Firma"
+        created_at: "Erstellungsdatum"
+        updated_at: "Aktualisierungsdatum"
+        id: "Primärschlüssel"
       branches:
         companies: "Firmen"
         description: "Beschreibung"
@@ -210,6 +222,9 @@ de:
         internal_key: "Branchenschlüssel"
         internal_type: "Typ des Branchenschlüssels"
         parent_id: "Übergeordneter Branchenschlüssel"
+        created_at: "Erstellungsdatum"
+        updated_at: "Aktualisierungsdatum"
+        id: "Primärschlüssel"
       companies:
         city: "Stadt"
         description: "Beschreibung"
@@ -233,4 +248,7 @@ de:
         sub_market_id: "Marktschlüssel"
         url_primary: "Primäre Website"
         url_secondary: "Sekundäre Website"
-                    
+        created_at: "Erstellungsdatum"
+        updated_at: "Aktualisierungsdatum"
+        id: "Primärschlüssel"
+
