@@ -18,5 +18,8 @@ end
 
 group :production do
   gem "mysql", "~> 2.8.1"
+  gem "daemons", "1.0.10"
+  gem "rack", "1.1.0"
+  gem "mongrel", "1.2.0.pre2"
 end
 
