@@ -179,6 +179,8 @@ de:
         created_at: "Erstellungsdatum"
         updated_at: "Aktualisierungsdatum"
         id: "Primärschlüssel"
+        public: "Zugriffsstatus"
+        user_id: "Ersteller"
       hosts:
         url: "Website"
         mobile: "Mobilnummer"
