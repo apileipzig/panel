@@ -10,6 +10,7 @@ class EventsController < ApplicationController
 
     @rich_events = Array.new
     @events.each do |event|
+      next unless event['user_id'] == @current_user.id
       e = Hash.new
       e['event'] = event
       e['host'] = @hosts.select{|h| h['id'] == event['host_id']}.first
@@ -30,7 +31,7 @@ class EventsController < ApplicationController
     @venues = retrieve_data('get', 'calendar', 'venues')
     @hosts = retrieve_data('get', 'calendar', 'hosts')
 
-    # data from prviously failed attempts
+    # data from previously failed attempts
     @data = params[:event] ||= Hash.new
   end
 
@@ -43,6 +44,7 @@ class EventsController < ApplicationController
         e['time_to'] = e['time_to'] + ":00" if e['time_to']
         e['host_id'] = params[:host]
         e['venue_id'] = params[:venue]
+        e['user_id'] = @current_user.id
         @result = retrieve_data('post', 'calendar', 'events', "", e)
         if @result.has_key?('success')
           flash[:success] = "Termin gespeichert"
@@ -69,8 +71,13 @@ class EventsController < ApplicationController
       @event_permissions = @current_user.source_permissions('calendar', 'update')
       item_permissions(@event_permissions)
       @event_id = params[:event]
-      @result = retrieve_data('get', 'calendar', 'events', params[:event])
+      @result = retrieve_data('get', 'calendar', 'events', @event_id)
       unless @result.has_key?('error')
+        unless @result['user_id'] == @current_user.id
+          # User may only edit its own events.
+          flash[:error] = "Berechtigung fehlt!"
+          redirect_to events_path and return
+        end
         # get all venues, hosts, and branches for selection
         @venues = retrieve_data('get', 'calendar', 'venues')
         @hosts = retrieve_data('get', 'calendar', 'hosts')
@@ -95,6 +102,7 @@ class EventsController < ApplicationController
         e['time_to'] = e['time_to'].split(':').length > 2 ? e['time_to'] : e['time_to'] + ":00" if e['time_to']
         e['host_id'] = params[:host]
         e['venue_id'] = params[:venue]
+        e['user_id'] = @current_user.id
         @result = retrieve_data('put', 'calendar', 'events', params[:event_id], e)
         if @result.has_key?('success')
           flash[:success] = "Termin gespeichert"
@@ -128,11 +136,12 @@ class EventsController < ApplicationController
   private
 
   def extract_error_message(error)
-      first_error = error.to_a.first
-      column = first_error.first
-      message = first_error.second.gsub(' ', '_').delete(".,'").downcase
-      return "#{t("data.calendar.events.#{column}")} #{t("data.api.messages.#{message}")}"
-    end
+    first_error = error.to_a.first
+    column = first_error.first
+    message = first_error.second.gsub(' ', '_').delete(".,'").downcase
+    return "#{t("data.calendar.events.#{column}")} #{t("data.api.messages.#{message}")}"
+  end
+
   def item_permissions(event_permissions)
     @event_rows = event_permissions.select{|p| p.table == 'events'}.map{|p| p.column}
     @host_rows = event_permissions.select{|p| p.table == 'hosts'}.map{|p| p.column}
