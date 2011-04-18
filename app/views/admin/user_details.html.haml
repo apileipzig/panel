@@ -66,29 +66,39 @@
         .accordion
           %h3
             %a{:href => '#'}
-              Löschrechte
+              andere Rechte
           %div
             %table
               %tr
                 %td
                   Alles auswählen
                 %td
+                  %input{:type => "checkbox", :name => "select-all-#{source}-count-count", :class => "parent #{source}-count"}
+                %td
                   %input{:type => "checkbox", :name => "select-all-#{source}-delete-delete", :class => "parent #{source}-delete"}
               %tr
                 %td
                   &nbsp;
                 %td
+                  Zählen
+                %td
                   Löschen
                 - tables_sort.each do |table,columns|
-                  - columns.reject!{|k,v| !k.nil?}.sort.each do |column, accesses|
+                  - columns.reject{|k,v| !k.nil?}.sort.each do |column, accesses|
                     %tr                         
                       %td
                         = "Datensätze aus #{table.capitalize}"
+                      %td
+                        - if @user_permissions.reject! {|p| p.source == source and p.table == table and p.column == nil and p.access == 'count'}
+                          %input{:type => "checkbox", :name => "permissions[#{accesses['count']}]", :checked => true, :class => "child #{source}-count"}
+                        - else
+                          %input{:type => "checkbox", :name => "permissions[#{accesses['count']}]", :class => "child #{source}-count"}
                       %td
                         - if @user_permissions.reject! {|p| p.source == source and p.table == table and p.column == nil and p.access == 'delete'}
                           %input{:type => "checkbox", :name => "permissions[#{accesses['delete']}]", :checked => true, :class => "child #{source}-delete"}
                         - else
                           %input{:type => "checkbox", :name => "permissions[#{accesses['delete']}]", :class => "child #{source}-delete"}
+
 
       %button{:name => 'commit', :type => 'submit'} Absenden
     
