@@ -9,7 +9,7 @@ class UserSessionsController < ApplicationController
   def create
     @user_session = UserSession.new(params[:user_session])
     if @user_session.save
-      flash[:notice] = "Login erfolgreich!"
+      flash[:notice] = "Anmeldung erfolgreich!"
       redirect_back_or_default account_url
     else
       render :action => :new
@@ -18,7 +18,7 @@ class UserSessionsController < ApplicationController
 
   def destroy
     current_user_session.destroy
-    flash[:notice] = "Logout erfolgreich!"
+    flash[:notice] = "Abmeldung erfolgreich!"
     redirect_back_or_default login_url
   end
 end

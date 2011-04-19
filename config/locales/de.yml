@@ -164,6 +164,7 @@ de:
         is_invalid_please_use_straße_and_not_str_or_str: "darf nicht mit str. abgekürzt werden"
         cant_be_blank: "darf nicht leer sein"
         does_not_exist: "existiert nicht"
+        no_permission_to_use_parameters: "Sie haben keine Berechtigung für die Spalte"
     calendar:
       events:
         name: "Name"

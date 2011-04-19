@@ -32,7 +32,7 @@ class HostsController < ApplicationController
         redirect_to hosts_path and return
       end
     else
-      flash[:error] = "Berechtigung fehlt!"
+      flash[:error] = "Sie haben keine Berechtigung für diese Seite."
       redirect_to hosts_path and return
     end
   end
@@ -67,18 +67,26 @@ class HostsController < ApplicationController
         redirect_to hosts_path and return
       end
     end
-    flash[:error] = "Berechtigung fehlt!"
+    flash[:error] = "Sie haben keine Berechtigung für diese Seite."
     redirect_to hosts_path and return
   end
 
   private
 
   def extract_error_message(error)
+    if error.kind_of?(Hash)
       first_error = error.to_a.first
       column = first_error.first
-      message = first_error.second.gsub(' ', '_').delete(".,'").downcase
+      message = first_error.second.first.gsub(' ', '_').delete(".,'").downcase
       return "#{t("data.calendar.hosts.#{column}")} #{t("data.api.messages.#{message}")}"
+    else
+      first_error = error.split('[') 
+      column = first_error.second.gsub(']', '')
+      message = first_error.first.strip.gsub(' ', '_').delete(".,'").downcase
+      return "#{t("data.api.messages.#{message}")} #{t("data.calendar.hosts.#{column}")}"
     end
+  end
+
   def prepare_index
     @hosts = retrieve_data('get', 'calendar', 'hosts')
     @host_rows = @current_user.table_permissions('calendar', 'hosts', 'create').map{|p| p.column}

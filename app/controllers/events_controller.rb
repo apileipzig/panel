@@ -75,7 +75,7 @@ class EventsController < ApplicationController
       unless @result.has_key?('error')
         unless @result['user_id'] == @current_user.id
           # User may only edit its own events.
-          flash[:error] = "Berechtigung fehlt!"
+          flash[:error] = "Sie haben keine Berechtigung für diese Seite."
           redirect_to events_path and return
         end
         # get all venues, hosts, and branches for selection
@@ -87,7 +87,7 @@ class EventsController < ApplicationController
         redirect_to events_path and return
       end
     else
-      flash[:error] = "Berechtigung fehlt!"
+      flash[:error] = "Sie haben keine Berechtigung für diese Seite."
       redirect_to events_path and return
     end
   end
@@ -129,17 +129,24 @@ class EventsController < ApplicationController
         redirect_to events_path and return
       end
     end
-    flash[:error] = "Berechtigung fehlt!"
+    flash[:error] = "Sie haben keine Berechtigung für diese Seite."
     redirect_to events_path and return
   end
 
   private
 
   def extract_error_message(error)
-    first_error = error.to_a.first
-    column = first_error.first
-    message = first_error.second.gsub(' ', '_').delete(".,'").downcase
-    return "#{t("data.calendar.events.#{column}")} #{t("data.api.messages.#{message}")}"
+    if error.kind_of?(Hash)
+      first_error = error.to_a.first
+      column = first_error.first
+      message = first_error.second.first.gsub(' ', '_').delete(".,'").downcase
+      return "#{t("data.calendar.events.#{column}")} #{t("data.api.messages.#{message}")}"
+    else
+      first_error = error.split('[') 
+      column = first_error.second.gsub(']', '')
+      message = first_error.first.strip.gsub(' ', '_').delete(".,'").downcase
+      return "#{t("data.api.messages.#{message}")} #{t("data.calendar.events.#{column}")}"
+    end
   end
 
   def item_permissions(event_permissions)

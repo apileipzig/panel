@@ -32,4 +32,5 @@
         = venue['description']
             
 - if @current_user.may_create_resource?('calendar', 'venues')
+  %h1 Neuen Veranstaltungsort hinzufügen
   = render :partial => "/venues/form", :locals => {:target => create_venue_path, :data => @data}

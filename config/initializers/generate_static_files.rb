@@ -26,7 +26,7 @@ begin
   header = doc.to_html
   
   #add login/logout switch to the template string
-  login_switch = "\n- if @current_user\n\t%a.LogoutLink.span-1.last{:href => logout_path, :title => 'Login'} Logout \n- else\n\t%a.LogoutLink.span-1.last{:href => login_path, :title => 'Login'} Login\n"
+  login_switch = "\n- if @current_user\n\t%a.LogoutLink.span-1.last{:href => logout_path, :title => 'Abmelden'} Abmelden \n- else\n\t%a.LogoutLink.span-1.last{:href => login_path, :title => 'Anmelden'} Anmelden\n"
 
   header.gsub!('<a class="LoginLink span-1 last" id="login" href="/panel/login" title="Anmelden">Anmelden</a>',login_switch)
   

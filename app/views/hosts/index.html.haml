@@ -27,4 +27,5 @@
             %img{:src => '/images/delete.png'}
             
 - if @current_user.may_create_resource?('calendar', 'hosts')
+  %h1 Neuen Veranstalter hinzufügen
   = render :partial => "/hosts/form", :locals => {:target => create_host_path, :data => @data}

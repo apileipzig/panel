@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   acts_as_authentic
+  
   has_and_belongs_to_many :permissions
 
   def may_create_resource?(source, table)
