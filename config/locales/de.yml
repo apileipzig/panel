@@ -254,4 +254,8 @@ de:
         created_at: "Erstellungsdatum"
         updated_at: "Aktualisierungsdatum"
         id: "Primärschlüssel"
+        main_activity: "Hauptgeschäftsfeld"
+        past_customers: "Referenzkunden"
+        products: "Produkte"
+        resources: "Ressourcen"
 
