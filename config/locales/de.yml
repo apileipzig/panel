@@ -278,7 +278,7 @@ de:
       companies:
         district_id: "Stadtteilschlüssel"
         companies_total: "Gesamtanzahl der Unternehmen im Stadtteil"
-        agriculture_foresrty_fishery: "Land- und Forstwirtschaft, Fischerei"
+        agriculture_forestry_fishery: "Land- und Forstwirtschaft, Fischerei"
         mining: "Bergbau und Gewinnung von Steinen und Erden"
         processing_trade: "Verarbeitendes Gewerbe"
         power_supply: "Energieversorgung"
