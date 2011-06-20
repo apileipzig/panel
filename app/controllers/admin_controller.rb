@@ -46,7 +46,7 @@ class AdminController < ApplicationController
     flash[:success] = "Der Benutzer wurde erfolgreich aktiviert. Ihm wurde automatisch eine E-Mail-Benachrichtigung zugestellt."
     redirect_to admin_path and return
   end
-  
+
   def reset_apikey
     unless params[:user].blank?
       user = User.find(params[:user][:id])
@@ -56,14 +56,14 @@ class AdminController < ApplicationController
       end
       if user == @current_user
         flash[:error] = "Ein Admin kann seinen eigenen Schlüssel nicht ändern."
-        redirect_to user_details_path(:user => params[:user]) and return if user == @current_user # Admin may not change its own key.
+        redirect_to user_details_path(:user => params[:user][:id]) and return if user == @current_user # Admin may not change its own key.
       end
       user.reset_single_access_token!
     end
     flash[:success] = "Der API-Key wurde zurückgesetzt."
-    redirect_to user_details_path(:user => params[:user]) and return
+    redirect_to user_details_path(:user => params[:user][:id]) and return
   end
-  
+
   def user_details
     redirect_to admin_path and return if params[:user].blank?
     @user = User.find(params[:user])
@@ -82,15 +82,15 @@ class AdminController < ApplicationController
     user = User.find(params[:user])
     if user == @current_user
       flash[:error] = "Sie können sich nicht selbst löschen."
-      redirect_to admin_path and return 
+      redirect_to admin_path and return
     end
     user.destroy
     flash[:success] = "Der Benutzer wurde erfolgreich gelöscht."
     redirect_to admin_path and return
   end
-  
+
   def set_permissions
-    redirect_to user_details_path and return if params[:user].blank?
+    redirect_to admin_path and return if params[:user].blank?
     @user = User.find(params[:user][:id])
     @updated_permissions = []
     unless params[:permissions].nil?
