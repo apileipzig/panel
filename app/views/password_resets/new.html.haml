@@ -1,0 +1,13 @@
+%header
+  %h1 Passwort zurücksetzen
+%p
+  Bitte geben Sie Ihre E-Mail-Adresse ein und klicken sie auf "Passwort zurücksetzen".
+- form_tag password_resets_path do
+  %fieldset
+    %legend Passwort zurücksetzen
+    .fieldset-desc
+      %p
+        Bitte geben Sie Ihre E-Mail-Adresse ein.
+    = label_tag :email, 'E-Mail-Adresse'
+    = text_field_tag :email
+    %button{:name => 'commit', :type => 'submit'} Passwort zurücksetzen

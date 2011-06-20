@@ -1,8 +1,7 @@
 class User < ActiveRecord::Base
   acts_as_authentic
-  
-  has_and_belongs_to_many :permissions
 
+  has_and_belongs_to_many :permissions
   def may_create_resource?(source, table)
     !table_permissions(source, table, 'create').blank?
   end
@@ -22,8 +21,13 @@ class User < ActiveRecord::Base
   def table_permissions(source, table, access)
     permissions.select{|p| p.source == source && p.table == table && p.access == access}
   end
-  
+
   def source_permissions(source, access)
     permissions.select{|p| p.source == source && p.access == access}
+  end
+
+  def deliver_password_reset_instructions!
+    reset_perishable_token!
+    EmailNotifier.deliver_password_reset_instructions(self)
   end
 end

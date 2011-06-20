@@ -24,14 +24,12 @@
               - @deletor = false
               - columns.each do |columnname, permissions|
                 - @deletor = (columnname.blank? && !permissions['delete'].blank?) unless @deletor
-                - Rails.logger.info "Deletor: #{@deletor}"
                 - unless columnname.blank?
                   %tr
                     %td= "#{t("data.#{sourcename}.#{tablename}.#{columnname}")} (#{columnname})"
                     - %w[read create update].each do |access|
                       %td
                         %img{:src => "#{permissions[access].blank? ? "/images/nein.png" : "/images/ja.png"}"}
-              - Rails.logger.info "Deletor2: #{@deletor}"
               - if @deletor
                 %tr
                   %td{:colspan => 4}

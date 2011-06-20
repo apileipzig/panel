@@ -37,7 +37,6 @@
     = select_tag 'venue', blank_venue + @venues.map{|v| "<option #{data['venue_id'] == v['id'] ? 'selected="selected"' : ""} value='#{v['id']}'>#{v['name']}</option>"}.to_s
   = hidden_field_tag 'user_id', data['user_id'].blank? ? '' : data['user_id']
   = label_tag 'public', 'Veröffentlichen?'
-  - Rails.logger.info data.inspect
   = check_box_tag 'event[public]', '1', data['public']
   .clear 
   %button{:name => 'commit', :type => 'submit'} Eintragen

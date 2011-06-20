@@ -4,6 +4,8 @@
   Bitte
   %a{:href => signup_path} registrieren
   Sie sich für die Nutzung der API.LEIPZIG, falls Sie noch keine Zugangsdaten haben.
+  %br
+  %a{:href => new_password_reset_path} Passwort vergessen?
 - form_for @user_session, :url => user_session_path, :html => {:class => 'api-form'} do |f|
   %fieldset
     %legend Zugangsdaten

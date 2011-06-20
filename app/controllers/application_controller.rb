@@ -27,6 +27,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def require_user_silent
+    unless current_user
+      store_location
+      redirect_to new_user_session_url
+      return false
+    end
+  end
+
   def require_no_user
     if current_user
       store_location
@@ -55,7 +63,7 @@ class ApplicationController < ActionController::Base
   def retrieve_data(verb, source, table, id = "", form_data = {})
     host_address = "http://178.77.99.225/api/v1"
     api_key = @current_user.single_access_token
-    http_header = {"User-Agent" => "api.leipzig panel"} 
+    http_header = {"User-Agent" => "api.leipzig panel"}
 
     case verb
     when "get"

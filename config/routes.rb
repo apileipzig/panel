@@ -9,7 +9,8 @@ ActionController::Routing::Routes.draw do |map|
   map.signup '/signup', :controller => 'users', :action => 'new'
   map.login '/login', :controller => 'user_sessions', :action => 'new'
   map.logout '/logout', :controller => 'user_sessions', :action => 'destroy'
-  
+  map.resources :password_resets, :only => [ :new, :create, :edit, :update ]
+    
   #routes for admins
   map.admin '/admin', :controller => 'admin', :action => 'index' # the admin console
   map.user_details '/admin/user_details', :controller => 'admin', :action => 'user_details'

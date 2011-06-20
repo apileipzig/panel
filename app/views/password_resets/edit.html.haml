@@ -1,0 +1,16 @@
+%header
+  %h1 Passwort ändern
+%p
+  Bitte geben Sie das neue Passwort ein und klicken sie auf "Passwort ändern"
+- form_tag password_reset_path, :method => :put do
+  %fieldset
+    %legend Passwort ändern
+    .fieldset-desc
+      %p
+        Bitte geben Sie Ihr neues Passwort ein.
+    = label_tag :password, 'Passwort'
+    = password_field_tag :password
+    = label_tag :password_confirmation, 'Passwortbestätigung'
+    = password_field_tag :password_confirmation
+    %button{:name => 'commit', :type => 'submit'} Passwort ändern
+  
