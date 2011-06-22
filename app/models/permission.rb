@@ -13,4 +13,8 @@ class Permission < ActiveRecord::Base
   def self.all_read
     Permission.all.select{|p| p.access == 'read'}
   end
+  
+  def self.all_count
+    Permission.all.select{|p| p.access == 'count'}
+  end
 end

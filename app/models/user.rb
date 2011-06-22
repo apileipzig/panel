@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   end
   
   def initialize_permissions
-    self.permissions = Permission.all_read
+    self.permissions = Permission.all_read + Permission.all_count
     self.save
   end
 end
