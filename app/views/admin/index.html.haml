@@ -27,6 +27,7 @@
     %th Aktiv?
     %th Admin?
     %th Aktionen
+    %th Angemeldet seit
   - @users.each do |user|
     %tr
       %td= mail_to(user.email, user.name)
@@ -47,7 +48,8 @@
           %img{:src => '/images/edit.png'}
         %a{:href => "#{url_for(:controller => 'admin', :action => 'delete_user', :user => user.id)}", :class => 'edit_user', :onclick => "return confirm('Soll dieser Benutzer wirklich gelöscht werden?');"}
           %img{:src => '/images/delete.png'}
-          
+      %td= user.created_at.strftime('%d. %m. %Y - %H:%M Uhr')
+         
 %header
   %h1
     API-Statistik
