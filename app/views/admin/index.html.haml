@@ -36,7 +36,7 @@
       %td
         %img{:src => "#{user.admin? ? "/images/ja.png" : "/images/nein.png"}"}
       %td
-        - onclick_activate = "return confirm('Soll dieser Benutzer wirklich aktiviert werden? Der Benutzer erhält eine automatische Aktivierungsnachricht per E-Mail.');"
+        - onclick_activate = "return confirm('Soll dieser Benutzer wirklich aktiviert werden? Der Benutzer erhält eine automatische Aktivierungsnachricht per E-Mail und Leserechte auf alle Datenquellen.');"
         - onclick_deactivate = "return confirm('Soll dieser Benutzer wirklich deaktiviert werden?');"
         %a{:href => "#{url_for(:controller => 'admin', :action => "user_activation", :user => user.id)}", :class => 'edit_user', :onclick => "#{user.active? ? onclick_deactivate : onclick_activate}"}
           %img{:src => '/images/active.png'}

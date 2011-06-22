@@ -30,4 +30,9 @@ class User < ActiveRecord::Base
     reset_perishable_token!
     EmailNotifier.deliver_password_reset_instructions(self)
   end
+  
+  def initialize_permissions
+    self.permissions = Permission.all_read
+    self.save
+  end
 end

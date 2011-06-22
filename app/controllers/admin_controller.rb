@@ -14,22 +14,24 @@ class AdminController < ApplicationController
   end
 
   def user_activation
-    unless params[:user].blank?
-      user = User.find(params[:user])
-      if user.blank?
-        flash[:error] = "Dieser Benutzer existiert nicht"
-        redirect_to admin_path and return
-      end
-      if user == @current_user && user.active?
-        flash[:error] = "Sie können sich nicht selbst deaktivieren."
-        redirect_to admin_path and return
-      end
-      new_status = user.active? ? '0' : '1'
-      user.update_attributes({:active => new_status})
-      EmailNotifier.deliver_activation_confirmation(user) if user.active?
-      flash[:success] = "Der Benutzer wurde erfolgreich aktiviert. Ihm wurde automatisch eine E-Mail-Benachrichtigung zugestellt." if user.active?
-      flash[:success] = "Der Benutzer wurde erfolgreich deaktiviert." unless user.active?
+    redirect_to admin_path and return if params[:user].blank?
+    user = User.find(params[:user])
+    if user.blank?
+      flash[:error] = "Dieser Benutzer existiert nicht"
+      redirect_to admin_path and return
     end
+    if user == @current_user && user.active?
+      flash[:error] = "Sie können sich nicht selbst deaktivieren."
+      redirect_to admin_path and return
+    end
+    new_status = user.active? ? '0' : '1'
+    user.update_attributes({:active => new_status})
+    if user.active?
+      EmailNotifier.deliver_activation_confirmation(user) 
+      flash[:success] = "Der Benutzer wurde erfolgreich aktiviert. Ihm wurde automatisch eine E-Mail-Benachrichtigung zugestellt."
+      user.initialize_permissions
+    end
+    flash[:success] = "Der Benutzer wurde erfolgreich deaktiviert." unless user.active?
     redirect_to admin_path and return
   end
 

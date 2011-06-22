@@ -9,4 +9,8 @@ class Permission < ActiveRecord::Base
   def self.all_sources
     Permission.all.map{|p| p.source}.uniq
   end
+  
+  def self.all_read
+    Permission.all.select{|p| p.access == 'read'}
+  end
 end
