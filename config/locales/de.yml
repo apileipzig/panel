@@ -165,6 +165,7 @@ de:
         cant_be_blank: "darf nicht leer sein"
         does_not_exist: "existiert nicht"
         no_permission_to_use_parameters: "Sie haben keine Berechtigung für die Spalte"
+        has_already_been_taken: "existiert bereits"
     calendar:
       events:
         name: "Name"
@@ -275,7 +276,7 @@ de:
         created_at: "Erstellungsdatum"
         updated_at: "Aktualisierungsdatum"
         id: "Primärschlüssel"
-      companies:
+      ihkcompanies:
         district_id: "Stadtteilschlüssel"
         companies_total: "Gesamtanzahl der Unternehmen im Stadtteil"
         agriculture_forestry_fishery: "Land- und Forstwirtschaft, Fischerei"

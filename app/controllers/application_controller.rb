@@ -61,7 +61,7 @@ class ApplicationController < ActionController::Base
   end
 
   def retrieve_data(verb, source, table, id = "", form_data = {})
-    host_address = "http://178.77.99.225/api/v1"
+    host_address = "http://www.apileipzig.de/api/v1"
     api_key = @current_user.single_access_token
     http_header = {"User-Agent" => "api.leipzig panel"}
 
