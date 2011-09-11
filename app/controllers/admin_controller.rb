@@ -1,7 +1,7 @@
 require 'net/http'
 
 class AdminController < ApplicationController
-  before_filter :require_admin
+  before_filter :require_user, :require_admin
   def index
     @users = User.all
     @stats_tables = []
