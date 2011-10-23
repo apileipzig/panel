@@ -3,7 +3,7 @@ require 'net/http'
 class AdminController < ApplicationController
   before_filter :require_user, :require_admin
   def index
-    @users = User.all
+    @users = User.find(:all, :order => 'created_at DESC')
     @stats_tables = []
     data_points = {'data' => []}
     RequestLog.table_stats.each do |stat|
