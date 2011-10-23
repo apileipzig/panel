@@ -175,6 +175,8 @@ de:
         time_from: "Startzeit"
         time_to: "Endzeit"
         url: "Website"
+        image_url: "Bild-Url"
+        document_url: "Dokumenten-Url"
         venue_id: "Veranstaltungsort"
         category_id: "Kategorie"
         host_id: "Veranstalter"
