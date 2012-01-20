@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class RequestLog < ActiveRecord::Base
 
   def self.all_tables

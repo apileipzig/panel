@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 # ====
 # The following options can be changed by creating an initializer in config/initializers/jrails.rb
 # ====

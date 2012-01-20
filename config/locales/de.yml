@@ -14,7 +14,7 @@ de:
         not_approved: Ihr Account ist nicht freigeschaltet.
         no_authentication_details: Sie haben keine Anmeldedaten eingegeben.
       models:
-        user_session: UserSession 
+        user_session: UserSession
       attributes:
         user_session:
           login: Login
@@ -33,7 +33,7 @@ de:
     month_names: [~, Januar, Februar, März, April, Mai, Juni, Juli, August, September, Oktober, November, Dezember]
     abbr_month_names: [~, Jan, Feb, Mär, Apr, Mai, Jun, Jul, Aug, Sep, Okt, Nov, Dez]
     order: [ :day, :month, :year ]
-  
+
   time:
     formats:
       default: "%A, %d. %B %Y, %H:%M Uhr"
@@ -43,7 +43,7 @@ de:
 
     am: "vormittags"
     pm: "nachmittags"
-      
+
   datetime:
     distance_in_words:
       half_a_minute: 'eine halbe Minute'
@@ -96,9 +96,9 @@ de:
       format:
         unit: '€'
         format: '%n%u'
-        separator: 
-        delimiter: 
-        precision: 
+        separator:
+        delimiter:
+        precision:
     percentage:
       format:
         delimiter: ""
@@ -218,7 +218,7 @@ de:
         created_at: "Erstellungsdatum"
         updated_at: "Aktualisierungsdatum"
         id: "Primärschlüssel"
-              
+
     mediahandbook:
       people:
         first_name: "Vorname"

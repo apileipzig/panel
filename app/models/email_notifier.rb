@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 class EmailNotifier < ActionMailer::Base
   default_url_options[:host] = "www.apileipzig.de"  
     

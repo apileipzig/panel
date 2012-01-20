@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 require 'nokogiri'
 
 marker_header = '<!-- /#Start_Content_Marker - DO NOT (RE)MOVE! -->'
