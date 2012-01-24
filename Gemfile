@@ -17,7 +17,6 @@ group :development do
 end
 
 group :production do
-  gem "mysql", "~> 2.8.1"
-  gem "thin"
+  gem "mysql2", "~> 0.2.0"
 end
 
