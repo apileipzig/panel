@@ -17,7 +17,7 @@
     - if event_rows.include?(row)
       = label_tag t("data.calendar.events.#{row}")
       - if row =~ /time/
-        - time = data[row].include?('T') ? data[row].split('T')[1].split('+')[0] : data[row] unless data[row].blank? 
+        - time = data[row].include?('T') ? data[row].split('T')[1].split('+')[0] : data[row] unless data[row].blank?
         = text_field_tag "event[#{row}]", data[row].blank? ? '' : time, :class => 'time'
       - elsif row =~ /date/
         = text_field_tag "event[#{row}]", data[row].blank? ? '' : data[row], :class => 'date'
@@ -26,7 +26,7 @@
   - unless branches.blank?
     - blank_branch = "<option value='0' #{data['category_id'].blank? ? 'selected="selected"' : ""}>Wählen Sie eine Branche ...</option>"
     = label_tag 'Branche'
-    = select_tag 'branch', blank_branch + branches.map{|h| "<option #{data['category_id'] == h['id'] ? 'selected="selected"' : ""} value='#{h['id']}'>#{h['name']}</option>"}.to_s                    
+    = select_tag 'branch', blank_branch + branches.map{|h| "<option #{data['category_id'] == h['id'] ? 'selected="selected"' : ""} value='#{h['id']}'>#{h['name']}</option>"}.to_s
   - unless @hosts.blank?
     - blank_host = "<option value='0' #{data['host_id'].blank? ? 'selected="selected"' : ""}>Wählen Sie einen Veranstalter ...</option>"
     = label_tag 'Veranstalter'
@@ -35,8 +35,8 @@
     - blank_venue = "<option value='0' #{data['venue_id'].blank? ? 'selected="selected"' : ""}>Wählen Sie einen Veranstaltungsort ...</option>"
     = label_tag 'Veranstaltungsort'
     = select_tag 'venue', blank_venue + @venues.map{|v| "<option #{data['venue_id'] == v['id'] ? 'selected="selected"' : ""} value='#{v['id']}'>#{v['name']}</option>"}.to_s
-  = hidden_field_tag 'user_id', data['user_id'].blank? ? '' : data['user_id']
+  = hidden_field_tag 'owner_id', data['owner_id'].blank? ? '' : data['owner_id']
   = label_tag 'public', 'Veröffentlichen?'
-  = check_box_tag 'event[public]', '1', data['public']
-  .clear 
+  = check_box_tag 'event[public]', '1', data['public'].nil? ? true : data['public']
+  .clear
   %button{:name => 'commit', :type => 'submit'} Eintragen

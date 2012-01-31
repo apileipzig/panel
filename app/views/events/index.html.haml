@@ -3,8 +3,9 @@
     Kalendereinträge bearbeiten
 %p
   Hier können Sie die Kalendereinträge ansehen und/oder bearbeiten
-%table  
+%table
   %tr
+    %th Öffentlich
     %th Name
     %th Start
     %th Ende
@@ -14,6 +15,8 @@
         Aktionen
   - @rich_events.each do |rich_event|
     %tr
+      %td
+        %img{:src => rich_event['event']['public'] ? "/images/ja.png" : "/images/nein.png"}
       %td= rich_event['event']['name']
       - tf = rich_event['event']['time_from'].blank? ? ['--', '--'] : rich_event['event']['time_from'].split('T')[1].split(':')
       - tt = rich_event['event']['time_to'].blank? ? ['--', '--'] : rich_event['event']['time_to'].split('T')[1].split(':')

@@ -11,7 +11,7 @@ class EventsController < ApplicationController
 
     @rich_events = Array.new
     @events.each do |event|
-      next unless event['user_id'] == @current_user.id
+      next unless event['owner_id'] == @current_user.id
       e = Hash.new
       e['event'] = event
       e['host'] = @hosts.select{|h| h['id'] == event['host_id']}.first
@@ -45,7 +45,8 @@ class EventsController < ApplicationController
         e['time_to'] = e['time_to'] + ":00" if e['time_to']
         e['host_id'] = params[:host]
         e['venue_id'] = params[:venue]
-        e['user_id'] = @current_user.id
+        e['owner_id'] = @current_user.id
+        e['public'] = e['public'].present? ? true : false
         @result = retrieve_data('post', 'calendar', 'events', "", e)
         if @result.has_key?('success')
           flash[:success] = "Termin gespeichert"
@@ -74,7 +75,7 @@ class EventsController < ApplicationController
       @event_id = params[:event]
       @result = retrieve_data('get', 'calendar', 'events', @event_id)
       unless @result.has_key?('error')
-        unless @result['user_id'] == @current_user.id
+        unless @result['owner_id'] == @current_user.id
           # User may only edit its own events.
           flash[:error] = "Sie haben keine Berechtigung für diese Seite."
           redirect_to events_path and return
@@ -103,7 +104,8 @@ class EventsController < ApplicationController
         e['time_to'] = e['time_to'].split(':').length > 2 ? e['time_to'] : e['time_to'] + ":00" if e['time_to']
         e['host_id'] = params[:host]
         e['venue_id'] = params[:venue]
-        e['user_id'] = @current_user.id
+        e['owner_id'] = @current_user.id
+        e['public'] = e['public'].present? ? true : false
         @result = retrieve_data('put', 'calendar', 'events', params[:event_id], e)
         if @result.has_key?('success')
           flash[:success] = "Termin gespeichert"
@@ -143,7 +145,7 @@ class EventsController < ApplicationController
       message = first_error.second.first.gsub(' ', '_').delete(".,'").downcase
       return "#{t("data.calendar.events.#{column}")} #{t("data.api.messages.#{message}")}"
     else
-      first_error = error.split('[') 
+      first_error = error.split('[')
       column = first_error.second.gsub(']', '')
       message = first_error.first.strip.gsub(' ', '_').delete(".,'").downcase
       return "#{t("data.api.messages.#{message}")} #{t("data.calendar.events.#{column}")}"

@@ -5,7 +5,7 @@ marker_header = '<!-- /#Start_Content_Marker - DO NOT (RE)MOVE! -->'
 marker_footer = '<!-- /#End_Content_Marker - DO NOT (RE)MOVE! -->'
 
 begin
-	html = File.open(Rails.root + '../index.html', 'r') { |f| f.read }
+	html = File.open(Rails.root + '../../index.html', 'r') { |f| f.read }
 
   doc = Nokogiri::HTML(html[0,html.index(marker_header)])
 
