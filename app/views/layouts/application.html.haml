@@ -1,4 +1,4 @@
-= render 'layouts/header.html.haml'
+= render :file => Rails.root + 'app/views/layouts/header.html.haml'
 %section#Page.container.pane-backend{:role => "main"}
   %article.span-8
     %section#CatEdit
@@ -55,5 +55,5 @@
 %script{:src => "/js/jquery.h5validate.js"}
 / Guess what? all the nice js-driven things on api.leipzig
 %script{:src => "/js/api-leipzig-global.js?v=1"}
-= render :file => 'layouts/footer.html'
+= render :file => Rails.root + 'app/views/layouts/footer.html'
 
