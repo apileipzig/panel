@@ -33,11 +33,13 @@ begin
 
   header.gsub!('<a class="LoginLink span-1 last" id="login" href="/panel/login" title="Anmelden">Anmelden</a>',login_switch)
   
-  write_to = File.new(Rails.root + "app/views/layouts/header.html.haml", "w+")
-  write_to.write(header[0,header.length-16]) #extreme ugly because nokogiri add </body></html> at the end of its document
+  File.open(Rails.root + "app/views/layouts/header.html.haml", "w+") do |f|
+    f.write(header[0,header.length-16]) #extreme ugly because nokogiri add </body></html> at the end of its document
+  end
 
-	write_to = File.new(Rails.root + "app/views/layouts/footer.html", "w+")
-	write_to.write(html[html.index(marker_footer)+marker_footer.length,html.length])
+  File.open(Rails.root + "app/views/layouts/footer.html", "w+") do |f|
+    f.write(html[html.index(marker_footer)+marker_footer.length,html.length])
+  end
 
   #copy fresh static files from the frontend on every startup only on dev mode
   if Rails.env == 'development'
