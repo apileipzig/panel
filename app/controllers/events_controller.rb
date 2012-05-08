@@ -11,7 +11,7 @@ class EventsController < ApplicationController
 
     @rich_events = Array.new
     @events.each do |event|
-      next unless event['owner_id'] == @current_user.id
+      #next unless event['owner_id'] == @current_user.id
       e = Hash.new
       e['event'] = event
       e['host'] = @hosts.select{|h| h['id'] == event['host_id']}.first
