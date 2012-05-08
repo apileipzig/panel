@@ -43,14 +43,12 @@ begin
 
   #copy fresh static files from the frontend on every startup only on dev mode
   if Rails.env == 'development'
-    %x[rm -r public/css]
-    %x[rm -r public/js]
-    %x[rm -r public/images]
-    %x[cp -R ../css public/]
-    %x[cp -R ../js public/]
-    %x[cp -R ../images public/]
+    %x[cp -f -R ../css public/]
+    %x[cp -f -R ../js public/]
+    %x[cp -f -R ../images public/]
+    %x[cp -f ../favicon.ico public/]
   end
- 
+
 rescue Exception => e
 	puts "Can't generate static HTML Header and Footer! Do nothing!"
 	puts "ERROR: #{e}"
