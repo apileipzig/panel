@@ -10,7 +10,7 @@ begin
 	html = File.open(Rails.root + '../../index.html', 'r') { |f| f.read }
 
   doc = Nokogiri::HTML(html[0,html.index(marker_header)])
-  
+
   #give body a class
   doc.search('body').each do |e|
     e['class'] = "panel"
@@ -27,12 +27,12 @@ begin
   end
 
   header = doc.to_html
-  
+
   #add login/logout switch to the template string
   login_switch = "\n- if @current_user\n\t%a.LogoutLink.span-1.last{:href => logout_path, :title => 'Abmelden'} Abmelden \n- else\n\t%a.LogoutLink.span-1.last{:href => login_path, :title => 'Anmelden'} Anmelden\n"
 
   header.gsub!('<a class="LoginLink span-1 last" id="login" href="/panel/login" title="Anmelden">Anmelden</a>',login_switch)
-  
+
   File.open(Rails.root + "app/views/layouts/header.html.haml", "w+") do |f|
     f.write(header[0,header.length-16]) #extreme ugly because nokogiri add </body></html> at the end of its document
   end

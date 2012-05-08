@@ -13,6 +13,9 @@
       %b Hinweise:
       %br
       Datumsangaben müssen im angelsächsischen Format erfolgen (bspw. 2011-01-01).
+      %br
+      %br
+      Legen Sie am Ende fest, ob der Eintrag nur für Sie oder für alle Benutzer der API.Leipzig sichtbar sein soll.
   - %w[name description date_from time_from date_to time_to url].each do |row|
     - if event_rows.include?(row)
       = label_tag t("data.calendar.events.#{row}")
@@ -36,7 +39,7 @@
     = label_tag 'Veranstaltungsort'
     = select_tag 'venue', blank_venue + @venues.map{|v| "<option #{data['venue_id'] == v['id'] ? 'selected="selected"' : ""} value='#{v['id']}'>#{v['name']}</option>"}.to_s
   = hidden_field_tag 'owner_id', data['owner_id'].blank? ? '' : data['owner_id']
-  = label_tag 'public', 'Veröffentlichen?'
+  = label_tag 'public', 'Soll der Beitrag für alle Benutzer sichtbar sein?'
   = check_box_tag 'event[public]', '1', data['public'].nil? ? true : data['public']
   .clear
   %button{:name => 'commit', :type => 'submit'} Eintragen
