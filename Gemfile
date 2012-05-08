@@ -13,7 +13,7 @@ group :default do
 end
 
 group :development do
-  gem "sqlite3-ruby", "~> 1.3.3", :require => "sqlite3"
+  gem "sqlite3", "~> 1.3.3"
 end
 
 group :production do
